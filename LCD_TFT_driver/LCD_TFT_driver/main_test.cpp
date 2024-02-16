@@ -37,7 +37,7 @@ int main(void)
     /* Replace with your application code */
     while (1) 
     {
-		FillRectangle(0, 0, 200, 200, 0xFF, 0xFF, 0xFF);
+		FillRectangle(0, 0, 200, 200, 0x0, 0x0, 0xFF);
 		_delay_ms(500);
     }
 }

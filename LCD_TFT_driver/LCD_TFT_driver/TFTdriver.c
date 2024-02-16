@@ -62,6 +62,10 @@ void WriteData(unsigned char data_low, unsigned char data_high)
 {
 	DATA_PORT_LOW = data_low;
 	DATA_PORT_HIGH = data_high;
+	_NOP();
+	WR_PORT &= ~(1 << WR_BIT);
+	_NOP();
+	WR_PORT |= (1 << WR_BIT);
 }
 
 // PUBLIC FUNCTIONS ////////////////////////////////////////////////////////////
@@ -85,6 +89,12 @@ void DisplayInit()
 	_delay_ms(250);
 	WriteData(1, 0);
 	_delay_ms(25);
+	
+	// Set pixel format
+	WriteData(0b00111010, 0);
+	DC_PORT |= (1 << DC_BIT);
+	WriteData(0b01010101, 0);
+	DC_PORT &= ~(1 << DC_BIT);
 }
 
 void SetGamma(unsigned char value)
@@ -92,44 +102,25 @@ void SetGamma(unsigned char value)
 	
 	
 	WriteData(0b00100110, 0);
-	WR_PORT &= ~(1 << WR_BIT);
-	_NOP();
-	WR_PORT |= (1 << WR_BIT);
 	
+	DC_PORT |= (1 << DC_BIT);	
 	WriteData(value, 0);
-	DC_PORT |= (1 << DC_BIT);
-	WR_PORT &= ~(1 << WR_BIT);
-	_NOP();
-	WR_PORT |= (1 << WR_BIT);
-	
 	DC_PORT &= ~(1 << DC_BIT);
 }
 
 void DisplayOff()
 {
 	WriteData(0b00101000, 0);
-	
-	WR_PORT &= ~(1 << WR_BIT);
-	_NOP();
-	WR_PORT |= (1 << WR_BIT);
 }
 
 void DisplayOn()
 {
 	WriteData(0b00101001, 0);
-	
-	WR_PORT &= ~(1 << WR_BIT);
-	_NOP();
-	WR_PORT |= (1 << WR_BIT);
 }
 
 void SleepOut()
 {
 	WriteData(0b00010001, 0);
-	
-	WR_PORT &= ~(1 << WR_BIT);
-	_NOP();
-	WR_PORT |= (1 << WR_BIT);
 	_delay_ms(10);
 }
 
@@ -155,28 +146,16 @@ void WritePixel(unsigned char Red, unsigned char Green, unsigned char Blue)
 	
 	WriteData(0b00101100, 0);
 	
-	WR_PORT &= ~(1 << WR_BIT);
-	_NOP();
-	_NOP();
-	WR_PORT |= (1 << WR_BIT);
-	
-	
-	
 	DC_PORT |= (1 << DC_BIT);
 	
 	unsigned char data_high = (Red << 3);
 	unsigned char data_low = Blue;
-	unsigned char g_high = (Green >> 3);
-	unsigned char g_low = (Green & 0b00000111) << 5;
-	data_high |= g_high;
-	data_low |= g_low;
+	//unsigned char g_high = (Green >> 3);
+	//unsigned char g_low = (Green & 0b00000111) << 5;
+	data_high = 255;
+	data_low = 255;
 	
 	WriteData(data_low, data_high);
-	
-	WR_PORT &= ~(1 << WR_BIT);
-	_NOP();
-	_NOP();
-	WR_PORT |= (1 << WR_BIT);
 	
 	DC_PORT &= ~(1 << DC_BIT);
 }
@@ -203,17 +182,10 @@ void FillRectangle(unsigned int StartX, unsigned int StartY, unsigned int Width,
 	
 	WriteData(0b00101100, 0);
 	
-	WR_PORT &= ~(1 << WR_BIT);
-	_NOP();
-	_NOP();
-	WR_PORT |= (1 << WR_BIT);
-	
-	
-	
 	DC_PORT |= (1 << DC_BIT);
 	
-	unsigned char data_high = (Red << 3);
-	unsigned char data_low = Blue;
+	unsigned char data_high = (Blue << 3);
+	unsigned char data_low = Red;
 	unsigned char g_high = (Green >> 3);
 	unsigned char g_low = (Green & 0b00000111) << 5;
 	data_high |= g_high;
@@ -222,13 +194,9 @@ void FillRectangle(unsigned int StartX, unsigned int StartY, unsigned int Width,
 	
 	for(int i = 0; i < Width; i++){
 		for (int j = 0; j < Height; j++){
-			WR_PORT &= ~(1 << WR_BIT);
-			_NOP();
-			_NOP();
-			WR_PORT |= (1 << WR_BIT);
+			WriteData(data_low, data_high);
 		}
 	}
-	WriteData(data_low, data_high);
 
 	DC_PORT &= ~(1 << DC_BIT);
 }
