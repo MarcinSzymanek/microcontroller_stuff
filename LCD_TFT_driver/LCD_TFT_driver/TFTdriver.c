@@ -50,6 +50,9 @@ Modified Michael Alrøe
 
 // LOCAL FUNCTIONS /////////////////////////////////////////////////////////////
 
+int selection_start[2];
+int selection_end[2];
+
 // ILI 9341 data sheet, page 238
 void WriteCommand(unsigned char command)
 {
@@ -163,11 +166,52 @@ void WritePixel(unsigned char Red, unsigned char Green, unsigned char Blue)
 // Set Column Address (0-239), Start > End
 void SetColumnAddress(unsigned int Start, unsigned int End)
 {
+	if(End > 239) End = 239;
+	if(Start > End) Start = End - 1;
+	
+	selection_start[1] = Start;
+	selection_end[1] = End;
+	
+	WriteData(0b00101010, 0);
+	DC_PORT |= (1 << DC_BIT);
+	WriteData(0, 0);
+	WriteData(Start, 0);
+	WriteData(0, 0);
+	WriteData(End, 0);
+	
+	DC_PORT &= ~(1 << DC_BIT);
 }
 
 // Set Page Address (0-319), Start > End
 void SetPageAddress(unsigned int Start, unsigned int End)
 {
+	if(End > 319) End = 319;
+	if(Start > End) Start = End - 1;
+	selection_start[0] = Start;
+	selection_end[0] = End;
+	unsigned char end_low = End & 0xFF;
+	unsigned char end_high = End >> 8;
+	
+	unsigned char start_low = Start & 0xFF;
+	unsigned char start_high = Start >> 8;
+	
+	WriteData(0b00101011, 0);
+	DC_PORT |= (1 << DC_BIT);
+	
+	WriteData(start_high, 0);
+	WriteData(start_low, 0);
+	
+	WriteData(end_high, 0);
+	WriteData(end_low, 0);
+	
+	DC_PORT &= ~(1 << DC_BIT);
+}
+
+void FillSelection(unsigned char Red, unsigned char Green, unsigned char Blue)
+{
+	int width = selection_end[0] - selection_start[0];
+	int height = selection_end[1] - selection_start[1];
+	FillRectangle(selection_start[0], selection_start[1], width, height, Red, Green, Blue);
 }
 
 // Fills rectangle with specified color
@@ -191,10 +235,11 @@ void FillRectangle(unsigned int StartX, unsigned int StartY, unsigned int Width,
 	data_high |= g_high;
 	data_low |= g_low;
 	
-	
-	for(int i = 0; i < Width; i++){
-		for (int j = 0; j < Height; j++){
-			WriteData(data_low, data_high);
+	//Width = 200;
+	//Height = 200;
+	for(int i = 0; i < Height; i++){
+		for(int j = 0; j < Width; j++){
+			WriteData(data_low, data_high);		
 		}
 	}
 
