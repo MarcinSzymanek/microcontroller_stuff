@@ -1,0 +1,1584 @@
+
+MY_MIDI.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000208  00800200  0000076c  00000800  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         0000076c  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          00000015  00800408  00800408  00000a08  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000a08  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000a38  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000100  00000000  00000000  00000a78  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00001bf3  00000000  00000000  00000b78  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 00000dac  00000000  00000000  0000276b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00000af1  00000000  00000000  00003517  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  000001e8  00000000  00000000  00004008  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    0000071e  00000000  00000000  000041f0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    0000040d  00000000  00000000  0000490e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 000000e0  00000000  00000000  00004d1b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	7d c0       	rjmp	.+250    	; 0xfc <__ctors_end>
+   2:	00 00       	nop
+   4:	9a c0       	rjmp	.+308    	; 0x13a <__bad_interrupt>
+   6:	00 00       	nop
+   8:	98 c0       	rjmp	.+304    	; 0x13a <__bad_interrupt>
+   a:	00 00       	nop
+   c:	96 c0       	rjmp	.+300    	; 0x13a <__bad_interrupt>
+   e:	00 00       	nop
+  10:	94 c0       	rjmp	.+296    	; 0x13a <__bad_interrupt>
+  12:	00 00       	nop
+  14:	92 c0       	rjmp	.+292    	; 0x13a <__bad_interrupt>
+  16:	00 00       	nop
+  18:	90 c0       	rjmp	.+288    	; 0x13a <__bad_interrupt>
+  1a:	00 00       	nop
+  1c:	8e c0       	rjmp	.+284    	; 0x13a <__bad_interrupt>
+  1e:	00 00       	nop
+  20:	8c c0       	rjmp	.+280    	; 0x13a <__bad_interrupt>
+  22:	00 00       	nop
+  24:	8a c0       	rjmp	.+276    	; 0x13a <__bad_interrupt>
+  26:	00 00       	nop
+  28:	88 c0       	rjmp	.+272    	; 0x13a <__bad_interrupt>
+  2a:	00 00       	nop
+  2c:	86 c0       	rjmp	.+268    	; 0x13a <__bad_interrupt>
+  2e:	00 00       	nop
+  30:	84 c0       	rjmp	.+264    	; 0x13a <__bad_interrupt>
+  32:	00 00       	nop
+  34:	82 c0       	rjmp	.+260    	; 0x13a <__bad_interrupt>
+  36:	00 00       	nop
+  38:	80 c0       	rjmp	.+256    	; 0x13a <__bad_interrupt>
+  3a:	00 00       	nop
+  3c:	7e c0       	rjmp	.+252    	; 0x13a <__bad_interrupt>
+  3e:	00 00       	nop
+  40:	7c c0       	rjmp	.+248    	; 0x13a <__bad_interrupt>
+  42:	00 00       	nop
+  44:	7a c0       	rjmp	.+244    	; 0x13a <__bad_interrupt>
+  46:	00 00       	nop
+  48:	78 c0       	rjmp	.+240    	; 0x13a <__bad_interrupt>
+  4a:	00 00       	nop
+  4c:	76 c0       	rjmp	.+236    	; 0x13a <__bad_interrupt>
+  4e:	00 00       	nop
+  50:	74 c0       	rjmp	.+232    	; 0x13a <__bad_interrupt>
+  52:	00 00       	nop
+  54:	72 c0       	rjmp	.+228    	; 0x13a <__bad_interrupt>
+  56:	00 00       	nop
+  58:	70 c0       	rjmp	.+224    	; 0x13a <__bad_interrupt>
+  5a:	00 00       	nop
+  5c:	6e c0       	rjmp	.+220    	; 0x13a <__bad_interrupt>
+  5e:	00 00       	nop
+  60:	6c c0       	rjmp	.+216    	; 0x13a <__bad_interrupt>
+  62:	00 00       	nop
+  64:	6a c0       	rjmp	.+212    	; 0x13a <__bad_interrupt>
+  66:	00 00       	nop
+  68:	68 c0       	rjmp	.+208    	; 0x13a <__bad_interrupt>
+  6a:	00 00       	nop
+  6c:	66 c0       	rjmp	.+204    	; 0x13a <__bad_interrupt>
+  6e:	00 00       	nop
+  70:	64 c0       	rjmp	.+200    	; 0x13a <__bad_interrupt>
+  72:	00 00       	nop
+  74:	62 c0       	rjmp	.+196    	; 0x13a <__bad_interrupt>
+  76:	00 00       	nop
+  78:	60 c0       	rjmp	.+192    	; 0x13a <__bad_interrupt>
+  7a:	00 00       	nop
+  7c:	5e c0       	rjmp	.+188    	; 0x13a <__bad_interrupt>
+  7e:	00 00       	nop
+  80:	5c c0       	rjmp	.+184    	; 0x13a <__bad_interrupt>
+  82:	00 00       	nop
+  84:	5a c0       	rjmp	.+180    	; 0x13a <__bad_interrupt>
+  86:	00 00       	nop
+  88:	58 c0       	rjmp	.+176    	; 0x13a <__bad_interrupt>
+  8a:	00 00       	nop
+  8c:	56 c0       	rjmp	.+172    	; 0x13a <__bad_interrupt>
+  8e:	00 00       	nop
+  90:	54 c0       	rjmp	.+168    	; 0x13a <__bad_interrupt>
+  92:	00 00       	nop
+  94:	52 c0       	rjmp	.+164    	; 0x13a <__bad_interrupt>
+  96:	00 00       	nop
+  98:	50 c0       	rjmp	.+160    	; 0x13a <__bad_interrupt>
+  9a:	00 00       	nop
+  9c:	4e c0       	rjmp	.+156    	; 0x13a <__bad_interrupt>
+  9e:	00 00       	nop
+  a0:	4c c0       	rjmp	.+152    	; 0x13a <__bad_interrupt>
+  a2:	00 00       	nop
+  a4:	4a c0       	rjmp	.+148    	; 0x13a <__bad_interrupt>
+  a6:	00 00       	nop
+  a8:	48 c0       	rjmp	.+144    	; 0x13a <__bad_interrupt>
+  aa:	00 00       	nop
+  ac:	46 c0       	rjmp	.+140    	; 0x13a <__bad_interrupt>
+  ae:	00 00       	nop
+  b0:	44 c0       	rjmp	.+136    	; 0x13a <__bad_interrupt>
+  b2:	00 00       	nop
+  b4:	42 c0       	rjmp	.+132    	; 0x13a <__bad_interrupt>
+  b6:	00 00       	nop
+  b8:	40 c0       	rjmp	.+128    	; 0x13a <__bad_interrupt>
+  ba:	00 00       	nop
+  bc:	3e c0       	rjmp	.+124    	; 0x13a <__bad_interrupt>
+  be:	00 00       	nop
+  c0:	3c c0       	rjmp	.+120    	; 0x13a <__bad_interrupt>
+  c2:	00 00       	nop
+  c4:	3a c0       	rjmp	.+116    	; 0x13a <__bad_interrupt>
+  c6:	00 00       	nop
+  c8:	38 c0       	rjmp	.+112    	; 0x13a <__bad_interrupt>
+  ca:	00 00       	nop
+  cc:	36 c0       	rjmp	.+108    	; 0x13a <__bad_interrupt>
+  ce:	00 00       	nop
+  d0:	34 c0       	rjmp	.+104    	; 0x13a <__bad_interrupt>
+  d2:	00 00       	nop
+  d4:	32 c0       	rjmp	.+100    	; 0x13a <__bad_interrupt>
+  d6:	00 00       	nop
+  d8:	30 c0       	rjmp	.+96     	; 0x13a <__bad_interrupt>
+  da:	00 00       	nop
+  dc:	2e c0       	rjmp	.+92     	; 0x13a <__bad_interrupt>
+  de:	00 00       	nop
+  e0:	2c c0       	rjmp	.+88     	; 0x13a <__bad_interrupt>
+  e2:	00 00       	nop
+  e4:	a1 02       	muls	r26, r17
+  e6:	9e 02       	muls	r25, r30
+  e8:	ae 02       	muls	r26, r30
+  ea:	9b 02       	muls	r25, r27
+  ec:	ae 02       	muls	r26, r30
+  ee:	ab 02       	muls	r26, r27
+  f0:	99 02       	muls	r25, r25
+  f2:	ae 02       	muls	r26, r30
+  f4:	a7 02       	muls	r26, r23
+  f6:	a9 02       	muls	r26, r25
+  f8:	a5 02       	muls	r26, r21
+  fa:	a3 02       	muls	r26, r19
+
+000000fc <__ctors_end>:
+  fc:	11 24       	eor	r1, r1
+  fe:	1f be       	out	0x3f, r1	; 63
+ 100:	cf ef       	ldi	r28, 0xFF	; 255
+ 102:	d1 e2       	ldi	r29, 0x21	; 33
+ 104:	de bf       	out	0x3e, r29	; 62
+ 106:	cd bf       	out	0x3d, r28	; 61
+ 108:	00 e0       	ldi	r16, 0x00	; 0
+ 10a:	0c bf       	out	0x3c, r16	; 60
+
+0000010c <__do_copy_data>:
+ 10c:	14 e0       	ldi	r17, 0x04	; 4
+ 10e:	a0 e0       	ldi	r26, 0x00	; 0
+ 110:	b2 e0       	ldi	r27, 0x02	; 2
+ 112:	ec e6       	ldi	r30, 0x6C	; 108
+ 114:	f7 e0       	ldi	r31, 0x07	; 7
+ 116:	00 e0       	ldi	r16, 0x00	; 0
+ 118:	0b bf       	out	0x3b, r16	; 59
+ 11a:	02 c0       	rjmp	.+4      	; 0x120 <__do_copy_data+0x14>
+ 11c:	07 90       	elpm	r0, Z+
+ 11e:	0d 92       	st	X+, r0
+ 120:	a8 30       	cpi	r26, 0x08	; 8
+ 122:	b1 07       	cpc	r27, r17
+ 124:	d9 f7       	brne	.-10     	; 0x11c <__do_copy_data+0x10>
+
+00000126 <__do_clear_bss>:
+ 126:	24 e0       	ldi	r18, 0x04	; 4
+ 128:	a8 e0       	ldi	r26, 0x08	; 8
+ 12a:	b4 e0       	ldi	r27, 0x04	; 4
+ 12c:	01 c0       	rjmp	.+2      	; 0x130 <.do_clear_bss_start>
+
+0000012e <.do_clear_bss_loop>:
+ 12e:	1d 92       	st	X+, r1
+
+00000130 <.do_clear_bss_start>:
+ 130:	ad 31       	cpi	r26, 0x1D	; 29
+ 132:	b2 07       	cpc	r27, r18
+ 134:	e1 f7       	brne	.-8      	; 0x12e <.do_clear_bss_loop>
+ 136:	dd d2       	rcall	.+1466   	; 0x6f2 <main>
+ 138:	17 c3       	rjmp	.+1582   	; 0x768 <_exit>
+
+0000013a <__bad_interrupt>:
+ 13a:	62 cf       	rjmp	.-316    	; 0x0 <__vectors>
+
+0000013c <initSPI>:
+unsigned char send3zeros;        // EP3-IN function uses this to send HID (key up) codes between keystrokes
+
+void initSPI()
+{
+  // MOSI, CLK and SS pins + MAX CS are output 
+  DDRB |= 0b00010111;
+ 13c:	84 b1       	in	r24, 0x04	; 4
+ 13e:	87 61       	ori	r24, 0x17	; 23
+ 140:	84 b9       	out	0x04, r24	; 4
+  // MISO pin is input
+  DDRB &= 0b11110111;
+ 142:	84 b1       	in	r24, 0x04	; 4
+ 144:	87 7f       	andi	r24, 0xF7	; 247
+ 146:	84 b9       	out	0x04, r24	; 4
+  // At Mega2560: MAX Select is at PB4
+  // SS high (deselect MAX)
+  PORTB |= 0b00010001;
+ 148:	85 b1       	in	r24, 0x05	; 5
+ 14a:	81 61       	ori	r24, 0x11	; 17
+ 14c:	85 b9       	out	0x05, r24	; 5
+  // Disable SPI interrupts, SPI enable, MSB first, Master, Mode(0,0), f = 125 kHz
+  SPCR = 0b01010011;
+ 14e:	83 e5       	ldi	r24, 0x53	; 83
+ 150:	8c bd       	out	0x2c, r24	; 44
+  SPSR = 0;  
+ 152:	1d bc       	out	0x2d, r1	; 45
+ 154:	08 95       	ret
+
+00000156 <wreg>:
+// Write a MAX3420E register byte
+void wreg(unsigned char reg, unsigned char dat)
+{
+unsigned char dummy;	
+  // Slave select (MAX SS low)
+  PORTB &= 0b11101111;
+ 156:	95 b1       	in	r25, 0x05	; 5
+ 158:	9f 7e       	andi	r25, 0xEF	; 239
+ 15a:	95 b9       	out	0x05, r25	; 5
+  // Send the register number with the DIR bit (b1) set to WRITE
+  SPDR = reg | 0b00000010;
+ 15c:	82 60       	ori	r24, 0x02	; 2
+ 15e:	8e bd       	out	0x2e, r24	; 46
+  // Await transfer complete
+  while ((SPSR & 0b10000000) == 0)
+ 160:	0d b4       	in	r0, 0x2d	; 45
+ 162:	07 fe       	sbrs	r0, 7
+ 164:	fd cf       	rjmp	.-6      	; 0x160 <wreg+0xa>
+  {}
+  // Clear SPIF	  
+  dummy = SPDR;	    
+ 166:	8e b5       	in	r24, 0x2e	; 46
+  // Send the data
+  SPDR = dat;
+ 168:	6e bd       	out	0x2e, r22	; 46
+  // Await transfer complete
+  while ((SPSR & 0b10000000) == 0)
+ 16a:	0d b4       	in	r0, 0x2d	; 45
+ 16c:	07 fe       	sbrs	r0, 7
+ 16e:	fd cf       	rjmp	.-6      	; 0x16a <wreg+0x14>
+  {}
+  // Clear SPIF
+  dummy = SPDR;
+ 170:	8e b5       	in	r24, 0x2e	; 46
+  // Slave deselect (MAX SS high)
+  PORTB |= 0b00010000;
+ 172:	85 b1       	in	r24, 0x05	; 5
+ 174:	80 61       	ori	r24, 0x10	; 16
+ 176:	85 b9       	out	0x05, r24	; 5
+ 178:	08 95       	ret
+
+0000017a <wregAS>:
+// Same as 'wreg' but also set the ACKSTAT bit in the SPI command byte
+void wregAS(unsigned char reg, unsigned char dat)
+{
+unsigned char dummy;
+  // Slave select (MAX SS low)
+  PORTB &= 0b11101111;
+ 17a:	95 b1       	in	r25, 0x05	; 5
+ 17c:	9f 7e       	andi	r25, 0xEF	; 239
+ 17e:	95 b9       	out	0x05, r25	; 5
+  // Send the register number with the DIR bit (b1) set to WRITE and bit 0 (ACK STATUS) set to 1
+  SPDR = reg | 0b00000011;
+ 180:	83 60       	ori	r24, 0x03	; 3
+ 182:	8e bd       	out	0x2e, r24	; 46
+  // Await transfer complete
+  while ((SPSR & 0b10000000) == 0)
+ 184:	0d b4       	in	r0, 0x2d	; 45
+ 186:	07 fe       	sbrs	r0, 7
+ 188:	fd cf       	rjmp	.-6      	; 0x184 <wregAS+0xa>
+  {}
+  // Clear SPIF
+  dummy = SPDR;
+ 18a:	8e b5       	in	r24, 0x2e	; 46
+  // Send the data
+  SPDR = dat;
+ 18c:	6e bd       	out	0x2e, r22	; 46
+  // Await transfer complete
+  while ((SPSR & 0b10000000) == 0)
+ 18e:	0d b4       	in	r0, 0x2d	; 45
+ 190:	07 fe       	sbrs	r0, 7
+ 192:	fd cf       	rjmp	.-6      	; 0x18e <wregAS+0x14>
+  {}
+  // Clear SPIF
+  dummy = SPDR;
+ 194:	8e b5       	in	r24, 0x2e	; 46
+  // Slave deselect (MAX SS high)
+  PORTB |= 0b00010000;
+ 196:	85 b1       	in	r24, 0x05	; 5
+ 198:	80 61       	ori	r24, 0x10	; 16
+ 19a:	85 b9       	out	0x05, r24	; 5
+ 19c:	08 95       	ret
+
+0000019e <rreg>:
+// Read a register, return its value.
+unsigned char rreg(unsigned char reg)
+{
+unsigned char dummy;	
+  // Slave select (MAX SS low)
+  PORTB &= 0b11101111;
+ 19e:	95 b1       	in	r25, 0x05	; 5
+ 1a0:	9f 7e       	andi	r25, 0xEF	; 239
+ 1a2:	95 b9       	out	0x05, r25	; 5
+  // Send the register number with the DIR bit (b1) reset to READ
+  SPDR = reg;
+ 1a4:	8e bd       	out	0x2e, r24	; 46
+  // Await transfer complete
+  while ((SPSR & 0b10000000) == 0)
+ 1a6:	0d b4       	in	r0, 0x2d	; 45
+ 1a8:	07 fe       	sbrs	r0, 7
+ 1aa:	fd cf       	rjmp	.-6      	; 0x1a6 <rreg+0x8>
+  {}
+  // Clear SPIF
+  dummy = SPDR;
+ 1ac:	8e b5       	in	r24, 0x2e	; 46
+  // Dummy send (generate 8 clocks)
+  SPDR = 0;
+ 1ae:	1e bc       	out	0x2e, r1	; 46
+  // Await transfer complete  
+  while ((SPSR & 0b10000000) == 0)
+ 1b0:	0d b4       	in	r0, 0x2d	; 45
+ 1b2:	07 fe       	sbrs	r0, 7
+ 1b4:	fd cf       	rjmp	.-6      	; 0x1b0 <rreg+0x12>
+  {}  
+  // Slave deselect (MAX SS high)
+  PORTB |= 0b00010000;
+ 1b6:	85 b1       	in	r24, 0x05	; 5
+ 1b8:	80 61       	ori	r24, 0x10	; 16
+ 1ba:	85 b9       	out	0x05, r24	; 5
+  // Return read data
+  return SPDR;  
+ 1bc:	8e b5       	in	r24, 0x2e	; 46
+}
+ 1be:	08 95       	ret
+
+000001c0 <rregAS>:
+// Same as 'rreg' but also set the ACKSTAT bit
+unsigned char rregAS(unsigned char reg)
+{
+unsigned char dummy;
+  // Slave select (MAX SS low)
+  PORTB &= 0b11101111;
+ 1c0:	95 b1       	in	r25, 0x05	; 5
+ 1c2:	9f 7e       	andi	r25, 0xEF	; 239
+ 1c4:	95 b9       	out	0x05, r25	; 5
+  // Send the register number with the DIR bit (b1) reset to READ and bit 0 (ACKSTAT) set to 1
+  SPDR = reg | 0b00000001;
+ 1c6:	81 60       	ori	r24, 0x01	; 1
+ 1c8:	8e bd       	out	0x2e, r24	; 46
+  // Await transfer complete
+  while ((SPSR & 0b10000000) == 0)
+ 1ca:	0d b4       	in	r0, 0x2d	; 45
+ 1cc:	07 fe       	sbrs	r0, 7
+ 1ce:	fd cf       	rjmp	.-6      	; 0x1ca <rregAS+0xa>
+  {}
+  // Clear SPIF
+  dummy = SPDR;
+ 1d0:	8e b5       	in	r24, 0x2e	; 46
+  // Dummy send (generate 8 clocks)
+  SPDR = 0;
+ 1d2:	1e bc       	out	0x2e, r1	; 46
+  // Await transfer complete
+  while ((SPSR & 0b10000000) == 0)
+ 1d4:	0d b4       	in	r0, 0x2d	; 45
+ 1d6:	07 fe       	sbrs	r0, 7
+ 1d8:	fd cf       	rjmp	.-6      	; 0x1d4 <rregAS+0x14>
+  {}
+  // Slave deselect (MAX SS high)
+  PORTB |= 0b00010000;
+ 1da:	85 b1       	in	r24, 0x05	; 5
+ 1dc:	80 61       	ori	r24, 0x10	; 16
+ 1de:	85 b9       	out	0x05, r24	; 5
+  // Return read data
+  return SPDR;
+ 1e0:	8e b5       	in	r24, 0x2e	; 46
+}
+ 1e2:	08 95       	ret
+
+000001e4 <readbytes>:
+
+// Read N MAX3420E FIFO bytes into the array p
+void readbytes(unsigned char reg, unsigned char N, unsigned char *p)
+{
+ 1e4:	fa 01       	movw	r30, r20
+unsigned char j;
+  // Slave select (MAX SS low)
+  PORTB &= 0b11101111;
+ 1e6:	95 b1       	in	r25, 0x05	; 5
+ 1e8:	9f 7e       	andi	r25, 0xEF	; 239
+ 1ea:	95 b9       	out	0x05, r25	; 5
+  // Send the register number with the DIR bit (b1) reset to READ
+  SPDR = reg;
+ 1ec:	8e bd       	out	0x2e, r24	; 46
+  // Await transfer complete
+  while ((SPSR & 0b10000000) == 0)
+ 1ee:	0d b4       	in	r0, 0x2d	; 45
+ 1f0:	07 fe       	sbrs	r0, 7
+ 1f2:	fd cf       	rjmp	.-6      	; 0x1ee <readbytes+0xa>
+  {}  
+  // Clear SPIF
+  j = SPDR;  
+ 1f4:	8e b5       	in	r24, 0x2e	; 46
+  for(j=0; j<N; j++)
+ 1f6:	80 e0       	ldi	r24, 0x00	; 0
+ 1f8:	07 c0       	rjmp	.+14     	; 0x208 <readbytes+0x24>
+  {
+    // Dummy send (generate 8 clocks)
+    SPDR = 0;
+ 1fa:	1e bc       	out	0x2e, r1	; 46
+    // Await transfer complete
+    while ((SPSR & 0b10000000) == 0)
+ 1fc:	0d b4       	in	r0, 0x2d	; 45
+ 1fe:	07 fe       	sbrs	r0, 7
+ 200:	fd cf       	rjmp	.-6      	; 0x1fc <readbytes+0x18>
+    {}
+    // store it in the data array   	
+    *p = SPDR;
+ 202:	9e b5       	in	r25, 0x2e	; 46
+ 204:	91 93       	st	Z+, r25
+  // Await transfer complete
+  while ((SPSR & 0b10000000) == 0)
+  {}  
+  // Clear SPIF
+  j = SPDR;  
+  for(j=0; j<N; j++)
+ 206:	8f 5f       	subi	r24, 0xFF	; 255
+ 208:	86 17       	cp	r24, r22
+ 20a:	b8 f3       	brcs	.-18     	; 0x1fa <readbytes+0x16>
+    // store it in the data array   	
+    *p = SPDR;
+	p++;
+  }
+  // Slave deselect (MAX SS high)
+  PORTB |= 0b00010000;
+ 20c:	85 b1       	in	r24, 0x05	; 5
+ 20e:	80 61       	ori	r24, 0x10	; 16
+ 210:	85 b9       	out	0x05, r24	; 5
+ 212:	08 95       	ret
+
+00000214 <writebytes>:
+}
+
+// Write N MAX3420E FIFO bytes into the array p
+void writebytes(unsigned char reg, unsigned char N, const unsigned char *p)
+{
+ 214:	fa 01       	movw	r30, r20
+	// <------------- Write code here (exercise, part 2)
+	
+	// Slave select (MAX SS low)
+	PORTB &= 0b11101111;
+ 216:	95 b1       	in	r25, 0x05	; 5
+ 218:	9f 7e       	andi	r25, 0xEF	; 239
+ 21a:	95 b9       	out	0x05, r25	; 5
+	SPDR = reg | 0b00000010;
+ 21c:	82 60       	ori	r24, 0x02	; 2
+ 21e:	8e bd       	out	0x2e, r24	; 46
+	while ((SPSR & 0b10000000) == 0)
+ 220:	0d b4       	in	r0, 0x2d	; 45
+ 222:	07 fe       	sbrs	r0, 7
+ 224:	fd cf       	rjmp	.-6      	; 0x220 <writebytes+0xc>
+	{}
+	// Read SPSR to clear IF flag
+	char j = SPSR;
+ 226:	8d b5       	in	r24, 0x2d	; 45
+	char dummy;
+	for(j = 0; j < N; j++){
+ 228:	80 e0       	ldi	r24, 0x00	; 0
+ 22a:	09 c0       	rjmp	.+18     	; 0x23e <writebytes+0x2a>
+		// Clear SPIF
+		dummy = SPDR;
+ 22c:	9e b5       	in	r25, 0x2e	; 46
+		// Send the data
+		SPDR = *p;
+ 22e:	90 81       	ld	r25, Z
+ 230:	9e bd       	out	0x2e, r25	; 46
+		// Await transfer complete
+		while ((SPSR & 0b10000000) == 0)
+ 232:	0d b4       	in	r0, 0x2d	; 45
+ 234:	07 fe       	sbrs	r0, 7
+ 236:	fd cf       	rjmp	.-6      	; 0x232 <writebytes+0x1e>
+		{}
+		// Clear SPIF
+		dummy = SPDR;
+ 238:	9e b5       	in	r25, 0x2e	; 46
+		p++;
+ 23a:	31 96       	adiw	r30, 0x01	; 1
+	while ((SPSR & 0b10000000) == 0)
+	{}
+	// Read SPSR to clear IF flag
+	char j = SPSR;
+	char dummy;
+	for(j = 0; j < N; j++){
+ 23c:	8f 5f       	subi	r24, 0xFF	; 255
+ 23e:	86 17       	cp	r24, r22
+ 240:	a8 f3       	brcs	.-22     	; 0x22c <writebytes+0x18>
+		// Clear SPIF
+		dummy = SPDR;
+		p++;
+	}
+	// Slave deselect (MAX SS high)
+	PORTB |= 0b00010000;
+ 242:	85 b1       	in	r24, 0x05	; 5
+ 244:	80 61       	ori	r24, 0x10	; 16
+ 246:	85 b9       	out	0x05, r24	; 5
+ 248:	08 95       	ret
+
+0000024a <Reset_MAX>:
+
+// Reset the MAX3420E
+void Reset_MAX()
+{
+unsigned char dummy;
+  wreg(rUSBCTL,0x20);	// chip reset
+ 24a:	60 e2       	ldi	r22, 0x20	; 32
+ 24c:	88 e7       	ldi	r24, 0x78	; 120
+ 24e:	83 df       	rcall	.-250    	; 0x156 <wreg>
+  wreg(rUSBCTL,0x00);	// remove the reset
+ 250:	60 e0       	ldi	r22, 0x00	; 0
+ 252:	88 e7       	ldi	r24, 0x78	; 120
+ 254:	80 df       	rcall	.-256    	; 0x156 <wreg>
+  do                  // Chip reset stops the oscillator. Wait for it to stabilize.
+  {
+    dummy = rreg(rUSBIRQ);
+ 256:	88 e6       	ldi	r24, 0x68	; 104
+ 258:	a2 df       	rcall	.-188    	; 0x19e <rreg>
+ 25a:	80 ff       	sbrs	r24, 0
+	dummy &= bmOSCOKIRQ;
+  }
+  while (dummy == 0);
+ 25c:	fc cf       	rjmp	.-8      	; 0x256 <Reset_MAX+0xc>
+ 25e:	08 95       	ret
+
+00000260 <EnableIRQs>:
+}
+ 260:	60 e3       	ldi	r22, 0x30	; 48
+
+void EnableIRQs()
+{
+  wreg(rEPIEN,(bmSUDAVIE+bmIN3BAVIE)); 
+ 262:	80 e6       	ldi	r24, 0x60	; 96
+ 264:	78 df       	rcall	.-272    	; 0x156 <wreg>
+  wreg(rUSBIEN,(bmURESIE+bmURESDNIE));	
+ 266:	68 e8       	ldi	r22, 0x88	; 136
+ 268:	80 e7       	ldi	r24, 0x70	; 112
+ 26a:	75 cf       	rjmp	.-278    	; 0x156 <wreg>
+ 26c:	08 95       	ret
+
+0000026e <initMAX3421>:
+}
+
+void initMAX3421()
+{
+  // Set global variables
+  ep3stall=0;			// EP3 initially un-halted (no stall) (CH9 testing)
+ 26e:	10 92 0e 04 	sts	0x040E, r1	; 0x80040e <ep3stall>
+  msgidx = 0;			// start of KB Message[]
+ 272:	10 92 0d 04 	sts	0x040D, r1	; 0x80040d <msgidx>
+  msglen = sizeof(Message);     // so we can check for the end of the message
+ 276:	88 e4       	ldi	r24, 0x48	; 72
+ 278:	80 93 18 04 	sts	0x0418, r24	; 0x800418 <msglen>
+  inhibit_send = 0x01;		// 0 means send, 1 means inhibit sending
+ 27c:	81 e0       	ldi	r24, 0x01	; 1
+ 27e:	80 93 1c 04 	sts	0x041C, r24	; 0x80041c <inhibit_send>
+  send3zeros=1;
+ 282:	80 93 1b 04 	sts	0x041B, r24	; 0x80041b <send3zeros>
+  msec_timer=0;
+ 286:	10 92 1a 04 	sts	0x041A, r1	; 0x80041a <msec_timer+0x1>
+ 28a:	10 92 19 04 	sts	0x0419, r1	; 0x800419 <msec_timer>
+  blinktimer=0;
+ 28e:	10 92 0a 04 	sts	0x040A, r1	; 0x80040a <blinktimer+0x1>
+ 292:	10 92 09 04 	sts	0x0409, r1	; 0x800409 <blinktimer>
+  // software flags
+  configval=0;                    // at pwr on OR bus reset we're unconfigured
+ 296:	10 92 0b 04 	sts	0x040B, r1	; 0x80040b <configval>
+  Suspended=0;
+ 29a:	10 92 08 04 	sts	0x0408, r1	; 0x800408 <__data_end>
+  RWU_enabled=0;                  // Set by host Set_Feature(enable RWU) request
+ 29e:	10 92 0c 04 	sts	0x040C, r1	; 0x80040c <RWU_enabled>
+  // SPI initialization
+  initSPI();
+ 2a2:	4c df       	rcall	.-360    	; 0x13c <initSPI>
+  // Always set the FDUPSPI bit in the PINCTL register FIRST if you are using the SPI port in
+  // full duplex mode. This configures the port properly for subsequent SPI accesses.
+  wreg(rPINCTL,(bmFDUPSPI+bmINTLEVEL+gpxSOF)); // MAX3420: SPI=full-duplex, INT=neg level, GPX=SOF
+ 2a4:	6b e1       	ldi	r22, 0x1B	; 27
+ 2a6:	88 e8       	ldi	r24, 0x88	; 136
+  Reset_MAX();
+ 2a8:	56 df       	rcall	.-340    	; 0x156 <wreg>
+  wreg(rGPIO,0x00);                   // LEDs off (Active HIGH)
+ 2aa:	cf df       	rcall	.-98     	; 0x24a <Reset_MAX>
+ 2ac:	60 e0       	ldi	r22, 0x00	; 0
+ 2ae:	80 ea       	ldi	r24, 0xA0	; 160
+  // Therefore set the VBGATE bit to have the MAX3420E automatically disconnect the D+
+  // pullup resistor in the absense of Vbus. Note: the VBCOMP pin must be connected to Vbus
+  // or pulled high for this code to work--a low on VBCOMP will prevent USB connection.
+
+   // ----> wreg(rUSBCTL,(bmCONNECT+bmVBGATE));  // VBGATE=1 disconnects D+ pullup if host turns off VBUS
+  wreg(rUSBCTL,(bmCONNECT));		// Alrøe: Just connect. The Vbus comparator pin is floating at the USB host shield!
+ 2b0:	52 df       	rcall	.-348    	; 0x156 <wreg>
+ 2b2:	68 e0       	ldi	r22, 0x08	; 8
+ 2b4:	88 e7       	ldi	r24, 0x78	; 120
+  EnableIRQs();
+ 2b6:	4f df       	rcall	.-354    	; 0x156 <wreg>
+ 2b8:	d3 df       	rcall	.-90     	; 0x260 <EnableIRQs>
+  wreg(rCPUCTL,bmIE);                 // Enable the INT pin  
+ 2ba:	61 e0       	ldi	r22, 0x01	; 1
+ 2bc:	80 e8       	ldi	r24, 0x80	; 128
+ 2be:	4b cf       	rjmp	.-362    	; 0x156 <wreg>
+ 2c0:	08 95       	ret
+
+000002c2 <check_for_resume>:
+ 2c2:	88 e6       	ldi	r24, 0x68	; 104
+}
+
+void check_for_resume()
+{
+  if(rreg(rUSBIRQ) & bmBUSACTIRQ)     // THE HOST RESUMED BUS TRAFFIC
+ 2c4:	6c df       	rcall	.-296    	; 0x19e <rreg>
+ 2c6:	82 ff       	sbrs	r24, 2
+ 2c8:	09 c0       	rjmp	.+18     	; 0x2dc <check_for_resume+0x1a>
+  {
+    L2_OFF
+ 2ca:	80 ea       	ldi	r24, 0xA0	; 160
+ 2cc:	68 df       	rcall	.-304    	; 0x19e <rreg>
+ 2ce:	68 2f       	mov	r22, r24
+ 2d0:	6b 7f       	andi	r22, 0xFB	; 251
+ 2d2:	80 ea       	ldi	r24, 0xA0	; 160
+ 2d4:	40 df       	rcall	.-384    	; 0x156 <wreg>
+	Suspended=0;                    // no longer suspended
+ 2d6:	10 92 08 04 	sts	0x0408, r1	; 0x800408 <__data_end>
+ 2da:	08 95       	ret
+  }
+  else if(RWU_enabled)                // Only if the host enabled RWU
+ 2dc:	80 91 0c 04 	lds	r24, 0x040C	; 0x80040c <RWU_enabled>
+ 2e0:	88 23       	and	r24, r24
+  {
+	if((rreg(rGPIO)&0x40)==0)       // See if the Remote Wakeup button was pressed
+ 2e2:	51 f1       	breq	.+84     	; 0x338 <check_for_resume+0x76>
+ 2e4:	80 ea       	ldi	r24, 0xA0	; 160
+ 2e6:	5b df       	rcall	.-330    	; 0x19e <rreg>
+ 2e8:	86 fd       	sbrc	r24, 6
+	{
+	  L2_OFF                        // turn off suspend light
+ 2ea:	26 c0       	rjmp	.+76     	; 0x338 <check_for_resume+0x76>
+ 2ec:	80 ea       	ldi	r24, 0xA0	; 160
+ 2ee:	57 df       	rcall	.-338    	; 0x19e <rreg>
+ 2f0:	68 2f       	mov	r22, r24
+ 2f2:	6b 7f       	andi	r22, 0xFB	; 251
+ 2f4:	80 ea       	ldi	r24, 0xA0	; 160
+	  Suspended=0;                  // no longer suspended
+ 2f6:	2f df       	rcall	.-418    	; 0x156 <wreg>
+	  SETBIT(rUSBCTL,bmSIGRWU)      // signal RWU
+ 2f8:	10 92 08 04 	sts	0x0408, r1	; 0x800408 <__data_end>
+ 2fc:	88 e7       	ldi	r24, 0x78	; 120
+ 2fe:	4f df       	rcall	.-354    	; 0x19e <rreg>
+ 300:	68 2f       	mov	r22, r24
+ 302:	64 60       	ori	r22, 0x04	; 4
+	  while ((rreg(rUSBIRQ)&bmRWUDNIRQ)==0)  // spin until RWU signaling done
+ 304:	88 e7       	ldi	r24, 0x78	; 120
+ 306:	27 df       	rcall	.-434    	; 0x156 <wreg>
+ 308:	88 e6       	ldi	r24, 0x68	; 104
+ 30a:	49 df       	rcall	.-366    	; 0x19e <rreg>
+	  {}	
+	  CLRBIT(rUSBCTL,bmSIGRWU)      // remove the RESUME signal
+ 30c:	81 ff       	sbrs	r24, 1
+ 30e:	fc cf       	rjmp	.-8      	; 0x308 <check_for_resume+0x46>
+ 310:	88 e7       	ldi	r24, 0x78	; 120
+ 312:	45 df       	rcall	.-374    	; 0x19e <rreg>
+ 314:	68 2f       	mov	r22, r24
+ 316:	6b 7f       	andi	r22, 0xFB	; 251
+	  wreg(rUSBIRQ,bmRWUDNIRQ);     // clear the IRQ
+ 318:	88 e7       	ldi	r24, 0x78	; 120
+ 31a:	1d df       	rcall	.-454    	; 0x156 <wreg>
+ 31c:	62 e0       	ldi	r22, 0x02	; 2
+	  while((rreg(rGPIO)&0x40)==0)
+ 31e:	88 e6       	ldi	r24, 0x68	; 104
+ 320:	1a df       	rcall	.-460    	; 0x156 <wreg>
+ 322:	80 ea       	ldi	r24, 0xA0	; 160
+ 324:	3c df       	rcall	.-392    	; 0x19e <rreg>
+ 326:	86 ff       	sbrs	r24, 6
+      {}  // hang until RWU button released
+      wreg(rUSBIRQ,bmBUSACTIRQ);    // wait for bus traffic -- clear the BUS Active IRQ
+ 328:	fc cf       	rjmp	.-8      	; 0x322 <check_for_resume+0x60>
+ 32a:	64 e0       	ldi	r22, 0x04	; 4
+ 32c:	88 e6       	ldi	r24, 0x68	; 104
+ 32e:	13 df       	rcall	.-474    	; 0x156 <wreg>
+      while((rreg(rUSBIRQ) & bmBUSACTIRQ)==0)
+ 330:	88 e6       	ldi	r24, 0x68	; 104
+ 332:	35 df       	rcall	.-406    	; 0x19e <rreg>
+ 334:	82 ff       	sbrs	r24, 2
+ 336:	fc cf       	rjmp	.-8      	; 0x330 <check_for_resume+0x6e>
+ 338:	08 95       	ret
+
+0000033a <MAX_Int_Pending>:
+ 33a:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__TEXT_REGION_LENGTH__+0x7c0100>
+
+// Poll the MAX3420E INT pin (set for active low level)
+unsigned char MAX_Int_Pending()
+{
+  // Henning Hargaard: The interrupt pin is connected to PORT H, pin 6
+  return ((PINH & 0b01000000) == 0 );
+ 33e:	82 95       	swap	r24
+ 340:	86 95       	lsr	r24
+ 342:	86 95       	lsr	r24
+ 344:	83 70       	andi	r24, 0x03	; 3
+ 346:	91 e0       	ldi	r25, 0x01	; 1
+ 348:	89 27       	eor	r24, r25
+}
+ 34a:	81 70       	andi	r24, 0x01	; 1
+ 34c:	08 95       	ret
+
+0000034e <send_descriptor>:
+
+void send_descriptor()
+{
+ 34e:	cf 93       	push	r28
+ 350:	df 93       	push	r29
+unsigned int reqlen,sendlen,desclen;
+const unsigned char *pDdata;					// pointer to ROM Descriptor data to send
+  //
+  // NOTE This function assumes all descriptors are 64 or fewer bytes and can be sent in a single packet
+  desclen = 0;					// check for zero as error condition (no case statements satisfied)
+  reqlen = SUD[wLengthL] + 256*SUD[wLengthH];	// 16-bit
+ 352:	e0 e1       	ldi	r30, 0x10	; 16
+ 354:	f4 e0       	ldi	r31, 0x04	; 4
+ 356:	26 81       	ldd	r18, Z+6	; 0x06
+ 358:	87 81       	ldd	r24, Z+7	; 0x07
+ 35a:	90 e0       	ldi	r25, 0x00	; 0
+ 35c:	98 2f       	mov	r25, r24
+ 35e:	88 27       	eor	r24, r24
+ 360:	82 0f       	add	r24, r18
+ 362:	91 1d       	adc	r25, r1
+  switch (SUD[wValueH])			// wValueH is descriptor type
+ 364:	23 81       	ldd	r18, Z+3	; 0x03
+ 366:	22 30       	cpi	r18, 0x02	; 2
+ 368:	59 f0       	breq	.+22     	; 0x380 <send_descriptor+0x32>
+ 36a:	18 f4       	brcc	.+6      	; 0x372 <send_descriptor+0x24>
+ 36c:	21 30       	cpi	r18, 0x01	; 1
+ 36e:	f9 f0       	breq	.+62     	; 0x3ae <send_descriptor+0x60>
+ 370:	04 c0       	rjmp	.+8      	; 0x37a <send_descriptor+0x2c>
+ 372:	23 30       	cpi	r18, 0x03	; 3
+ 374:	51 f0       	breq	.+20     	; 0x38a <send_descriptor+0x3c>
+ 376:	22 32       	cpi	r18, 0x22	; 34
+ 378:	a9 f0       	breq	.+42     	; 0x3a4 <send_descriptor+0x56>
+{
+unsigned int reqlen,sendlen,desclen;
+const unsigned char *pDdata;					// pointer to ROM Descriptor data to send
+  //
+  // NOTE This function assumes all descriptors are 64 or fewer bytes and can be sent in a single packet
+  desclen = 0;					// check for zero as error condition (no case statements satisfied)
+ 37a:	60 e0       	ldi	r22, 0x00	; 0
+ 37c:	70 e0       	ldi	r23, 0x00	; 0
+ 37e:	1b c0       	rjmp	.+54     	; 0x3b6 <send_descriptor+0x68>
+      desclen = DD[0];	// descriptor length
+      pDdata = DD;
+      break;
+	case GD_CONFIGURATION:
+	  desclen = CD[2];	// Config descriptor includes interface, HID, report and ep descriptors
+      pDdata = CD;
+ 380:	43 eb       	ldi	r20, 0xB3	; 179
+ 382:	53 e0       	ldi	r21, 0x03	; 3
+	case GD_DEVICE:
+      desclen = DD[0];	// descriptor length
+      pDdata = DD;
+      break;
+	case GD_CONFIGURATION:
+	  desclen = CD[2];	// Config descriptor includes interface, HID, report and ep descriptors
+ 384:	62 e4       	ldi	r22, 0x42	; 66
+ 386:	70 e0       	ldi	r23, 0x00	; 0
+      pDdata = CD;
+	  break;
+ 388:	16 c0       	rjmp	.+44     	; 0x3b6 <send_descriptor+0x68>
+	case GD_STRING:
+	  desclen = strDesc[SUD[wValueL]][0];   // wValueL=string index, array[0] is the length
+ 38a:	40 91 12 04 	lds	r20, 0x0412	; 0x800412 <SUD+0x2>
+ 38e:	20 e4       	ldi	r18, 0x40	; 64
+ 390:	42 9f       	mul	r20, r18
+ 392:	a0 01       	movw	r20, r0
+ 394:	11 24       	eor	r1, r1
+ 396:	fa 01       	movw	r30, r20
+ 398:	e8 5b       	subi	r30, 0xB8	; 184
+ 39a:	fd 4f       	sbci	r31, 0xFD	; 253
+ 39c:	60 81       	ld	r22, Z
+ 39e:	70 e0       	ldi	r23, 0x00	; 0
+      pDdata = strDesc[SUD[wValueL]];       // point to first array element
+ 3a0:	af 01       	movw	r20, r30
+	  break;
+ 3a2:	09 c0       	rjmp	.+18     	; 0x3b6 <send_descriptor+0x68>
+	 // desclen = CD[18];
+	  //pDdata = &CD[18];
+      //break;
+	case GD_REPORT:
+	  desclen = CD[25];
+      pDdata = RepD;
+ 3a4:	48 e8       	ldi	r20, 0x88	; 136
+ 3a6:	53 e0       	ldi	r21, 0x03	; 3
+	//case GD_HID:
+	 // desclen = CD[18];
+	  //pDdata = &CD[18];
+      //break;
+	case GD_REPORT:
+	  desclen = CD[25];
+ 3a8:	61 e0       	ldi	r22, 0x01	; 1
+ 3aa:	70 e0       	ldi	r23, 0x00	; 0
+      pDdata = RepD;
+      break;
+ 3ac:	04 c0       	rjmp	.+8      	; 0x3b6 <send_descriptor+0x68>
+  reqlen = SUD[wLengthL] + 256*SUD[wLengthH];	// 16-bit
+  switch (SUD[wValueH])			// wValueH is descriptor type
+  {
+	case GD_DEVICE:
+      desclen = DD[0];	// descriptor length
+      pDdata = DD;
+ 3ae:	45 ef       	ldi	r20, 0xF5	; 245
+ 3b0:	53 e0       	ldi	r21, 0x03	; 3
+  desclen = 0;					// check for zero as error condition (no case statements satisfied)
+  reqlen = SUD[wLengthL] + 256*SUD[wLengthH];	// 16-bit
+  switch (SUD[wValueH])			// wValueH is descriptor type
+  {
+	case GD_DEVICE:
+      desclen = DD[0];	// descriptor length
+ 3b2:	62 e1       	ldi	r22, 0x12	; 18
+ 3b4:	70 e0       	ldi	r23, 0x00	; 0
+	case GD_REPORT:
+	  desclen = CD[25];
+      pDdata = RepD;
+      break;
+  }
+  if (desclen !=0 )                   // one of the case statements above filled in a value
+ 3b6:	61 15       	cp	r22, r1
+ 3b8:	71 05       	cpc	r23, r1
+ 3ba:	61 f0       	breq	.+24     	; 0x3d4 <send_descriptor+0x86>
+  {
+    sendlen = (reqlen <= desclen) ? reqlen : desclen; // send the smaller of requested and available
+ 3bc:	eb 01       	movw	r28, r22
+ 3be:	86 17       	cp	r24, r22
+ 3c0:	97 07       	cpc	r25, r23
+ 3c2:	08 f4       	brcc	.+2      	; 0x3c6 <send_descriptor+0x78>
+ 3c4:	ec 01       	movw	r28, r24
+	//sendlen = desclen;
+	
+	writebytes(rEP0FIFO, sendlen, pDdata);
+ 3c6:	6c 2f       	mov	r22, r28
+ 3c8:	80 e0       	ldi	r24, 0x00	; 0
+ 3ca:	24 df       	rcall	.-440    	; 0x214 <writebytes>
+	wregAS(rEP0BC, sendlen);
+ 3cc:	6c 2f       	mov	r22, r28
+ 3ce:	88 e2       	ldi	r24, 0x28	; 40
+ 3d0:	d4 de       	rcall	.-600    	; 0x17a <wregAS>
+ 3d2:	03 c0       	rjmp	.+6      	; 0x3da <send_descriptor+0x8c>
+		//wregAS(rEP0BC,sendlen);   // load EP0BC to arm the EP0-IN transfer & ACKSTAT
+	//}
+	
+  }
+  else
+    STALL_EP0  // none of the descriptor types match
+ 3d4:	63 e2       	ldi	r22, 0x23	; 35
+ 3d6:	88 e4       	ldi	r24, 0x48	; 72
+ 3d8:	be de       	rcall	.-644    	; 0x156 <wreg>
+}
+ 3da:	df 91       	pop	r29
+ 3dc:	cf 91       	pop	r28
+ 3de:	08 95       	ret
+
+000003e0 <feature>:
+// There are two set/clear feature requests:
+//	To a DEVICE: 	Remote Wakeup (RWU).
+//  	To an ENDPOINT:	Stall (EP3 only for this app)
+//
+void feature(unsigned char sc)
+{
+ 3e0:	cf 93       	push	r28
+ 3e2:	c8 2f       	mov	r28, r24
+  unsigned char mask;
+  if((SUD[bmRequestType]==0x02)	// dir=h->p, recipient = ENDPOINT
+ 3e4:	80 91 10 04 	lds	r24, 0x0410	; 0x800410 <SUD>
+ 3e8:	82 30       	cpi	r24, 0x02	; 2
+ 3ea:	f1 f4       	brne	.+60     	; 0x428 <__LOCK_REGION_LENGTH__+0x28>
+	&&  (SUD[wValueL]==0x00)	// wValueL is feature selector, 00 is EP Halt
+ 3ec:	90 91 12 04 	lds	r25, 0x0412	; 0x800412 <SUD+0x2>
+ 3f0:	91 11       	cpse	r25, r1
+ 3f2:	1a c0       	rjmp	.+52     	; 0x428 <__LOCK_REGION_LENGTH__+0x28>
+	&&  (SUD[wIndexL]==0x83))	// wIndexL is endpoint number IN3=83
+ 3f4:	90 91 14 04 	lds	r25, 0x0414	; 0x800414 <SUD+0x4>
+ 3f8:	93 38       	cpi	r25, 0x83	; 131
+ 3fa:	b1 f4       	brne	.+44     	; 0x428 <__LOCK_REGION_LENGTH__+0x28>
+  {
+    mask=rreg(rEPSTALLS);   // read existing bits
+ 3fc:	88 e4       	ldi	r24, 0x48	; 72
+ 3fe:	cf de       	rcall	.-610    	; 0x19e <rreg>
+    if(sc == 1)               // set_feature
+ 400:	c1 30       	cpi	r28, 0x01	; 1
+ 402:	31 f4       	brne	.+12     	; 0x410 <__LOCK_REGION_LENGTH__+0x10>
+    {
+      mask += bmSTLEP3IN;       // Halt EP3IN
+ 404:	c0 e1       	ldi	r28, 0x10	; 16
+ 406:	c8 0f       	add	r28, r24
+      ep3stall=1;
+ 408:	81 e0       	ldi	r24, 0x01	; 1
+ 40a:	80 93 0e 04 	sts	0x040E, r24	; 0x80040e <ep3stall>
+ 40e:	07 c0       	rjmp	.+14     	; 0x41e <__LOCK_REGION_LENGTH__+0x1e>
+    }
+    else                        // clear_feature
+    {
+      mask &= ~bmSTLEP3IN;      // UnHalt EP3IN
+ 410:	c8 2f       	mov	r28, r24
+ 412:	cf 7e       	andi	r28, 0xEF	; 239
+      ep3stall=0;
+ 414:	10 92 0e 04 	sts	0x040E, r1	; 0x80040e <ep3stall>
+      wreg(rCLRTOGS,bmCTGEP3IN);  // clear the EP3 data toggle
+ 418:	60 e1       	ldi	r22, 0x10	; 16
+ 41a:	80 e5       	ldi	r24, 0x50	; 80
+ 41c:	9c de       	rcall	.-712    	; 0x156 <wreg>
+    }
+    wreg(rEPSTALLS,(mask|bmACKSTAT)); // Don't use wregAS for this--directly writing the ACKSTAT bit
+ 41e:	6c 2f       	mov	r22, r28
+ 420:	60 64       	ori	r22, 0x40	; 64
+ 422:	88 e4       	ldi	r24, 0x48	; 72
+ 424:	98 de       	rcall	.-720    	; 0x156 <wreg>
+ 426:	0f c0       	rjmp	.+30     	; 0x446 <__LOCK_REGION_LENGTH__+0x46>
+  }
+  else if ((SUD[bmRequestType]==0x00)	// dir=h->p, recipient = DEVICE
+ 428:	81 11       	cpse	r24, r1
+ 42a:	0a c0       	rjmp	.+20     	; 0x440 <__LOCK_REGION_LENGTH__+0x40>
+	&&  (SUD[wValueL]==0x01))	// wValueL is feature selector, 01 is Device_Remote_Wakeup
+ 42c:	80 91 12 04 	lds	r24, 0x0412	; 0x800412 <SUD+0x2>
+ 430:	81 30       	cpi	r24, 0x01	; 1
+ 432:	31 f4       	brne	.+12     	; 0x440 <__LOCK_REGION_LENGTH__+0x40>
+  {
+    RWU_enabled = sc<<1;	// =2 for set, =0 for clear feature. The shift puts it in the get_status bit position.
+ 434:	cc 0f       	add	r28, r28
+ 436:	c0 93 0c 04 	sts	0x040C, r28	; 0x80040c <RWU_enabled>
+    rregAS(rFNADDR);		// dummy read to set ACKSTAT
+ 43a:	88 e9       	ldi	r24, 0x98	; 152
+ 43c:	c1 de       	rcall	.-638    	; 0x1c0 <rregAS>
+  }
+  else STALL_EP0
+ 43e:	03 c0       	rjmp	.+6      	; 0x446 <__LOCK_REGION_LENGTH__+0x46>
+ 440:	63 e2       	ldi	r22, 0x23	; 35
+ 442:	88 e4       	ldi	r24, 0x48	; 72
+ 444:	88 de       	rcall	.-752    	; 0x156 <wreg>
+}
+ 446:	cf 91       	pop	r28
+ 448:	08 95       	ret
+
+0000044a <get_status>:
+
+void get_status()
+{
+unsigned char testbyte;
+  testbyte=SUD[bmRequestType];
+ 44a:	80 91 10 04 	lds	r24, 0x0410	; 0x800410 <SUD>
+  switch(testbyte)
+ 44e:	81 38       	cpi	r24, 0x81	; 129
+ 450:	81 f0       	breq	.+32     	; 0x472 <get_status+0x28>
+ 452:	82 38       	cpi	r24, 0x82	; 130
+ 454:	c1 f0       	breq	.+48     	; 0x486 <get_status+0x3c>
+ 456:	80 38       	cpi	r24, 0x80	; 128
+ 458:	41 f5       	brne	.+80     	; 0x4aa <get_status+0x60>
+  {
+    case 0x80: 			// directed to DEVICE
+      wreg(rEP0FIFO,(RWU_enabled+1));	// first byte is 000000rs where r=enabled for RWU and s=self-powered.
+ 45a:	60 91 0c 04 	lds	r22, 0x040C	; 0x80040c <RWU_enabled>
+ 45e:	6f 5f       	subi	r22, 0xFF	; 255
+ 460:	80 e0       	ldi	r24, 0x00	; 0
+ 462:	79 de       	rcall	.-782    	; 0x156 <wreg>
+      wreg(rEP0FIFO,0x00);		// second byte is always 0
+ 464:	60 e0       	ldi	r22, 0x00	; 0
+ 466:	80 e0       	ldi	r24, 0x00	; 0
+ 468:	76 de       	rcall	.-788    	; 0x156 <wreg>
+      wregAS(rEP0BC,2); 		// load byte count, arm the IN transfer, ACK the status stage of the CTL transfer
+ 46a:	62 e0       	ldi	r22, 0x02	; 2
+ 46c:	88 e2       	ldi	r24, 0x28	; 40
+ 46e:	85 ce       	rjmp	.-758    	; 0x17a <wregAS>
+      break;
+    case 0x81: 			// directed to INTERFACE
+      wreg(rEP0FIFO,0x00);		// this one is easy--two zero bytes
+ 470:	08 95       	ret
+ 472:	60 e0       	ldi	r22, 0x00	; 0
+ 474:	80 e0       	ldi	r24, 0x00	; 0
+      wreg(rEP0FIFO,0x00);
+ 476:	6f de       	rcall	.-802    	; 0x156 <wreg>
+ 478:	60 e0       	ldi	r22, 0x00	; 0
+ 47a:	80 e0       	ldi	r24, 0x00	; 0
+      wregAS(rEP0BC,2); 		// load byte count, arm the IN transfer, ACK the status stage of the CTL transfer
+ 47c:	6c de       	rcall	.-808    	; 0x156 <wreg>
+ 47e:	62 e0       	ldi	r22, 0x02	; 2
+ 480:	88 e2       	ldi	r24, 0x28	; 40
+ 482:	7b ce       	rjmp	.-778    	; 0x17a <wregAS>
+      break;
+ 484:	08 95       	ret
+    case 0x82: 			// directed to ENDPOINT
+      if(SUD[wIndexL] == 0x83)		// We only reported ep3, so it's the only one the host can stall IN3=83
+ 486:	80 91 14 04 	lds	r24, 0x0414	; 0x800414 <SUD+0x4>
+ 48a:	83 38       	cpi	r24, 0x83	; 131
+      {
+        wreg(rEP0FIFO,ep3stall);	// first byte is 0000000h where h is the halt (stall) bit
+ 48c:	59 f4       	brne	.+22     	; 0x4a4 <get_status+0x5a>
+ 48e:	60 91 0e 04 	lds	r22, 0x040E	; 0x80040e <ep3stall>
+        wreg(rEP0FIFO,0x00);		// second byte is always 0
+ 492:	80 e0       	ldi	r24, 0x00	; 0
+ 494:	60 de       	rcall	.-832    	; 0x156 <wreg>
+ 496:	60 e0       	ldi	r22, 0x00	; 0
+        wregAS(rEP0BC,2); 		// load byte count, arm the IN transfer, ACK the status stage of the CTL transfer
+ 498:	80 e0       	ldi	r24, 0x00	; 0
+ 49a:	5d de       	rcall	.-838    	; 0x156 <wreg>
+ 49c:	62 e0       	ldi	r22, 0x02	; 2
+        break;
+ 49e:	88 e2       	ldi	r24, 0x28	; 40
+      }
+      else
+        STALL_EP0		// Host tried to stall an invalid endpoint (not 3)
+ 4a0:	6c ce       	rjmp	.-808    	; 0x17a <wregAS>
+ 4a2:	08 95       	ret
+ 4a4:	63 e2       	ldi	r22, 0x23	; 35
+ 4a6:	88 e4       	ldi	r24, 0x48	; 72
+    default:
+      STALL_EP0		// don't recognize the request
+ 4a8:	56 de       	rcall	.-852    	; 0x156 <wreg>
+ 4aa:	63 e2       	ldi	r22, 0x23	; 35
+ 4ac:	88 e4       	ldi	r24, 0x48	; 72
+ 4ae:	53 ce       	rjmp	.-858    	; 0x156 <wreg>
+ 4b0:	08 95       	ret
+
+000004b2 <set_interface>:
+}
+
+void set_interface()	// All we accept are Interface=0 and AlternateSetting=0, otherwise send STALL
+{
+unsigned char dumval;
+  if((SUD[wValueL] == 0)		// wValueL=Alternate Setting index
+ 4b2:	80 91 12 04 	lds	r24, 0x0412	; 0x800412 <SUD+0x2>
+ 4b6:	81 11       	cpse	r24, r1
+ 4b8:	07 c0       	rjmp	.+14     	; 0x4c8 <set_interface+0x16>
+	&&(SUD[wIndexL] == 0))		// wIndexL=Interface index
+ 4ba:	80 91 14 04 	lds	r24, 0x0414	; 0x800414 <SUD+0x4>
+ 4be:	81 11       	cpse	r24, r1
+ 4c0:	03 c0       	rjmp	.+6      	; 0x4c8 <set_interface+0x16>
+    dumval=rregAS(rFNADDR);	// dummy read to set the ACKSTAT bit
+ 4c2:	88 e9       	ldi	r24, 0x98	; 152
+ 4c4:	7d ce       	rjmp	.-774    	; 0x1c0 <rregAS>
+ 4c6:	08 95       	ret
+  else
+    STALL_EP0
+ 4c8:	63 e2       	ldi	r22, 0x23	; 35
+ 4ca:	88 e4       	ldi	r24, 0x48	; 72
+ 4cc:	44 ce       	rjmp	.-888    	; 0x156 <wreg>
+ 4ce:	08 95       	ret
+
+000004d0 <get_interface>:
+}
+
+void get_interface()	// Check for Interface=0, always report AlternateSetting=0
+{
+  if(SUD[wIndexL] == 0)		// wIndexL=Interface index
+ 4d0:	80 91 14 04 	lds	r24, 0x0414	; 0x800414 <SUD+0x4>
+ 4d4:	81 11       	cpse	r24, r1
+ 4d6:	06 c0       	rjmp	.+12     	; 0x4e4 <get_interface+0x14>
+  {
+    wreg(rEP0FIFO,0);		// AS=0
+ 4d8:	60 e0       	ldi	r22, 0x00	; 0
+ 4da:	3d de       	rcall	.-902    	; 0x156 <wreg>
+    wregAS(rEP0BC,1);		// send one byte, ACKSTAT
+ 4dc:	61 e0       	ldi	r22, 0x01	; 1
+ 4de:	88 e2       	ldi	r24, 0x28	; 40
+ 4e0:	4c ce       	rjmp	.-872    	; 0x17a <wregAS>
+ 4e2:	08 95       	ret
+  }
+  else
+    STALL_EP0
+ 4e4:	63 e2       	ldi	r22, 0x23	; 35
+ 4e6:	88 e4       	ldi	r24, 0x48	; 72
+ 4e8:	36 ce       	rjmp	.-916    	; 0x156 <wreg>
+ 4ea:	08 95       	ret
+
+000004ec <get_configuration>:
+}
+
+void get_configuration()
+{
+  wreg(rEP0FIFO,configval);         // Send the config value
+ 4ec:	60 91 0b 04 	lds	r22, 0x040B	; 0x80040b <configval>
+ 4f0:	80 e0       	ldi	r24, 0x00	; 0
+ 4f2:	31 de       	rcall	.-926    	; 0x156 <wreg>
+  wregAS(rEP0BC,1);
+ 4f4:	61 e0       	ldi	r22, 0x01	; 1
+ 4f6:	88 e2       	ldi	r24, 0x28	; 40
+ 4f8:	40 ce       	rjmp	.-896    	; 0x17a <wregAS>
+ 4fa:	08 95       	ret
+
+000004fc <set_configuration>:
+}
+
+void set_configuration()
+{
+  configval =SUD[wValueL];           // Store the config value
+ 4fc:	80 91 12 04 	lds	r24, 0x0412	; 0x800412 <SUD+0x2>
+ 500:	80 93 0b 04 	sts	0x040B, r24	; 0x80040b <configval>
+  if(configval != 0)                // If we are configured,
+ 504:	88 23       	and	r24, r24
+ 506:	31 f0       	breq	.+12     	; 0x514 <set_configuration+0x18>
+    SETBIT(rUSBIEN,bmSUSPIE);       // start looking for SUSPEND interrupts
+ 508:	80 e7       	ldi	r24, 0x70	; 112
+ 50a:	49 de       	rcall	.-878    	; 0x19e <rreg>
+ 50c:	68 2f       	mov	r22, r24
+ 50e:	60 61       	ori	r22, 0x10	; 16
+ 510:	80 e7       	ldi	r24, 0x70	; 112
+ 512:	21 de       	rcall	.-958    	; 0x156 <wreg>
+  rregAS(rFNADDR);                  // dummy read to set the ACKSTAT bit
+ 514:	88 e9       	ldi	r24, 0x98	; 152
+ 516:	54 ce       	rjmp	.-856    	; 0x1c0 <rregAS>
+ 518:	08 95       	ret
+
+0000051a <std_request>:
+ 51a:	80 91 11 04 	lds	r24, 0x0411	; 0x800411 <SUD+0x1>
+}
+
+void std_request()
+{
+  switch(SUD[bRequest])
+ 51e:	90 e0       	ldi	r25, 0x00	; 0
+ 520:	8c 30       	cpi	r24, 0x0C	; 12
+ 522:	91 05       	cpc	r25, r1
+ 524:	d8 f4       	brcc	.+54     	; 0x55c <std_request+0x42>
+ 526:	fc 01       	movw	r30, r24
+ 528:	88 27       	eor	r24, r24
+ 52a:	ee 58       	subi	r30, 0x8E	; 142
+ 52c:	ff 4f       	sbci	r31, 0xFF	; 255
+ 52e:	8f 4f       	sbci	r24, 0xFF	; 255
+ 530:	13 c1       	rjmp	.+550    	; 0x758 <__tablejump2__>
+  {
+	case SR_GET_DESCRIPTOR:
+	  send_descriptor();
+ 532:	0d cf       	rjmp	.-486    	; 0x34e <send_descriptor>
+ 534:	08 95       	ret
+	   break;
+	case SR_SET_FEATURE:
+	  feature(1);
+ 536:	81 e0       	ldi	r24, 0x01	; 1
+ 538:	53 cf       	rjmp	.-346    	; 0x3e0 <feature>
+	  break;
+ 53a:	08 95       	ret
+	case SR_CLEAR_FEATURE:
+	  feature(0);
+ 53c:	80 e0       	ldi	r24, 0x00	; 0
+ 53e:	50 cf       	rjmp	.-352    	; 0x3e0 <feature>
+	  break;
+ 540:	08 95       	ret
+    case SR_GET_STATUS:	
+	  get_status();
+ 542:	83 cf       	rjmp	.-250    	; 0x44a <get_status>
+	  break;
+	case SR_SET_INTERFACE:
+	  set_interface();
+ 544:	08 95       	ret
+	  break;
+ 546:	b5 cf       	rjmp	.-150    	; 0x4b2 <set_interface>
+	case SR_GET_INTERFACE:
+	  get_interface();
+ 548:	08 95       	ret
+	  break;
+ 54a:	c2 cf       	rjmp	.-124    	; 0x4d0 <get_interface>
+	case SR_GET_CONFIGURATION:
+	  get_configuration();
+ 54c:	08 95       	ret
+ 54e:	ce cf       	rjmp	.-100    	; 0x4ec <get_configuration>
+	  break;
+	case SR_SET_CONFIGURATION:
+	  set_configuration();
+ 550:	08 95       	ret
+ 552:	d4 cf       	rjmp	.-88     	; 0x4fc <set_configuration>
+	  break;
+ 554:	08 95       	ret
+	case SR_SET_ADDRESS:
+	  rregAS(rFNADDR);
+ 556:	88 e9       	ldi	r24, 0x98	; 152
+ 558:	33 ce       	rjmp	.-922    	; 0x1c0 <rregAS>
+ 55a:	08 95       	ret
+	  break;  // discard return value
+ 55c:	63 e2       	ldi	r22, 0x23	; 35
+	default: 
+	  STALL_EP0
+ 55e:	88 e4       	ldi	r24, 0x48	; 72
+ 560:	fa cd       	rjmp	.-1036   	; 0x156 <wreg>
+ 562:	08 95       	ret
+
+00000564 <class_request>:
+ 564:	63 e2       	ldi	r22, 0x23	; 35
+ 566:	88 e4       	ldi	r24, 0x48	; 72
+  }
+}
+
+void class_request()
+{
+  STALL_EP0
+ 568:	f6 cd       	rjmp	.-1044   	; 0x156 <wreg>
+ 56a:	08 95       	ret
+
+0000056c <vendor_request>:
+}
+
+void vendor_request()
+{
+  STALL_EP0
+ 56c:	63 e2       	ldi	r22, 0x23	; 35
+ 56e:	88 e4       	ldi	r24, 0x48	; 72
+ 570:	f2 cd       	rjmp	.-1052   	; 0x156 <wreg>
+ 572:	08 95       	ret
+
+00000574 <do_SETUP>:
+}
+
+void do_SETUP()
+{
+  readbytes(rSUDFIFO,8,SUD);          // got a SETUP packet. Read 8 SETUP bytes
+ 574:	40 e1       	ldi	r20, 0x10	; 16
+ 576:	54 e0       	ldi	r21, 0x04	; 4
+ 578:	68 e0       	ldi	r22, 0x08	; 8
+ 57a:	80 e2       	ldi	r24, 0x20	; 32
+ 57c:	33 de       	rcall	.-922    	; 0x1e4 <readbytes>
+  switch(SUD[bmRequestType] & 0x60)     // Parse the SETUP packet. For request type, look only at b6&b5
+ 57e:	80 91 10 04 	lds	r24, 0x0410	; 0x800410 <SUD>
+ 582:	80 76       	andi	r24, 0x60	; 96
+ 584:	80 32       	cpi	r24, 0x20	; 32
+ 586:	31 f0       	breq	.+12     	; 0x594 <do_SETUP+0x20>
+ 588:	80 34       	cpi	r24, 0x40	; 64
+ 58a:	31 f0       	breq	.+12     	; 0x598 <do_SETUP+0x24>
+ 58c:	81 11       	cpse	r24, r1
+  {
+    case 0x00:
+	  std_request();
+ 58e:	06 c0       	rjmp	.+12     	; 0x59c <do_SETUP+0x28>
+	  break;
+ 590:	c4 cf       	rjmp	.-120    	; 0x51a <std_request>
+	case 0x20:
+	  class_request();
+ 592:	08 95       	ret
+	  break;  // just a stub in this program
+ 594:	e7 cf       	rjmp	.-50     	; 0x564 <class_request>
+	case 0x40:
+	  vendor_request();
+ 596:	08 95       	ret
+	  break;  // just a stub in this program
+ 598:	e9 cf       	rjmp	.-46     	; 0x56c <vendor_request>
+	default:
+	  STALL_EP0                       // unrecognized request type
+ 59a:	08 95       	ret
+ 59c:	63 e2       	ldi	r22, 0x23	; 35
+ 59e:	88 e4       	ldi	r24, 0x48	; 72
+ 5a0:	da cd       	rjmp	.-1100   	; 0x156 <wreg>
+ 5a2:	08 95       	ret
+
+000005a4 <do_IN3>:
+}
+
+// Send keyboard characters over Endpoint 3-IN
+void do_IN3()
+{
+  if (inhibit_send == 0x01)
+ 5a4:	80 91 1c 04 	lds	r24, 0x041C	; 0x80041c <inhibit_send>
+ 5a8:	81 30       	cpi	r24, 0x01	; 1
+ 5aa:	51 f4       	brne	.+20     	; 0x5c0 <do_IN3+0x1c>
+  {
+    wreg(rEP3INFIFO,0);			// send the "keys up" code
+ 5ac:	60 e0       	ldi	r22, 0x00	; 0
+ 5ae:	88 e1       	ldi	r24, 0x18	; 24
+ 5b0:	d2 dd       	rcall	.-1116   	; 0x156 <wreg>
+    wreg(rEP3INFIFO,0);
+ 5b2:	60 e0       	ldi	r22, 0x00	; 0
+ 5b4:	88 e1       	ldi	r24, 0x18	; 24
+ 5b6:	cf dd       	rcall	.-1122   	; 0x156 <wreg>
+    wreg(rEP3INFIFO,0);
+ 5b8:	60 e0       	ldi	r22, 0x00	; 0
+ 5ba:	88 e1       	ldi	r24, 0x18	; 24
+ 5bc:	cc dd       	rcall	.-1128   	; 0x156 <wreg>
+ 5be:	47 c0       	rjmp	.+142    	; 0x64e <do_IN3+0xaa>
+  }
+  else
+  if (send3zeros == 0x01)                         // precede every keycode with the "no keys" code
+ 5c0:	80 91 1b 04 	lds	r24, 0x041B	; 0x80041b <send3zeros>
+ 5c4:	81 30       	cpi	r24, 0x01	; 1
+  {
+    wreg(rEP3INFIFO,0);			// send the "keys up" code
+ 5c6:	61 f4       	brne	.+24     	; 0x5e0 <do_IN3+0x3c>
+ 5c8:	60 e0       	ldi	r22, 0x00	; 0
+ 5ca:	88 e1       	ldi	r24, 0x18	; 24
+    wreg(rEP3INFIFO,0);
+ 5cc:	c4 dd       	rcall	.-1144   	; 0x156 <wreg>
+ 5ce:	60 e0       	ldi	r22, 0x00	; 0
+ 5d0:	88 e1       	ldi	r24, 0x18	; 24
+    wreg(rEP3INFIFO,0);
+ 5d2:	c1 dd       	rcall	.-1150   	; 0x156 <wreg>
+ 5d4:	60 e0       	ldi	r22, 0x00	; 0
+ 5d6:	88 e1       	ldi	r24, 0x18	; 24
+ 5d8:	be dd       	rcall	.-1156   	; 0x156 <wreg>
+    send3zeros=0;                           // next time through this function send the keycode
+ 5da:	10 92 1b 04 	sts	0x041B, r1	; 0x80041b <send3zeros>
+ 5de:	37 c0       	rjmp	.+110    	; 0x64e <do_IN3+0xaa>
+  }
+  else
+  {
+    send3zeros=1;
+ 5e0:	81 e0       	ldi	r24, 0x01	; 1
+ 5e2:	80 93 1b 04 	sts	0x041B, r24	; 0x80041b <send3zeros>
+    wreg(rEP3INFIFO,Message[msgidx++]);	// load the next keystroke (3 bytes)
+ 5e6:	e0 91 0d 04 	lds	r30, 0x040D	; 0x80040d <msgidx>
+ 5ea:	8e 0f       	add	r24, r30
+ 5ec:	80 93 0d 04 	sts	0x040D, r24	; 0x80040d <msgidx>
+ 5f0:	f0 e0       	ldi	r31, 0x00	; 0
+ 5f2:	e0 50       	subi	r30, 0x00	; 0
+ 5f4:	fe 4f       	sbci	r31, 0xFE	; 254
+ 5f6:	60 81       	ld	r22, Z
+ 5f8:	88 e1       	ldi	r24, 0x18	; 24
+ 5fa:	ad dd       	rcall	.-1190   	; 0x156 <wreg>
+    wreg(rEP3INFIFO,Message[msgidx++]);
+ 5fc:	e0 91 0d 04 	lds	r30, 0x040D	; 0x80040d <msgidx>
+ 600:	81 e0       	ldi	r24, 0x01	; 1
+ 602:	8e 0f       	add	r24, r30
+ 604:	80 93 0d 04 	sts	0x040D, r24	; 0x80040d <msgidx>
+ 608:	f0 e0       	ldi	r31, 0x00	; 0
+ 60a:	e0 50       	subi	r30, 0x00	; 0
+ 60c:	fe 4f       	sbci	r31, 0xFE	; 254
+ 60e:	60 81       	ld	r22, Z
+ 610:	88 e1       	ldi	r24, 0x18	; 24
+ 612:	a1 dd       	rcall	.-1214   	; 0x156 <wreg>
+    wreg(rEP3INFIFO,Message[msgidx++]);
+ 614:	e0 91 0d 04 	lds	r30, 0x040D	; 0x80040d <msgidx>
+ 618:	81 e0       	ldi	r24, 0x01	; 1
+ 61a:	8e 0f       	add	r24, r30
+ 61c:	80 93 0d 04 	sts	0x040D, r24	; 0x80040d <msgidx>
+ 620:	f0 e0       	ldi	r31, 0x00	; 0
+ 622:	e0 50       	subi	r30, 0x00	; 0
+ 624:	fe 4f       	sbci	r31, 0xFE	; 254
+ 626:	60 81       	ld	r22, Z
+ 628:	88 e1       	ldi	r24, 0x18	; 24
+ 62a:	95 dd       	rcall	.-1238   	; 0x156 <wreg>
+    if(msgidx >= msglen)                    // check for message wrap
+ 62c:	90 91 0d 04 	lds	r25, 0x040D	; 0x80040d <msgidx>
+ 630:	80 91 18 04 	lds	r24, 0x0418	; 0x800418 <msglen>
+    {
+      msgidx = 0;
+ 634:	98 17       	cp	r25, r24
+ 636:	58 f0       	brcs	.+22     	; 0x64e <do_IN3+0xaa>
+      L0_OFF
+ 638:	10 92 0d 04 	sts	0x040D, r1	; 0x80040d <msgidx>
+ 63c:	80 ea       	ldi	r24, 0xA0	; 160
+ 63e:	af dd       	rcall	.-1186   	; 0x19e <rreg>
+ 640:	68 2f       	mov	r22, r24
+ 642:	6e 7f       	andi	r22, 0xFE	; 254
+ 644:	80 ea       	ldi	r24, 0xA0	; 160
+      inhibit_send=1;                     // send the string once per pushbutton press
+ 646:	87 dd       	rcall	.-1266   	; 0x156 <wreg>
+ 648:	81 e0       	ldi	r24, 0x01	; 1
+ 64a:	80 93 1c 04 	sts	0x041C, r24	; 0x80041c <inhibit_send>
+    }
+  }
+  wreg(rEP3INBC,3);				// arm it
+ 64e:	63 e0       	ldi	r22, 0x03	; 3
+ 650:	80 e4       	ldi	r24, 0x40	; 64
+ 652:	81 cd       	rjmp	.-1278   	; 0x156 <wreg>
+ 654:	08 95       	ret
+
+00000656 <service_irqs>:
+}
+
+void service_irqs()
+{
+ 656:	cf 93       	push	r28
+ 658:	df 93       	push	r29
+unsigned char itest1,itest2;
+
+  itest1 = rreg(rEPIRQ);            // Check the EPIRQ bits
+ 65a:	88 e5       	ldi	r24, 0x58	; 88
+ 65c:	a0 dd       	rcall	.-1216   	; 0x19e <rreg>
+ 65e:	c8 2f       	mov	r28, r24
+  itest2 = rreg(rUSBIRQ);           // Check the USBIRQ bits
+ 660:	88 e6       	ldi	r24, 0x68	; 104
+ 662:	9d dd       	rcall	.-1222   	; 0x19e <rreg>
+ 664:	d8 2f       	mov	r29, r24
+  if(itest1 & bmSUDAVIRQ)
+ 666:	c5 ff       	sbrs	r28, 5
+ 668:	04 c0       	rjmp	.+8      	; 0x672 <service_irqs+0x1c>
+  {
+    wreg(rEPIRQ,bmSUDAVIRQ);     // clear the SUDAV IRQ
+ 66a:	60 e2       	ldi	r22, 0x20	; 32
+ 66c:	88 e5       	ldi	r24, 0x58	; 88
+    do_SETUP();
+ 66e:	73 dd       	rcall	.-1306   	; 0x156 <wreg>
+ 670:	81 df       	rcall	.-254    	; 0x574 <do_SETUP>
+  }
+  if(itest1 & bmIN3BAVIRQ)          // Was an EP3-IN packet just dispatched to the host?
+ 672:	c4 fd       	sbrc	r28, 4
+  {
+ 	do_IN3();                     // Yes--load another keystroke and arm the endpoint
+ 674:	97 df       	rcall	.-210    	; 0x5a4 <do_IN3>
+ 676:	80 91 0b 04 	lds	r24, 0x040B	; 0x80040b <configval>
+  }                             // NOTE: don't clear the IN3BAVIRQ bit here--loading the EP3-IN byte
+  // count register in the do_IN3() function does it.
+  if((configval != 0) && (itest2&bmSUSPIRQ))   // HOST suspended bus for 3 msec
+ 67a:	88 23       	and	r24, r24
+ 67c:	a1 f0       	breq	.+40     	; 0x6a6 <service_irqs+0x50>
+ 67e:	d4 ff       	sbrs	r29, 4
+  {
+    wreg(rUSBIRQ,(bmSUSPIRQ+bmBUSACTIRQ));  // clear the IRQ and bus activity IRQ
+ 680:	12 c0       	rjmp	.+36     	; 0x6a6 <service_irqs+0x50>
+ 682:	64 e1       	ldi	r22, 0x14	; 20
+ 684:	88 e6       	ldi	r24, 0x68	; 104
+    L2_ON                         // turn on the SUSPEND light
+ 686:	67 dd       	rcall	.-1330   	; 0x156 <wreg>
+ 688:	80 ea       	ldi	r24, 0xA0	; 160
+ 68a:	89 dd       	rcall	.-1262   	; 0x19e <rreg>
+ 68c:	68 2f       	mov	r22, r24
+ 68e:	64 60       	ori	r22, 0x04	; 4
+ 690:	80 ea       	ldi	r24, 0xA0	; 160
+    L3_OFF                        // turn off blinking light (in case it's on)
+ 692:	61 dd       	rcall	.-1342   	; 0x156 <wreg>
+ 694:	80 ea       	ldi	r24, 0xA0	; 160
+ 696:	83 dd       	rcall	.-1274   	; 0x19e <rreg>
+ 698:	68 2f       	mov	r22, r24
+ 69a:	67 7f       	andi	r22, 0xF7	; 247
+ 69c:	80 ea       	ldi	r24, 0xA0	; 160
+    Suspended=1;                  // signal the main loop
+ 69e:	5b dd       	rcall	.-1354   	; 0x156 <wreg>
+ 6a0:	81 e0       	ldi	r24, 0x01	; 1
+  }
+  if(rreg(rUSBIRQ) & bmURESIRQ)
+ 6a2:	80 93 08 04 	sts	0x0408, r24	; 0x800408 <__data_end>
+ 6a6:	88 e6       	ldi	r24, 0x68	; 104
+ 6a8:	7a dd       	rcall	.-1292   	; 0x19e <rreg>
+  {
+    L1_ON                         // turn the BUS RESET light on
+ 6aa:	83 ff       	sbrs	r24, 3
+ 6ac:	0f c0       	rjmp	.+30     	; 0x6cc <service_irqs+0x76>
+ 6ae:	80 ea       	ldi	r24, 0xA0	; 160
+ 6b0:	76 dd       	rcall	.-1300   	; 0x19e <rreg>
+ 6b2:	68 2f       	mov	r22, r24
+    L2_OFF                        // Suspend light off (if on)
+ 6b4:	62 60       	ori	r22, 0x02	; 2
+ 6b6:	80 ea       	ldi	r24, 0xA0	; 160
+ 6b8:	4e dd       	rcall	.-1380   	; 0x156 <wreg>
+ 6ba:	80 ea       	ldi	r24, 0xA0	; 160
+ 6bc:	70 dd       	rcall	.-1312   	; 0x19e <rreg>
+ 6be:	68 2f       	mov	r22, r24
+    wreg(rUSBIRQ,bmURESIRQ);      // clear the IRQ
+ 6c0:	6b 7f       	andi	r22, 0xFB	; 251
+ 6c2:	80 ea       	ldi	r24, 0xA0	; 160
+ 6c4:	48 dd       	rcall	.-1392   	; 0x156 <wreg>
+  }
+  if(rreg(rUSBIRQ) & bmURESDNIRQ)
+ 6c6:	68 e0       	ldi	r22, 0x08	; 8
+ 6c8:	88 e6       	ldi	r24, 0x68	; 104
+ 6ca:	45 dd       	rcall	.-1398   	; 0x156 <wreg>
+ 6cc:	88 e6       	ldi	r24, 0x68	; 104
+ 6ce:	67 dd       	rcall	.-1330   	; 0x19e <rreg>
+  {
+    L1_OFF                        // turn the BUS RESET light off
+ 6d0:	88 23       	and	r24, r24
+ 6d2:	64 f4       	brge	.+24     	; 0x6ec <service_irqs+0x96>
+ 6d4:	80 ea       	ldi	r24, 0xA0	; 160
+ 6d6:	63 dd       	rcall	.-1338   	; 0x19e <rreg>
+ 6d8:	68 2f       	mov	r22, r24
+ 6da:	6d 7f       	andi	r22, 0xFD	; 253
+ 6dc:	80 ea       	ldi	r24, 0xA0	; 160
+ 6de:	3b dd       	rcall	.-1418   	; 0x156 <wreg>
+    wreg(rUSBIRQ,bmURESDNIRQ);    // clear the IRQ bit
+ 6e0:	60 e8       	ldi	r22, 0x80	; 128
+ 6e2:	88 e6       	ldi	r24, 0x68	; 104
+ 6e4:	38 dd       	rcall	.-1424   	; 0x156 <wreg>
+ 6e6:	10 92 08 04 	sts	0x0408, r1	; 0x800408 <__data_end>
+    Suspended = 0;                  // in case we were suspended
+ 6ea:	ba dd       	rcall	.-1164   	; 0x260 <EnableIRQs>
+	EnableIRQs();                   // ...because a bus reset clears the IE bits
+ 6ec:	df 91       	pop	r29
+ 6ee:	cf 91       	pop	r28
+  }
+ 6f0:	08 95       	ret
+
+000006f2 <main>:
+#define TWENTY_MSEC 14200           // adjust this constant for 20 msec button checks
+#define BLINKTIME 25                // blink every 500 msec
+
+int main(void)
+{
+	initMAX3421();
+ 6f2:	bd dd       	rcall	.-1158   	; 0x26e <initMAX3421>
+	while (1)
+	{
+		if(Suspended)
+ 6f4:	80 91 08 04 	lds	r24, 0x0408	; 0x800408 <__data_end>
+		check_for_resume();
+ 6f8:	81 11       	cpse	r24, r1
+		if (MAX_Int_Pending())
+ 6fa:	e3 dd       	rcall	.-1082   	; 0x2c2 <check_for_resume>
+ 6fc:	1e de       	rcall	.-964    	; 0x33a <MAX_Int_Pending>
+		service_irqs();
+ 6fe:	81 11       	cpse	r24, r1
+ 700:	aa df       	rcall	.-172    	; 0x656 <service_irqs>
+		msec_timer++;
+ 702:	80 91 19 04 	lds	r24, 0x0419	; 0x800419 <msec_timer>
+ 706:	90 91 1a 04 	lds	r25, 0x041A	; 0x80041a <msec_timer+0x1>
+ 70a:	01 96       	adiw	r24, 0x01	; 1
+ 70c:	90 93 1a 04 	sts	0x041A, r25	; 0x80041a <msec_timer+0x1>
+ 710:	80 93 19 04 	sts	0x0419, r24	; 0x800419 <msec_timer>
+		if(msec_timer == TWENTY_MSEC)
+ 714:	88 37       	cpi	r24, 0x78	; 120
+ 716:	97 43       	sbci	r25, 0x37	; 55
+ 718:	69 f7       	brne	.-38     	; 0x6f4 <main+0x2>
+		{
+			msec_timer=0;
+ 71a:	10 92 1a 04 	sts	0x041A, r1	; 0x80041a <msec_timer+0x1>
+ 71e:	10 92 19 04 	sts	0x0419, r1	; 0x800419 <msec_timer>
+			
+			if((rreg(rGPIO) & 0x10) == 0) // Check the pushbutton on GPI-0
+ 722:	80 ea       	ldi	r24, 0xA0	; 160
+ 724:	3c dd       	rcall	.-1416   	; 0x19e <rreg>
+ 726:	84 ff       	sbrs	r24, 4
+			{
+				inhibit_send = 0x00;      // Tell the "do_IN3" function to send the text string
+ 728:	10 92 1c 04 	sts	0x041C, r1	; 0x80041c <inhibit_send>
+				// L0_ON                     // Turn on the SEND light
+			}
+			blinktimer++;                 // blink the loop active light every half second
+ 72c:	80 91 09 04 	lds	r24, 0x0409	; 0x800409 <blinktimer>
+ 730:	90 91 0a 04 	lds	r25, 0x040A	; 0x80040a <blinktimer+0x1>
+ 734:	01 96       	adiw	r24, 0x01	; 1
+ 736:	90 93 0a 04 	sts	0x040A, r25	; 0x80040a <blinktimer+0x1>
+ 73a:	80 93 09 04 	sts	0x0409, r24	; 0x800409 <blinktimer>
+			if(blinktimer == BLINKTIME)
+ 73e:	49 97       	sbiw	r24, 0x19	; 25
+ 740:	c9 f6       	brne	.-78     	; 0x6f4 <main+0x2>
+			{
+				blinktimer=0;
+ 742:	10 92 0a 04 	sts	0x040A, r1	; 0x80040a <blinktimer+0x1>
+ 746:	10 92 09 04 	sts	0x0409, r1	; 0x800409 <blinktimer>
+				L3_BLINK
+ 74a:	80 ea       	ldi	r24, 0xA0	; 160
+ 74c:	28 dd       	rcall	.-1456   	; 0x19e <rreg>
+ 74e:	68 e0       	ldi	r22, 0x08	; 8
+ 750:	68 27       	eor	r22, r24
+ 752:	80 ea       	ldi	r24, 0xA0	; 160
+ 754:	00 dd       	rcall	.-1536   	; 0x156 <wreg>
+ 756:	ce cf       	rjmp	.-100    	; 0x6f4 <main+0x2>
+
+00000758 <__tablejump2__>:
+ 758:	ee 0f       	add	r30, r30
+ 75a:	ff 1f       	adc	r31, r31
+ 75c:	88 1f       	adc	r24, r24
+ 75e:	8b bf       	out	0x3b, r24	; 59
+ 760:	07 90       	elpm	r0, Z+
+ 762:	f6 91       	elpm	r31, Z
+ 764:	e0 2d       	mov	r30, r0
+ 766:	19 94       	eijmp
+
+00000768 <_exit>:
+ 768:	f8 94       	cli
+
+0000076a <__stop_program>:
+ 76a:	ff cf       	rjmp	.-2      	; 0x76a <__stop_program>

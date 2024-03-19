@@ -1,0 +1,9 @@
+1. USB MIDI lies at INTERFACE level (descriptor)
+2. Uses Bulk transfers to exchange data with the host
+3. One or more MIDI IN - MIDI OUT endpoints
+XFR IN/OUT endpoints??
+
+USB-MIDI event packets:
+- 32 bit msg
+b0: Cable Number + Code Index Number
+b1-3: MIDI_0 - 2
