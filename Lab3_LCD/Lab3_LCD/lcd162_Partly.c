@@ -188,7 +188,10 @@ void LCDDispString(char* str, int len)
 // Max value is +- 32767
 void LCDDispInteger(int number)
 {
-	if(number > 32767 || number < -32767) return;
+	if(number > 32767 || number < -32767){
+		LCDDispString("OVF", 3);
+		return;
+	}
 	int len = 0;
 	char string[8];
 	char reversed[8];

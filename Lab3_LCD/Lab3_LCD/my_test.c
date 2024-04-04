@@ -15,28 +15,7 @@
 #define WAIT_1S _delay_ms(1000)
 #define WAIT_2S _delay_ms(2000)
 
-void beNiceToMyGf(){
-	LCDClear();
-	_delay_ms(50);
-	LCDDispString("Hello Marchelka!", 16);
-	LCDGotoXY(0, 1);
-	LCDDispInteger(40000);
-	_delay_ms(2000);
-	for(int i = 0; i < 5; i++){
-		showLove();
-	}
-}
-
-void showLove(){
-	char luv1[] = "<3 <3 <3 <3 <3";
-	char luv2[] = " <3 <3 <3 <3";
-	LCDClear();
-	_delay_ms(50);
-	LCDDispString(luv1, 14);
-	LCDGotoXY(0, 1);
-	LCDDispString(luv2, 12);
-	_delay_ms(500);
-}
+#define MEASUREMENT_COUNT 5
 
 void measure_velocity(int* val, int threshold){
 	if(*val > threshold) return;
@@ -44,13 +23,31 @@ void measure_velocity(int* val, int threshold){
 	LCDGotoXY(0, 1);
 	LCDDispString("***", 3);
 	int lowest = temp;
-	temp = adc_read_single();
-	while(temp <= lowest){
+	int avg = temp;
+	int it = 0;
+	int measurements[MEASUREMENT_COUNT];
+	memset(measurements, 0, sizeof(measurements));
+	
+	// Take avg of 20 measurements
+	while(it < MEASUREMENT_COUNT){
+		
 		temp = adc_read_single();
+		if(temp == 1024){
+			continue;
+		}
+		measurements[it] = temp;
+		//if(temp > threshold + 50){
+			//break;
+		//}
+		avg += temp;
+		avg /= 2;
 		if(temp < lowest) lowest = temp;
+		it++;
+		_delay_us(100);
 	}
-	*val = lowest;
-	_delay_ms(500);
+	LCDGotoXY(0, 1);
+	LCDDispString("   ", 3);
+	*val = avg;
 	
 }
 
@@ -75,19 +72,36 @@ int main(void){
 	int it = 0;
 	LCDOnOffControl(1, 0);
 	char print = 0;
+	int cursorx = 0;
+	int cursory = 0;
+	int threshold = 900;
 	while(1){
 		int val = adc_read_single();
 		
-		if(val < 1000){
+		if(val < threshold){
 			print = 1;
 			int* p = &val;
-			measure_velocity(p, 1000);
+			measure_velocity(p, threshold);
 		}
 		
-		if(val < 1000){
-			LCDClear();
+		if(val < threshold){
+			cursorx += 5;
+			LCDGotoXY(cursorx, cursory);
+			it++;
+			if(it == 3){
+				cursory = 1;
+				cursorx = 4;
+				LCDGotoXY(cursorx, cursory);			
+			}
+			else if(it > 5){
+				LCDClear();
+				cursorx = 0;
+				cursory = 0;
+				it = 0;
+			}
 			LCDDispInteger(val);
-			LCDCursorRight();
+			_delay_ms(100);
+			//LCDCursorRight();
 			print = 0;
 		}
 	}

@@ -5,7 +5,7 @@ c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/..
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
                               C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o (exit)
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_copy_data.o)
-                              LCD_Test.o (__do_copy_data)
+                              lcd162_Partly.o (__do_copy_data)
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_udivmodhi4.o)
                               c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_divmodhi4.o) (__udivmodhi4)
 
@@ -17,7 +17,7 @@ Discarded input sections
  .data          0x00000000        0x0 adc_control.o
  .bss           0x00000000        0x0 adc_control.o
  .text.check_value
-                0x00000000       0x2c adc_control.o
+                0x00000000       0x2e adc_control.o
  .text          0x00000000        0x0 lcd162_Partly.o
  .data          0x00000000        0x0 lcd162_Partly.o
  .bss           0x00000000        0x0 lcd162_Partly.o
@@ -39,7 +39,7 @@ Discarded input sections
  .rodata.str1.1
                 0x00000000       0x21 LCD_Test.o
  .text.summmain
-                0x00000000      0x2a4 LCD_Test.o
+                0x00000000      0x2bc LCD_Test.o
  .rodata.minor_aa
                 0x00000000        0x8 LCD_Test.o
  .rodata.minor_oe
@@ -52,23 +52,19 @@ Discarded input sections
                 0x00000000        0x8 LCD_Test.o
  .rodata.capital_ae
                 0x00000000        0x8 LCD_Test.o
- .debug_info    0x00000000      0x978 LCD_Test.o
+ .debug_info    0x00000000      0x97e LCD_Test.o
  .debug_abbrev  0x00000000      0x13c LCD_Test.o
- .debug_loc     0x00000000      0x478 LCD_Test.o
+ .debug_loc     0x00000000      0x47b LCD_Test.o
  .debug_aranges
                 0x00000000       0x20 LCD_Test.o
  .debug_ranges  0x00000000       0x10 LCD_Test.o
- .debug_line    0x00000000      0x31f LCD_Test.o
+ .debug_line    0x00000000      0x353 LCD_Test.o
  .debug_str     0x00000000      0x2d8 LCD_Test.o
  .comment       0x00000000       0x31 LCD_Test.o
  .debug_frame   0x00000000       0x34 LCD_Test.o
  .text          0x00000000        0x0 my_test.o
  .data          0x00000000        0x0 my_test.o
  .bss           0x00000000        0x0 my_test.o
- .text.showLove
-                0x00000000       0x92 my_test.o
- .text.beNiceToMyGf
-                0x00000000       0x5a my_test.o
  .text          0x00000000        0x0 timer_control.o
  .data          0x00000000        0x0 timer_control.o
  .bss           0x00000000        0x0 timer_control.o
@@ -278,7 +274,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x526
+.text           0x00000000      0x63a
  *(.vectors)
  .vectors       0x00000000       0xe4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
                 0x00000000                __vector_default
@@ -398,55 +394,55 @@ END GROUP
                 0x00000114       0x16 adc_control.o
                 0x00000114                init_adc
  .text.adc_read_single
-                0x0000012a       0x1a adc_control.o
+                0x0000012a       0x1c adc_control.o
                 0x0000012a                adc_read_single
- .text.pulse_E  0x00000144       0x2a lcd162_Partly.o
+ .text.pulse_E  0x00000146       0x36 lcd162_Partly.o
  .text.set4DataPins
-                0x0000016e       0x48 lcd162_Partly.o
+                0x0000017c       0x4c lcd162_Partly.o
  .text.sendData
-                0x000001b6       0x28 lcd162_Partly.o
+                0x000001c8       0x28 lcd162_Partly.o
  .text.sendInstruction
-                0x000001de       0x3e lcd162_Partly.o
- .text.LCDInit  0x0000021c       0x68 lcd162_Partly.o
-                0x0000021c                LCDInit
+                0x000001f0       0x3e lcd162_Partly.o
+ .text.LCDInit  0x0000022e       0x7c lcd162_Partly.o
+                0x0000022e                LCDInit
  .text.LCDClear
-                0x00000284       0x12 lcd162_Partly.o
-                0x00000284                LCDClear
+                0x000002aa       0x12 lcd162_Partly.o
+                0x000002aa                LCDClear
  .text.LCDGotoXY
-                0x00000296       0x16 lcd162_Partly.o
-                0x00000296                LCDGotoXY
+                0x000002bc       0x1a lcd162_Partly.o
+                0x000002bc                LCDGotoXY
  .text.LCDDispChar
-                0x000002ac        0x4 lcd162_Partly.o
-                0x000002ac                LCDDispChar
+                0x000002d6        0x4 lcd162_Partly.o
+                0x000002d6                LCDDispChar
  .text.LCDDispString
-                0x000002b0       0x2c lcd162_Partly.o
-                0x000002b0                LCDDispString
+                0x000002da       0x3a lcd162_Partly.o
+                0x000002da                LCDDispString
  .text.LCDDispInteger
-                0x000002dc      0x102 lcd162_Partly.o
-                0x000002dc                LCDDispInteger
+                0x00000314      0x104 lcd162_Partly.o
+                0x00000314                LCDDispInteger
  .text.LCDOnOffControl
-                0x000003de       0x1e lcd162_Partly.o
-                0x000003de                LCDOnOffControl
+                0x00000418       0x1e lcd162_Partly.o
+                0x00000418                LCDOnOffControl
  .text.LCDCursorRight
-                0x000003fc        0x6 lcd162_Partly.o
-                0x000003fc                LCDCursorRight
+                0x00000436        0x6 lcd162_Partly.o
+                0x00000436                LCDCursorRight
  .text.measure_velocity
-                0x00000402       0x60 my_test.o
-                0x00000402                measure_velocity
- .text.main     0x00000462       0x72 my_test.o
-                0x00000462                main
+                0x0000043c       0xe6 my_test.o
+                0x0000043c                measure_velocity
+ .text.main     0x00000522       0xc6 my_test.o
+                0x00000522                main
  .text.libgcc.div
-                0x000004d4       0x26 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_divmodhi4.o)
-                0x000004d4                _div
-                0x000004d4                __divmodhi4
+                0x000005e8       0x26 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_divmodhi4.o)
+                0x000005e8                _div
+                0x000005e8                __divmodhi4
  .text.libgcc.div
-                0x000004fa       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_udivmodhi4.o)
-                0x000004fa                __udivmodhi4
-                0x00000522                . = ALIGN (0x2)
+                0x0000060e       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_udivmodhi4.o)
+                0x0000060e                __udivmodhi4
+                0x00000636                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000522        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
-                0x00000522                _exit
-                0x00000522                exit
+ .fini9         0x00000636        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
+                0x00000636                _exit
+                0x00000636                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -465,11 +461,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000522        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
+ .fini0         0x00000636        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000526                _etext = .
+                0x0000063a                _etext = .
 
-.data           0x00800200       0x2a load address 0x00000526
+.data           0x00800200       0x12 load address 0x0000063a
                 0x00800200                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -477,27 +473,28 @@ END GROUP
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x00800200       0x2a my_test.o
-                                 0x37 (size before relaxing)
+                0x00800200        0x4 lcd162_Partly.o
+ .rodata.str1.1
+                0x00800204        0xe my_test.o
  *(.gnu.linkonce.r*)
-                0x0080022a                . = ALIGN (0x2)
-                0x0080022a                _edata = .
-                0x0080022a                PROVIDE (__data_end, .)
+                0x00800212                . = ALIGN (0x2)
+                0x00800212                _edata = .
+                0x00800212                PROVIDE (__data_end, .)
 
-.bss            0x0080022a        0x0
+.bss            0x00800212        0x0
                 [!provide]                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  *(COMMON)
                 [!provide]                PROVIDE (__bss_end, .)
-                0x00000526                __data_load_start = LOADADDR (.data)
-                0x00000550                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000063a                __data_load_start = LOADADDR (.data)
+                0x0000064c                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x0080022a        0x0
+.noinit         0x00800212        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x0080022a                _end = .
+                0x00800212                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -564,60 +561,60 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x110
+.debug_aranges  0x00000000      0x100
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x30 adc_control.o
  .debug_aranges
                 0x00000030       0xa8 lcd162_Partly.o
  .debug_aranges
-                0x000000d8       0x38 my_test.o
+                0x000000d8       0x28 my_test.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x1b0e
+.debug_info     0x00000000     0x19f5
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0xbbc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_info    0x00000bbc       0xf9 adc_control.o
- .debug_info    0x00000cb5      0x7f0 lcd162_Partly.o
- .debug_info    0x000014a5      0x669 my_test.o
+ .debug_info    0x00000cb5      0x7e4 lcd162_Partly.o
+ .debug_info    0x00001499      0x55c my_test.o
 
-.debug_abbrev   0x00000000     0x1089
+.debug_abbrev   0x00000000     0x1049
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0xb1a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_abbrev  0x00000b1a       0xa1 adc_control.o
- .debug_abbrev  0x00000bbb      0x2cf lcd162_Partly.o
- .debug_abbrev  0x00000e8a      0x1ff my_test.o
+ .debug_abbrev  0x00000bbb      0x296 lcd162_Partly.o
+ .debug_abbrev  0x00000e51      0x1f8 my_test.o
 
-.debug_line     0x00000000      0xa55
+.debug_line     0x00000000      0xaaf
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x1fa C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_line    0x000001fa      0x11e adc_control.o
- .debug_line    0x00000318      0x4ae lcd162_Partly.o
- .debug_line    0x000007c6      0x28f my_test.o
+ .debug_line    0x00000318      0x4fc lcd162_Partly.o
+ .debug_line    0x00000814      0x29b my_test.o
 
-.debug_frame    0x00000000      0x248
+.debug_frame    0x00000000      0x240
  *(.debug_frame)
  .debug_frame   0x00000000       0x44 adc_control.o
- .debug_frame   0x00000044      0x17c lcd162_Partly.o
- .debug_frame   0x000001c0       0x88 my_test.o
+ .debug_frame   0x00000044      0x180 lcd162_Partly.o
+ .debug_frame   0x000001c4       0x7c my_test.o
 
-.debug_str      0x00000000      0x773
+.debug_str      0x00000000      0x777
  *(.debug_str)
  .debug_str     0x00000000      0x3e6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_str     0x000003e6      0x191 adc_control.o
                                 0x1c5 (size before relaxing)
  .debug_str     0x00000577      0x19a lcd162_Partly.o
                                 0x320 (size before relaxing)
- .debug_str     0x00000711       0x62 my_test.o
-                                0x2b3 (size before relaxing)
+ .debug_str     0x00000711       0x66 my_test.o
+                                0x2c6 (size before relaxing)
 
-.debug_loc      0x00000000      0xb49
+.debug_loc      0x00000000      0xa73
  *(.debug_loc)
  .debug_loc     0x00000000       0x28 adc_control.o
- .debug_loc     0x00000028      0x7ab lcd162_Partly.o
- .debug_loc     0x000007d3      0x376 my_test.o
+ .debug_loc     0x00000028      0x681 lcd162_Partly.o
+ .debug_loc     0x000006a9      0x3ca my_test.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -637,11 +634,11 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0xf8
+.debug_ranges   0x00000000       0xd0
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x20 adc_control.o
- .debug_ranges  0x00000020       0xb0 lcd162_Partly.o
- .debug_ranges  0x000000d0       0x28 my_test.o
+ .debug_ranges  0x00000020       0x98 lcd162_Partly.o
+ .debug_ranges  0x000000b8       0x18 my_test.o
 
 .debug_macro
  *(.debug_macro)
