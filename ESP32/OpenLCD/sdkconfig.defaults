@@ -1,0 +1,5 @@
+# This file was generated using idf.py save-defconfig. It can be edited manually.
+# Espressif IoT Development Framework (ESP-IDF) Project Minimal Configuration
+#
+CONFIG_I2C_MASTER_SCL=22
+CONFIG_I2C_MASTER_SDA=21

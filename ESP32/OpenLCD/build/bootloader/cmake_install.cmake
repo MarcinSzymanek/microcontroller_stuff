@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/nastr/esp-idf/esp-projects/i2c_simple/build/bootloader/esp-idf/cmake_install.cmake")
+  include("C:/Users/nastr/Documents/MicrocontrollerStuff/ESP32/OpenLCD/build/bootloader/esp-idf/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/nastr/esp-idf/esp-projects/i2c_simple/build/bootloader/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/nastr/Documents/MicrocontrollerStuff/ESP32/OpenLCD/build/bootloader/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

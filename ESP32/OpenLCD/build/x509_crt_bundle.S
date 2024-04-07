@@ -1,4 +1,4 @@
-/* * Data converted from C:/Users/nastr/esp-idf/esp-projects/i2c_simple/build/esp-idf/mbedtls/x509_crt_bundle
+/* * Data converted from C:/Users/nastr/Documents/MicrocontrollerStuff/ESP32/OpenLCD/build/esp-idf/mbedtls/x509_crt_bundle
  */
 .data
 .section .rodata.embedded

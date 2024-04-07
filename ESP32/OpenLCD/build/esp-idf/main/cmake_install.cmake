@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/nastr/esp-idf/esp-projects/i2c_simple/main
+# Install script for directory: C:/Users/nastr/Documents/MicrocontrollerStuff/ESP32/OpenLCD/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/i2c-simple")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/OpenLCD")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
