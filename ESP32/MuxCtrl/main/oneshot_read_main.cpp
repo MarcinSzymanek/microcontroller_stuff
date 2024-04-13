@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <string>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "soc/soc_caps.h"
@@ -60,6 +61,23 @@ static int voltage[2][10];
 static bool example_adc_calibration_init(adc_unit_t unit, adc_atten_t atten, adc_cali_handle_t *out_handle);
 static void example_adc_calibration_deinit(adc_cali_handle_t handle);
 
+int js_adc_to_midi(int val){
+    int ret;
+   if(val < 1850){
+        // 4.4281 =~ 8192/1850
+        ret = -((1850 - val) * (4.4281));
+   }
+   else{
+        // 3.8191 = 8192/(4095 - 1950)
+        ret = (val - 1950) * (3.8191);
+   }
+   // Clamp to min/max
+   if (ret < -8192) ret = -8192;
+   if(ret > 8192) ret = 8192;
+
+   return ret;
+}
+
 extern "C" void app_main(void)
 {
     MuxController mux_ctrl;
@@ -78,16 +96,29 @@ extern "C" void app_main(void)
     std::vector<adc_channel_t> channels {ADC_CHANNEL_4};
     adc.init_adc(channels);
 
+
+
     uint8_t mux_channel = 0;
+    const int joystick_stable_min = 1850;
+    const int joystick_stable_max = 1950;
     while (1) {
 
         mux_ctrl.switch_channel(mux_channel);
         int data = adc.read_adc();
-        ESP_LOGI(TAG, "ADC%d Channel[%d] Raw Data: %d", ADC_UNIT_1, ADC_CHANNEL_4, data);
-        ESP_LOGI(TAG, "Mux switch %d", mux_channel);
-        if(mux_channel == 0) mux_channel = 2;
-        else mux_channel = 0;
-        vTaskDelay(pdMS_TO_TICKS(2000));
+        //ESP_LOGI(TAG, "ADC%d Channel[%d] Raw Data: %d", ADC_UNIT_1, ADC_CHANNEL_4, data);
+        //ESP_LOGI(TAG, "Mux switch %d", mux_channel);
+        if(mux_channel != 0){
+            if(data < joystick_stable_min || data > joystick_stable_max){
+                std::string joystick_id;
+                if(mux_channel == 2) joystick_id = "x-axis";
+                else joystick_id = "y-axis";
+
+                ESP_LOGI("Joystick event", "%s Pitch Bend :%d , Data: %d", joystick_id.c_str(), js_adc_to_midi(data), data);
+            }
+        }
+        mux_channel++;
+        if(mux_channel > 2) mux_channel = 0;
+        vTaskDelay(1);
 
     }
 
