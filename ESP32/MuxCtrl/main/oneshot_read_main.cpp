@@ -61,21 +61,40 @@ static int voltage[2][10];
 static bool example_adc_calibration_init(adc_unit_t unit, adc_atten_t atten, adc_cali_handle_t *out_handle);
 static void example_adc_calibration_deinit(adc_cali_handle_t handle);
 
-int js_adc_to_midi(int val){
+int js_adc_to_pitch(int val){
     int ret;
-   if(val < 1850){
+    if(val < 1850){
         // 4.4281 =~ 8192/1850
         ret = -((1850 - val) * (4.4281));
-   }
-   else{
+    }
+    else{
         // 3.8191 = 8192/(4095 - 1950)
         ret = (val - 1950) * (3.8191);
-   }
-   // Clamp to min/max
-   if (ret < -8192) ret = -8192;
-   if(ret > 8192) ret = 8192;
+    }
+    // Clamp to min/max
+    if (ret < -8192) ret = -8192;
+    if(ret > 8192) ret = 8192;
 
-   return ret;
+    return ret;
+}
+
+int js_adc_to_mod(int val){
+    int ret;
+    // Values must be 0-127
+    // Only one of them should be MOD
+    if(val < 1850){
+        // 0.0686 =~ 127/1850
+        ret = ((1850 - val) * (0.0686));
+    }
+    else{
+        // 0.0592 = 127/(4095 - 1950)
+        ret = (val - 1950) * (0.0592);
+    }
+    // Clamp to min/max
+    if (ret < 0) ret = 0;
+    if(ret > 127) ret = 127;
+
+    return ret;
 }
 
 extern "C" void app_main(void)
@@ -110,10 +129,16 @@ extern "C" void app_main(void)
         if(mux_channel != 0){
             if(data < joystick_stable_min || data > joystick_stable_max){
                 std::string joystick_id;
-                if(mux_channel == 2) joystick_id = "x-axis";
-                else joystick_id = "y-axis";
-
-                ESP_LOGI("Joystick event", "%s Pitch Bend :%d , Data: %d", joystick_id.c_str(), js_adc_to_midi(data), data);
+                int val;
+                if(mux_channel == 2) {
+                    joystick_id = "x-axis";
+                    val = js_adc_to_mod(data);
+                }
+                else{
+                    joystick_id = "y-axis";
+                    val = js_adc_to_pitch(data);
+                }
+                ESP_LOGI("Joystick event", "%s Pitch Bend :%d , Data: %d", joystick_id.c_str(), val, data);
             }
         }
         mux_channel++;
