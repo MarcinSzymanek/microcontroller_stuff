@@ -1362,7 +1362,7 @@ rule C_STATIC_LIBRARY_LINKER____idf_main_
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = C:\Users\nastr\.espressif\tools\cmake\3.24.0\bin\cmake.exe --regenerate-during-build -SC:\Users\nastr\Documents\MicrocontrollerStuff\ESP32\OpenLCD -BC:\Users\nastr\Documents\MicrocontrollerStuff\ESP32\OpenLCD\build
+  command = C:\Users\nastr\.espressif\tools\cmake\3.24.0\bin\cmake.exe --regenerate-during-build -SC:\Users\nastr\Documents\Microcontroller\microcontroller_stuff\ESP32\OpenLCD -BC:\Users\nastr\Documents\Microcontroller\microcontroller_stuff\ESP32\OpenLCD\build
   description = Re-running CMake...
   generator = 1
 

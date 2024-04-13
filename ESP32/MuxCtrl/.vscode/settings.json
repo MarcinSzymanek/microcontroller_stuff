@@ -1,0 +1,11 @@
+{
+  "C_Cpp.intelliSenseEngine": "default",
+  "idf.portWin": "COM7",
+  "idf.flashType": "UART",
+  "idf.adapterTargetName": "esp32",
+  "files.associations": {
+    "adc_oneshot.h": "c",
+    "adc_cali.h": "c"
+  },
+  "cmake.configureOnOpen": false
+}

@@ -102,14 +102,12 @@ extern "C" void app_main(void)
         //vTaskDelay(100/portTICK_PERIOD_MS);
         //ESP_ERROR_CHECK(mpu9250_register_write_byte("oogaboogab", 'H'));
         //vTaskDelay(1000/portTICK_PERIOD_MS);
-        uint8_t data2[11] = {'h', 'e', 'l', 'l', 'o',' ', 'w', 'o', 'r', 'l', 'd'};
-        ESP_LOGI(TAG, "sizeof data2: %d", sizeof(data2));
-        ESP_LOGI(TAG, "sizeof data2 total: %d", sizeof(data2)* 11);
-        ESP_LOGI(TAG, "sizeof uint8_t: %d", sizeof(uint8_t));
         ESP_ERROR_CHECK(lcd.write("Hello world", 11));
-        char text[] = "What the...";
+        char text[] = "Hej Jonas...";
         lcd.update_line(text, 0, sizeof(text));
         lcd.update_line("line2", 1, 5);
+        lcd.update_display();
+        lcd.update_line("I've been expecting u", 1, 21);
         lcd.update_display();
         //ESP_ERROR_CHECK(lcd.clear());
         //ESP_ERROR_CHECK(mpu9250_register_write_byte(data2, 11));

@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/nastr/Documents/MicrocontrollerStuff/ESP32/OpenLCD/main
+# Install script for directory: C:/Users/nastr/Documents/Microcontroller/microcontroller_stuff/ESP32/OpenLCD/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
