@@ -2,6 +2,8 @@
 #include "driver/gpio.h"
 #include "esp_log.h"
 
+
+
 esp_err_t conf_gpio(gpio_num_t gpio){
         esp_err_t err;
         err = gpio_reset_pin(gpio);
@@ -11,8 +13,6 @@ esp_err_t conf_gpio(gpio_num_t gpio){
     }
 
 void MuxController::init_mux(mux_pin_config* mux_pins){
-    
-
     mux_pins_.S0 = mux_pins->S0;
     mux_pins_.S1 = mux_pins->S1;
     mux_pins_.S2 = mux_pins->S2;
@@ -21,6 +21,8 @@ void MuxController::init_mux(mux_pin_config* mux_pins){
     ESP_ERROR_CHECK(conf_gpio(mux_pins_.S1));
     ESP_ERROR_CHECK(conf_gpio(mux_pins_.S2));
     ESP_ERROR_CHECK(conf_gpio(mux_pins_.S3));
+    mux_id_ = MUX_ID;
+    MUX_ID++;
 }
 
 void MuxController::switch_channel(uint8_t channel){

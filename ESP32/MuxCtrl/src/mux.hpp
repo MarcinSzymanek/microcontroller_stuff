@@ -18,4 +18,8 @@ public:
     void switch_channel(uint8_t channel);
 private:
     mux_pin_config mux_pins_;
+    static int MUX_ID;
+    int mux_id_;
 };
+
+int MuxController::MUX_ID = 0;

@@ -1,0 +1,26 @@
+menu "Mux options"
+
+    orsource "$IDF_PATH/examples/common_components/env_caps/$IDF_TARGET/Kconfig.env_caps"
+
+    config MUX_PINS
+        help
+            Pin configuration of MUX: choose which gpio control the mux
+
+    choice MUX_PIN_S0
+        int "Pin s0"
+        range 0 30
+    endchoice
+    choice MUX_PIN_S1
+        int "Pin s1"
+        range 0 30
+    endchoice
+    choice MUX_PIN_S2
+        int "Pin s2"
+        range 0 30
+    endchoice
+    choice MUX_PIN_S3
+        int "Pin s3"
+        range 0 30
+    endchoice
+
+endmenu
