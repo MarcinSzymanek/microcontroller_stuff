@@ -1,12 +1,11 @@
-#include "Arduino.h"
-#include "USB/src/USBMIDI.h"
 #include "esp_adc/adc_oneshot.h"
+#include <stdlib.h>
+#include "esp_log.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "tinyusb.h"
+#include "esp_timer.h"
 
-void setup(){
-  Serial.begin(115200);
-}
+extern "C" void app_main(void){
 
-void loop(){
-    Serial.println("Hello world!");
-    delay(1000);
 }

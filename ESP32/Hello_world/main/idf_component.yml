@@ -1,4 +1,5 @@
+
+## IDF Component Manager Manifest File
 dependencies:
-  espressif/arduino-esp32:
-    pre_release: true
-    version: '*'
+  espressif/esp_tinyusb: "^1.1"
+  idf: "^5.0"
