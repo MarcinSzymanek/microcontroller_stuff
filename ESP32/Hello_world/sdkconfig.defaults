@@ -1,12 +1,8 @@
 #
-# Arduino ESP32
-#
-CONFIG_AUTOSTART_ARDUINO=y
-# end of Arduino ESP32
-
-#
 # FREERTOS
 #
 CONFIG_FREERTOS_HZ=1000
 # end of FREERTOS
+
+CONFIG_TINYUSB_MIDI_COUNT=1
 # end of Component config
