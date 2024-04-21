@@ -47,7 +47,7 @@ public:
         }
     }
 
-    void send();
+    void send(const MidiPacket &packet);
 private:
     std::array<string, 5> str_desc = {
     // array of poinbter to string descriptors
