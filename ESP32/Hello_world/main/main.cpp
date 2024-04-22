@@ -4,4 +4,6 @@
 extern "C" void app_main(void){
     // Smoke test: Include works
     usb::func();
+
+    usb::UsbMidi usb_handle;
 }

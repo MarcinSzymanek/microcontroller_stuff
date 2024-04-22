@@ -27,7 +27,7 @@ public:
 
 class UsbMidi{
 public:
-    UsbMidi(){}
+    UsbMidi();
     constexpr size_t get_total_desc_size();
     enum interface_count{
         ITF_NUM_MIDI = 0,
@@ -57,7 +57,14 @@ private:
     "123456",              // 3: Serials, should use chip ID
     "XMidi", // 4: MIDI
 };
-    char* str_desc_handle;
+
+const uint8_t s_midi_cfg_desc[] = {
+    // Configuration number, interface count, string index, total length, attribute, power in mA
+    TUD_CONFIG_DESCRIPTOR(1, ITF_COUNT, 0, TUSB_DESCRIPTOR_TOTAL_LEN, 0, 100),
+
+    // Interface number, string index, EP Out & EP In address, EP size
+    TUD_MIDI_DESCRIPTOR(ITF_NUM_MIDI, 4, EPNUM_MIDI, (0x80 | EPNUM_MIDI), 64),
+};
 };
 
 };
