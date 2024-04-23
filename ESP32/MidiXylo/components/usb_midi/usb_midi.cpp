@@ -32,12 +32,12 @@ UsbMidi::UsbMidi(){
     ESP_ERROR_CHECK(tinyusb_driver_install(&tusb_cfg));
 }
 
+void UsbMidi::send(const usb::MidiPacket packet){
+    tud_midi_stream_write(0, packet.payload.data(), packet.payload.size());
+}
+
 constexpr size_t UsbMidi::get_total_desc_size(){
     return TUD_CONFIG_DESC_LEN + CFG_TUD_MIDI * TUD_MIDI_DESC_LEN;
 }
 
-void send(const MidiPacket &packet){
-    tud_midi_packet_write(packet.data.data());
-}
-
-}
+} // namespace usb

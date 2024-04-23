@@ -14,19 +14,19 @@ void func(void);
 
 class MidiPacket{
 public:
-    MidiPacket(){data = {0};}
+    MidiPacket(){payload = {0};}
     template<typename Iter>
     MidiPacket(Iter it){
         for(size_t i = 0; i < 4; i++){
-            data[i] = *it;
+            payload[i] = *it;
             it++;
         }
     }
     MidiPacket(std::initializer_list<uint8_t> values){
         assert(values.size() < 5);
-        std::copy(values.begin(), values.end(), data.begin());
+        std::copy(values.begin(), values.end(), payload.begin());
     }
-    std::array<uint8_t, 4> data;
+    std::array<uint8_t, 4> payload;
 };
 
 typedef std::array<const uint8_t, 101> midi_cfg_desc_t;
@@ -53,7 +53,7 @@ public:
             it++;
         }
     }
-    void send(const MidiPacket &packet);
+    void send(const MidiPacket packet);
 private:
     std::array<const char*, 5> str_desc = {
         // array of poinbter to string descriptors
