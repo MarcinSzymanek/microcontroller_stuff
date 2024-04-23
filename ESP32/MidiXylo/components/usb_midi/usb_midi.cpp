@@ -34,7 +34,7 @@ UsbMidi::UsbMidi(){
         .pin_bit_mask = (1ULL << GPIO_LED),
         .mode = GPIO_MODE_OUTPUT,
         .pull_up_en = GPIO_PULLUP_DISABLE,
-        .pull_down_en = GPIO_PULLDOWN_ENABLE
+        .pull_down_en = GPIO_PULLDOWN_DISABLE
     };
     gpio_config(&gpio_config_);
     gpio_set_level(gpio_num_t(GPIO_LED), 0);
@@ -42,7 +42,6 @@ UsbMidi::UsbMidi(){
 }
 
 void UsbMidi::send(const midi::MidiPacket packet){
-    printf("UsbMidi::send");
     if(tud_midi_mounted()){
         if(debug_led){
             gpio_set_level(gpio_num_t(GPIO_LED), 1);
@@ -52,7 +51,6 @@ void UsbMidi::send(const midi::MidiPacket packet){
             gpio_set_level(gpio_num_t(GPIO_LED), 0);
             debug_led = true;
         }
-        printf("Packet payload size: %d", packet.payload.size());
         int written = tud_midi_stream_write(0, packet.payload.data(), 3);
     }
 }

@@ -20,11 +20,7 @@ namespace midi{
             }
         }
         MidiPacket(std::initializer_list<uint8_t> values){
-            printf("Midipacket initializer list");
             assert(values.size() < 5);
-            for(auto val: values){
-                printf("%d", val);
-            }
             payload.reserve(values.size());
             std::copy(values.begin(), values.end(), payload.begin());
         }
