@@ -1,6 +1,10 @@
-#include <string>
+#pragma once
+
 #include <array>
 #include <initializer_list>
+#include <memory>
+
+#include "tinyusb.h"
 
 namespace usb{
 
@@ -25,9 +29,12 @@ public:
     std::array<uint8_t, 4> data;
 };
 
+typedef std::array<const uint8_t, 101> midi_cfg_desc_t;
+
 class UsbMidi{
 public:
     UsbMidi();
+    
     constexpr size_t get_total_desc_size();
     enum interface_count{
         ITF_NUM_MIDI = 0,
@@ -46,25 +53,17 @@ public:
             it++;
         }
     }
-
     void send(const MidiPacket &packet);
 private:
-    std::array<string, 5> str_desc = {
-    // array of poinbter to string descriptors
-    (char[]){0x09, 0x04},  // 0: is supported language is English (0x0409)
-    "MSzymanek",             // 1: Manufacturer
-    "XyloMidi",      // 2: Product
-    "123456",              // 3: Serials, should use chip ID
-    "XMidi", // 4: MIDI
-};
+    std::array<const char*, 5> str_desc = {
+        // array of poinbter to string descriptors
+        (char[]){0x09, 0x04},  // 0: is supported language is English (0x0409)
+        "MSzymanek",             // 1: Manufacturer
+        "XyloMidi",      // 2: Product
+        "123456",              // 3: Serials, should use chip ID
+        "XMidi", // 4: MIDI
+    };
 
-const uint8_t s_midi_cfg_desc[] = {
-    // Configuration number, interface count, string index, total length, attribute, power in mA
-    TUD_CONFIG_DESCRIPTOR(1, ITF_COUNT, 0, TUSB_DESCRIPTOR_TOTAL_LEN, 0, 100),
-
-    // Interface number, string index, EP Out & EP In address, EP size
-    TUD_MIDI_DESCRIPTOR(ITF_NUM_MIDI, 4, EPNUM_MIDI, (0x80 | EPNUM_MIDI), 64),
+    std::array<const uint8_t, 101>* s_midi_cfg_desc_handle_;
 };
-};
-
 };
