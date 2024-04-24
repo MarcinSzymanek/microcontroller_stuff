@@ -1,5 +1,6 @@
 #include "stdint.h"
 #include "esp_log.h"
+#include "driver/gpio.h"
 
 namespace sensors{
 
