@@ -39,6 +39,7 @@ namespace midi{
         };
 
         MidiPacket noteOn(uint8_t channel, uint8_t note_value, uint8_t velocity);
+        MidiPacket cc(uint8_t channel, uint8_t cc_val, uint8_t val);
     }
 
 } // namespace midi
