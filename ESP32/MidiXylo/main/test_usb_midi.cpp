@@ -1,6 +1,7 @@
 #include "esp_log.h"
 #include "esp_timer.h"
-
+#include "adc_ctrl.hpp"
+#include "mux.hpp"
 #include "usb_midi.h"
 
 
@@ -16,6 +17,8 @@ static void timer_cb(void* args){
 }
 
 extern "C" void app_main(void){
+    
+    // Test UsbMidi
     usb::UsbMidi usb_handle;
 
     usb_handle.send(midi::msg::noteOn(0, 60, 60));

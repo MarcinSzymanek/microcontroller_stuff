@@ -561,6 +561,14 @@ CONFIG_EFUSE_MAX_BLK_LEN=256
 # end of eFuse Bit Manager
 
 #
+# ADC and ADC Calibration
+#
+# CONFIG_ADC_ONESHOT_CTRL_FUNC_IN_IRAM is not set
+# CONFIG_ADC_CONTINUOUS_ISR_IRAM_SAFE is not set
+# CONFIG_ADC_CONTINUOUS_FORCE_USE_ADC2_ON_C3_S3 is not set
+# end of ADC and ADC Calibration
+
+#
 # Common ESP-related
 #
 CONFIG_ESP_ERR_TO_NAME_LOOKUP=y
@@ -1360,6 +1368,38 @@ CONFIG_WL_SECTOR_SIZE=4096
 # end of Wear Levelling
 
 #
+# XyloMidi Configuration
+#
+
+#
+# ADC and MUX
+#
+
+#
+# MUX
+#
+
+#
+# MUX0
+#
+CONFIG_MUX0_PIN_S0=10
+CONFIG_MUX_PIN_S1=11
+CONFIG_MUX_PIN_S2=12
+CONFIG_MUX_PIN_S3=13
+# end of MUX0
+# end of MUX
+
+#
+# ADC
+#
+CONFIG_XMIDI_MUX_CHANNEL_0=3
+CONFIG_XMIDI_MUX_CHANNEL_1=4
+CONFIG_XMIDI_MUX_CHANNEL_2=4
+# end of ADC
+# end of ADC and MUX
+# end of XyloMidi Configuration
+
+#
 # TinyUSB Stack
 #
 CONFIG_TINYUSB_DEBUG_LEVEL=1
@@ -1407,7 +1447,7 @@ CONFIG_TINYUSB_DESC_SERIAL_STRING="123456"
 #
 # Musical Instrument Digital Interface (MIDI)
 #
-CONFIG_TINYUSB_MIDI_COUNT=0
+CONFIG_TINYUSB_MIDI_COUNT=1
 # end of Musical Instrument Digital Interface (MIDI)
 
 #
