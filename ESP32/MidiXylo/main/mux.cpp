@@ -2,6 +2,7 @@
 #include "driver/gpio.h"
 #include "esp_log.h"
 
+int sensors::MuxController::MUX_ID = 0;
 
 namespace sensors{
     esp_err_t conf_gpio(gpio_num_t gpio){
@@ -11,7 +12,9 @@ namespace sensors{
         err = gpio_set_direction(gpio, GPIO_MODE_OUTPUT);
         return err;
     }
-
+    MuxController::MuxController(mux_pin_config* mux_pins){
+            init_mux(mux_pins);
+        }
     void MuxController::init_mux(mux_pin_config* mux_pins){
         mux_pins_.S0 = mux_pins->S0;
         mux_pins_.S1 = mux_pins->S1;
@@ -30,7 +33,6 @@ namespace sensors{
         gpio_set_level(mux_pins_.S1, (channel >> 1) & 1);
         gpio_set_level(mux_pins_.S2, (channel >> 2) & 1);
         gpio_set_level(mux_pins_.S3, (channel >> 3) & 1);
-
     }
 }
 

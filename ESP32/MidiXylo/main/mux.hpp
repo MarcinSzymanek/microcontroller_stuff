@@ -1,3 +1,5 @@
+#pragma once
+
 #include "stdint.h"
 #include "esp_log.h"
 #include "driver/gpio.h"
@@ -14,9 +16,7 @@ typedef struct mux_pin_config_t{
 class MuxController{
     public:
         MuxController(){}
-        MuxController(mux_pin_config* mux_pins){
-            init_mux(mux_pins);
-        }
+        MuxController(mux_pin_config* mux_pins);
         void init_mux(mux_pin_config* mux_pins);
         void switch_channel(uint8_t channel);
     private:
@@ -25,6 +25,5 @@ class MuxController{
         int mux_id_;
     };
 
-    int MuxController::MUX_ID = 0;
 } // namespace sensors
 

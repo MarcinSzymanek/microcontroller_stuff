@@ -2,25 +2,25 @@ menu "XyloMidi Configuration"
 
     menu "ADC and MUX"
         
-        menu MUX
-            menu MUX0
+        menu "MUX"
+            menu "MUX0"
             config MUX0_PIN_S0
                 int "MUX0_PIN_S0"
                 default 10
-            config MUX_PIN_S1
+            config MUX0_PIN_S1
                 int "MUX0_PIN_S1"
                 default 11
-            config MUX_PIN_S2
+            config MUX0_PIN_S2
                 int "MUX0_PIN_S2"
                 default 12
-            config MUX_PIN_S3
+            config MUX0_PIN_S3
                 int "MUX0_PIN_S3"
                 default 13
 
             endmenu #MUX0
         endmenu # MUX menu
 
-        menu ADC
+        menu "ADC"
             config XMIDI_MUX_CHANNEL_0
                 int "XMIDI_MUX_CHAN_0"
                 default 3

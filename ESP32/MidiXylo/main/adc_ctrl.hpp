@@ -1,3 +1,5 @@
+#pragma once
+
 #include "esp_log.h"
 #include "esp_adc/adc_oneshot.h"
 #include <vector>
