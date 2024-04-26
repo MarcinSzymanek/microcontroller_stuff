@@ -1,41 +1,73 @@
 menu "XyloMidi Configuration"
 
     menu "ADC and MUX"
-        
+
         menu "MUX"
-            menu "MUX0"
-            config MUX0_PIN_S0
-                int "MUX0_PIN_S0"
+            menu "MUX PADS 0"
+            config MUX_P0_PIN_S0
+                int "MUX_P0_PIN_S0"
                 default 10
-            config MUX0_PIN_S1
-                int "MUX0_PIN_S1"
+            config MUX_P0_PIN_S1
+                int "MUX_P0_PIN_S1"
                 default 11
-            config MUX0_PIN_S2
-                int "MUX0_PIN_S2"
+            config MUX_P0_PIN_S2
+                int "MUX_P0_PIN_S2"
                 default 12
-            config MUX0_PIN_S3
-                int "MUX0_PIN_S3"
+            config MUX_P0_PIN_S3
+                int "MUX_P0_PIN_S3"
                 default 13
 
-            endmenu #MUX0
+            endmenu #MUX PADS 0
+
+            menu "MUX PADS 1"
+                config MUX_P1_PIN_S0
+                    int "MUX_P1_PIN_S0"
+                    default 14
+                config MUX_P1_PIN_S1
+                    int "MUX_P1_PIN_S1"
+                    default 15
+                config MUX_P1_PIN_S2
+                    int "MUX_P1_PIN_S2"
+                    default 16
+                config MUX_P1_PIN_S3
+                    int "MUX_P1_PIN_S3"
+                    default 17
+
+                endmenu #MUX PADS 1
+
+            menu "MUX MISC"
+                config MUX_MISC_PIN_S0
+                    int "MUX_MISC_PIN_S0"
+                    default 18
+                config MUX_MISC_PIN_S1
+                    int "MUX_MISC_PIN_S1"
+                    default 19
+                config MUX_MISC_PIN_S2
+                    int "MUX_MISC_PIN_S2"
+                    default 20
+                config MUX_MISC_PIN_S3
+                    int "MUX_MISC_PIN_S3"
+                    default 21
+
+                endmenu #MUX MISC
         endmenu # MUX menu
 
         menu "ADC"
-            config XMIDI_MUX_CHANNEL_0
-                int "XMIDI_MUX_CHAN_0"
+            config XMIDI_CHAN_MUX_PADS_0
+                int "XMIDI_CHAN_MUX_P0"
                 default 3
                 help
-                    ADC channel used by MUX0
-            config XMIDI_MUX_CHANNEL_1
-                int "XMIDI_MUX_CHAN_1"
+                    ADC channel used by MUX_P0 (Pads 0-15)
+            config XMIDI_CHAN_MUX_PADS_1
+                int "XMIDI_CHAN_MUX_P1"
                 default 4
                 help
-                    ADC channel used by MUX2
-            config XMIDI_MUX_CHANNEL_2
-                int "XMIDI_MUX_CHAN_2"
+                    ADC channel used by MUX_P1 (Pads 16-24)
+            config XMIDI_CHAN_MUX_MISC
+                int "XMIDI_CHAN_MUX_MISC"
                 default 4
                 help
-                    ADC channel used by MUX2
+                    ADC channel used by MUX_MISC (Buttons 0-11, Knobs 0-3)
         endmenu # ADC menu
     endmenu # ADC and MUX menu
 

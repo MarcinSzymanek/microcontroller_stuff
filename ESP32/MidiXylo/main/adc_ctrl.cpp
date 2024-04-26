@@ -5,7 +5,7 @@ AdcController::~AdcController(){
      ESP_ERROR_CHECK(adc_oneshot_del_unit(handle_));
 }
 
-void AdcController::init_adc(std::vector<adc_channel_t> channels){
+void AdcController::init_adc(std::vector<adc_channel_t>&& channels){
     adc_oneshot_unit_init_cfg_t init_config1 = {
         .unit_id = ADC_UNIT_1
     };

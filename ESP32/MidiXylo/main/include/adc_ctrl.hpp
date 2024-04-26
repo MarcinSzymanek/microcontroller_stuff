@@ -13,7 +13,7 @@ public:
 
     AdcController(){}
     ~AdcController();
-    void init_adc(std::vector<adc_channel_t> channels);
+    void init_adc(std::vector<adc_channel_t> &&channels);
     int read_adc();
     int read_adc(int channel);
 private:
