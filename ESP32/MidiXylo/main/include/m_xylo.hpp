@@ -4,13 +4,26 @@
 #include "adc_ctrl.hpp"
 #include "mux.hpp"
 #include <array>
+#include "FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/queue.h"
+#include "queue.h"
 
+#include "esp_timer.h"
 
 class MXylo{
 public:
-    MXylo();
     void start();
+    static QueueHandle_t pad_int_queue;
+    static MXylo& instance(){
+        static MXylo instance_;
+
+        return instance_;
+    }
+    MXylo(MXylo const&) = delete;
+    void operator=(MXylo const&) = delete;
 private:
+    MXylo();
     // Mappings of MUX_MISC
     enum MiscMappings : uint8_t{
         PROGRAM = 0,   // This will be a switch, but treat as a button in src
@@ -50,10 +63,18 @@ private:
         MUX_MISC = 2
     };
 
+    uint8_t read_pads_(int mux_id);
     uint8_t read_buttons_();
     void button_action_(MiscMappings&& button);
     void play_button_action_(MiscMappings&& button);
     void program_button_action_(MiscMappings&& button);
+
+    static void task_scan_pads_(void* params);
+    
+    int timer_count = 0;
+    esp_timer_cb_t debug_timer_cb;
+    esp_timer_handle_t debug_timer;
+    std::array<int, 1024> adc_buffer;
 
     uint8_t channel_{1};
     int8_t octave_{0};

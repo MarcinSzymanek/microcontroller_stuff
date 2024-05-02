@@ -14,7 +14,10 @@ int adc_to_midi(int val){
 
 extern "C" void app_main(void){
     int old = 0;
-    MXylo mxylo;
+    MXylo::instance().start();
+    for(;;){
+        vTaskDelay(100);
+    }
     // AdcController adc_ctrl;
     // std::vector<adc_channel_t> channels{
     //     adc_channel_t(CONFIG_XMIDI_MUX_CHANNEL_0)
