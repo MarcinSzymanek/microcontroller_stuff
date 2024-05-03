@@ -71,9 +71,10 @@ void MXylo::task_scan_pads_(void* params){
                 // vTaskDelay(2/portTICK_PERIOD_MS); // Wait 1 ms before we measure
 
                 int val = MXylo::instance().read_pads_(mux_id);
+                long time = esp_timer_get_time();
                 esp_timer_dump(stderr);
                 esp_timer_stop(MXylo::instance().debug_timer);
-                ESP_LOGI("Pads", "Measured: %d", val);
+                ESP_LOGI("Pads", "Measured: %d, time taken: %ld", val, time);
             }
         }
     }
@@ -114,13 +115,16 @@ uint8_t MXylo::read_pads_(int mux_id){
     uint8_t end = 16;
     ESP_LOGI("ReadPads", "Mux id: %d", mux_id);
     if(mux_id > 0) end = 9; 
-    int val = 0;
+    int high = 0;
     for(int i = 0; i < end; i++){
         mux_ctrls_[mux_id]->switch_channel(i);
-        val = adc_ctrl_->read_adc();
-        if(val > 50) return val;
+        int val = adc_ctrl_->read_adc();
+        if(val > high) high = i;
+        adc_buffer[adc_buffer_pos] = val;
+        adc_buffer_pos++;
+        if(adc_buffer_pos > adc_buffer.max_size());
     }
-    return 0;
+    return high;
 }
 
 uint8_t MXylo::read_buttons_(){

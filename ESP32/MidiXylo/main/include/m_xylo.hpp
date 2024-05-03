@@ -75,7 +75,7 @@ private:
     esp_timer_cb_t debug_timer_cb;
     esp_timer_handle_t debug_timer;
     std::array<int, 1024> adc_buffer;
-
+    size_t adc_buffer_pos = 0;
     uint8_t channel_{1};
     int8_t octave_{0};
     int8_t transpose_{0};
