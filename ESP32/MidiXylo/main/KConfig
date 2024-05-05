@@ -1,6 +1,35 @@
 menu "XyloMidi Configuration"
+
+    menu "Select features"
+
+        config FEATURE_LCD_ON
+            bool "FEATURE_LCD"
+            default true
+            help
+                Enable or disable LCD display
+
+        config FEATURE_USB_ON
+            bool "FEATURE_USB"
+            default true
+            help
+                Enable or disable sending USB messages
+
+    endmenu # Select features
+
+    menu "SerLCD I2C pins"
+
+        config LCD_I2C_SCL_PIN
+            int "LCD_I2C_SCL_PIN"
+            default 43
+
+        config LCD_I2C_SDA_PIN
+            int "LCD_I2C_SDA_PIN"
+            default 44
+
+    endmenu # SerLCD I2C pins
+
     menu "M-Xylo interrupts"
-        
+
         config PAD_SET_0_INT_PIN
             int "PAD_SET_0_INT_PIN"
             default 4
@@ -13,7 +42,7 @@ menu "XyloMidi Configuration"
             help
                 Pin number of interrupt for buttons and switches
     endmenu # Pad interrupts
-    
+
     menu "ADC and MUX"
 
         menu "MUX"
@@ -53,16 +82,16 @@ menu "XyloMidi Configuration"
             menu "MUX MISC"
                 config MUX_MISC_PIN_S0
                     int "MUX_MISC_PIN_S0"
-                    default 15
+                    default 42
                 config MUX_MISC_PIN_S1
                     int "MUX_MISC_PIN_S1"
-                    default 16
+                    default 41
                 config MUX_MISC_PIN_S2
                     int "MUX_MISC_PIN_S2"
-                    default 17
+                    default 40
                 config MUX_MISC_PIN_S3
                     int "MUX_MISC_PIN_S3"
-                    default 18
+                    default 39
 
                 endmenu #MUX MISC
         endmenu # MUX menu
@@ -82,8 +111,8 @@ menu "XyloMidi Configuration"
                     ADC channel used by MUX_P1 (Pads 16-24)
             config XMIDI_CHAN_MUX_MISC
                 int "XMIDI_CHAN_MUX_MISC"
-                # adc_1_chan6 : gpio 7
-                default 6
+                # adc_1_chan1 : gpio 2
+                default 1
                 help
                     ADC channel used by MUX_MISC (Buttons 0-11, Knobs 0-3)
         endmenu # ADC menu

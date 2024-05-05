@@ -1,24 +1,25 @@
-#include "OpenLCD.hpp"
-#include "Logger.hpp"
+#include "open_lcd.hpp"
 #include "driver/i2c.h"
 #include "freertos/FreeRTOS.h"
+#include "esp_timer.h"
 #include "string.h"
 
+// This class is an interface to OpenLCD (firmware of SerLCD) using I2C
 
 OpenLCD::OpenLCD(){
     ESP_LOGI(TAG, "Hello from OpenLCD!");
 }
 
-esp_err_t OpenLCD::init_openLCD(){
+esp_err_t OpenLCD::init_openLCD(int&& pin_scl_p, int&& pin_sda_p){
     // I2C vars
     // ESP32 Vroom i2c pins
-    const int pin_scl = 22;
-    const int pin_sda = 21;
+    const int pin_scl = pin_scl_p;
+    const int pin_sda = pin_sda_p;
     const char i2c_master_no = 0;
     const int i2c_master_freq_hz = 400000;
     const int master_port = 0;
-
-    // Initialize i2c using esp32 sdk i2c methods
+    ESP_LOGI("LCD", "LCD init");
+    // Initialize i2c
     i2c_config_t conf;
     conf.mode = I2C_MODE_MASTER;
     conf.sda_io_num = pin_sda;
@@ -29,15 +30,14 @@ esp_err_t OpenLCD::init_openLCD(){
     conf.clk_flags = 0;
 
     i2c_param_config(master_port, &conf);
-    Logger::Log(TAG, "Initialized i2c");
     esp_err_t err = i2c_driver_install(i2c_master_no, conf.mode, 0, 0, 0);
-
-    err = i2c_set_timeout(0, 20000);
+    // For some reason i2c doesn't work without calling this
+    err = i2c_set_timeout(0, 30);
     ESP_ERROR_CHECK(err);
     clear_buffer_();
     clear();
-    write("XylofonMidi v0.10", 17);
 
+    vTaskDelay(50);
     return err;
 }
 
@@ -47,7 +47,8 @@ esp_err_t OpenLCD::write(const char* str, size_t size){
         buffer[i] = (uint8_t)*str;
         str++;
     }
-    return i2c_master_write_to_device(0, i2c_addr, buffer, size, 500);
+    esp_err_t err = i2c_master_write_to_device(0, i2c_addr, buffer, size, 20000);
+    return ESP_OK;
 }
 
 bool OpenLCD::update_display(){
@@ -61,19 +62,19 @@ bool OpenLCD::update_display(){
 
 bool OpenLCD::switch_line_(size_t line){
     if(line > 4) return false;
-    char data[2] = {254, 0b10000000 | 20};
+    uint8_t line_cmd = 0;
+    if(line > 1) line_cmd |= 0b00010100;
+    if(line % 2 == 1) line_cmd |= 0b01000000;
+
+    char data[2] = {254, (char)(0b10000000 | line_cmd)};
     write(data, 2);
+    vTaskDelay(1);
     return true;
 }
 
-bool OpenLCD::update_line(const char* text, size_t line, size_t length){
-    strcpy(lcd_buffer[line], text);
-
-    if(length < 20){
-        for(int i = length; i < MAX_LINE_WIDTH; i++){
-            lcd_buffer[line][i] = ' ';
-        }
-    }
+bool OpenLCD::update_line(const char* text, size_t line){
+    switch_line_(line);
+    write(text, MAX_LINE_WIDTH);
     return true;
 }
 

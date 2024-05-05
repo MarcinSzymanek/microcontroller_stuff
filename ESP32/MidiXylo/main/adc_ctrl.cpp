@@ -26,9 +26,9 @@ int AdcController::read_adc(){
     return(buffer);
 }
 
-int AdcController::read_adc(int channel){
-    if(channel > channels_.size()) return -1;
+// Reading from the adc in this way takes approximately 38us. For faster reading, we could use continuous_adc instead
+int IRAM_ATTR AdcController::read_adc(ADC_CHAN channel){
     int buffer;
-    adc_oneshot_read(handle_, channels_[channel], &buffer);
+    adc_oneshot_read(handle_, channels_[(uint8_t)channel], &buffer);
     return(buffer);
 }

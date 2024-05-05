@@ -44,12 +44,12 @@ private:
         // array of poinbter to string descriptors
         (char[]){0x09, 0x04},  // 0: is supported language is English (0x0409)
         "MSzymanek",             // 1: Manufacturer
-        "XyloMidi",      // 2: Product
+        "M-Xylo",      // 2: Product
         "123456",              // 3: Serials, should use chip ID
-        "XMidi", // 4: MIDI
+        "M-Xylo", // 4: MIDI
     };
 
-    bool debug_led = true;
+    bool debug_led = false;
 
     std::array<const uint8_t, 101>* s_midi_cfg_desc_handle_;
 };

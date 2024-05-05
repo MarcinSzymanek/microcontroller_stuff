@@ -1,13 +1,15 @@
 #pragma once
 
 #include <memory>
-#include "adc_ctrl.hpp"
-#include "mux.hpp"
 #include <array>
 #include "FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
-#include "queue.h"
+
+#include "adc_ctrl.hpp"
+#include "display.hpp"
+#include "mux.hpp"
+#include "usb_midi.h"
 
 #include "esp_timer.h"
 
@@ -15,6 +17,7 @@ class MXylo{
 public:
     void start();
     static QueueHandle_t pad_int_queue;
+    static QueueHandle_t misc_int_queue;
     static MXylo& instance(){
         static MXylo instance_;
 
@@ -57,6 +60,9 @@ private:
     std::shared_ptr<AdcController> adc_ctrl_;
     std::array<std::unique_ptr<sensors::MuxController>, 3> mux_ctrls_;
 
+    Display display_;
+    usb::UsbMidi usb_midi_;
+
     enum mux_type : uint8_t{
         MUX_P0 = 0,
         MUX_P1 = 1,
@@ -65,12 +71,24 @@ private:
 
     uint8_t read_pads_(int mux_id);
     uint8_t read_buttons_();
+
+    // Choose which action to perform based on button press
     void button_action_(MiscMappings&& button);
     void play_button_action_(MiscMappings&& button);
     void program_button_action_(MiscMappings&& button);
 
+    // Actual actions to perform
+    void toggle_mode();
+    void toggle_sustain();
+    void transpose_change(bool up);
+    void octave_change(bool up);
+    void program_change(bool up);
+    void channel_change(bool up);
+
+
     static void task_scan_pads_(void* params);
-    
+    static void task_scan_misc_(void* params);
+
     int timer_count = 0;
     esp_timer_cb_t debug_timer_cb;
     esp_timer_handle_t debug_timer;
@@ -79,6 +97,9 @@ private:
     uint8_t channel_{1};
     int8_t octave_{0};
     int8_t transpose_{0};
+    int8_t patch_{0};
     bool sustain_on = false;
+
+    int8_t last_scanned_misc;
 
 };

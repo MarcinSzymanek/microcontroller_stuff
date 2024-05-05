@@ -40,7 +40,7 @@ MXylo::MXylo(){
     mux_ctrls_[1] = std::make_unique<sensors::MuxController>(&mux_p1_pins);
     mux_ctrls_[2] = std::make_unique<sensors::MuxController>(&mux_misc_pins);
 
-    
+
     esp_timer_create_args_t args = {
         .callback = debug_timer_cb,
         .arg = nullptr,
@@ -48,33 +48,64 @@ MXylo::MXylo(){
         .name = "one-shot"
     };
     esp_timer_create(&args, &debug_timer);
+
+    display_.start_display();
 }
+QueueHandle_t MXylo::misc_int_queue;
 QueueHandle_t MXylo::pad_int_queue;
+
 void IRAM_ATTR pad_0_int_handler(void* arg){
     int i = (int)arg;
     xQueueSendFromISR(MXylo::pad_int_queue, &i, NULL);
 }
+
+void IRAM_ATTR misc_int_handler(void* arg){
+    int i = (int)arg;
+    xQueueSendFromISR(MXylo::misc_int_queue, &i, NULL);
+}
+
+void MXylo::task_scan_misc_(void* params){
+    int interrupt_gpio;
+    for(;;){
+        if (xQueueReceive(misc_int_queue, &interrupt_gpio, portMAX_DELAY)){
+            int level = gpio_get_level((gpio_num_t) interrupt_gpio);
+            //ESP_LOGI("Pads", "Level: %d", gpio_get_level((gpio_num_t) interrupt_gpio));
+            if(!level) continue;
+            //if(level){
+            int buttons_state = MXylo::instance().read_buttons_();
+               // ESP_LOGI("Buttons", "Measured: %d, time taken: %ld", buttons_state, time_1 - time_0);
+            long time_0 = esp_timer_get_time();
+            for(int i = 0; i < MXylo::instance().MAX_BUTTONS; i++){
+                if(buttons_state & 1){
+                    MXylo::instance().button_action_(static_cast<MiscMappings>(i));
+                }
+                buttons_state = buttons_state >> 1;
+            }
+            long time_1 = esp_timer_get_time();
+            ESP_LOGI("Button Scan:", "Time to read buttons: %ld", time_1 - time_0);
+        }
+    }
+}
+//}
 
 void MXylo::task_scan_pads_(void* params){
     int interrupt_gpio;
     for(;;){
         if (xQueueReceive(pad_int_queue, &interrupt_gpio, portMAX_DELAY)){
             esp_err_t err = esp_timer_start_once(MXylo::instance().debug_timer, 500);
-            esp_timer_dump(stderr);
             //ESP_LOGI("Pads", "Interrupt received from int gpio: %d", interrupt_gpio);
             int level = gpio_get_level((gpio_num_t) interrupt_gpio);
             //ESP_LOGI("Pads", "Level: %d", gpio_get_level((gpio_num_t) interrupt_gpio));
             if(level){
-
                 int mux_id = 0;
                 if(interrupt_gpio == CONFIG_XMIDI_CHAN_MUX_PADS_1) mux_id = 1;
                 // vTaskDelay(2/portTICK_PERIOD_MS); // Wait 1 ms before we measure
 
                 int val = MXylo::instance().read_pads_(mux_id);
-                long time = esp_timer_get_time();
+                //long time = esp_timer_get_time();
                 esp_timer_dump(stderr);
                 esp_timer_stop(MXylo::instance().debug_timer);
-                ESP_LOGI("Pads", "Measured: %d, time taken: %ld", val, time);
+                //ESP_LOGI("Pads", "Measured: %d, time taken: %ld", val, time);
             }
         }
     }
@@ -82,17 +113,15 @@ void MXylo::task_scan_pads_(void* params){
 
 void MXylo::start(){
     ESP_LOGI("MX", "Start");
-    mux_ctrls_[0]->switch_channel(0);
-    mux_ctrls_[1]->switch_channel(0);
-    mux_ctrls_[2]->switch_channel(0);
     pad_int_queue = xQueueCreate(10, sizeof(int));
+    misc_int_queue = xQueueCreate(5, sizeof(int));
 
-    // Configure interrupts
+    // Configure interrupts + create scan pads (0-15) task
     gpio_config_t int_config = {
         .pin_bit_mask = (1 << CONFIG_PAD_SET_0_INT_PIN) | (1 << CONFIG_SWITCH_INT_PIN),
         .mode = GPIO_MODE_INPUT,
         .pull_up_en = GPIO_PULLUP_DISABLE,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .pull_down_en = GPIO_PULLDOWN_ENABLE,
         .intr_type = GPIO_INTR_ANYEDGE
     };
 
@@ -104,17 +133,20 @@ void MXylo::start(){
         (void*) CONFIG_PAD_SET_0_INT_PIN
     );
 
-    mux_ctrls_[0]->switch_channel(0);
-    mux_ctrls_[1]->switch_channel(0);
-    mux_ctrls_[2]->switch_channel(0);
-    xTaskCreate(&task_scan_pads_, "scan pads", 2048, NULL, (UBaseType_t) 2, NULL);
-    
+    gpio_isr_handler_add(
+        (gpio_num_t) CONFIG_SWITCH_INT_PIN,
+        misc_int_handler,
+        (void*) CONFIG_SWITCH_INT_PIN
+    );
+
+    xTaskCreate(&task_scan_pads_, "scan pads", 4096, NULL, (UBaseType_t) 2, NULL);
+    xTaskCreate(&task_scan_misc_, "scan misc", 4096, NULL, (UBaseType_t) 3, NULL);
 }
 
 uint8_t MXylo::read_pads_(int mux_id){
     uint8_t end = 16;
     ESP_LOGI("ReadPads", "Mux id: %d", mux_id);
-    if(mux_id > 0) end = 9; 
+    if(mux_id > 0) end = 9;
     int high = 0;
     for(int i = 0; i < end; i++){
         mux_ctrls_[mux_id]->switch_channel(i);
@@ -128,21 +160,26 @@ uint8_t MXylo::read_pads_(int mux_id){
 }
 
 uint8_t MXylo::read_buttons_(){
+    uint8_t values = 0;
+    vTaskDelay(1);
     for(int i = 0; i < MAX_BUTTONS; i++){
         mux_ctrls_[mux_type::MUX_MISC]->switch_channel(i);
-        int val = adc_ctrl_->read_adc(CONFIG_XMIDI_CHAN_MUX_MISC);
-        if(val) return i;
+        int val = adc_ctrl_->read_adc(AdcController::ADC_CHAN_MUX);
+        if(val > 1000) values |= (1 << i);
     }
-
-    return MiscMappings::NONE;
+    return values;
 }
 
 // Decide what to do based on the button pressed
 void MXylo::button_action_(MiscMappings&& button){
+    ESP_LOGI("Button Action", "Button: %d", (int)button);
+
     if(button == MiscMappings::NONE) return;
 
     if(button == MiscMappings::PROGRAM){
         mode_ = static_cast<Mode>((static_cast<int>(mode_) + 1) % (static_cast<int>(Mode::NUM_MODES)));
+        Display::event_data_t data{static_cast<uint8_t>(mode_)};
+        display_.push_event(Display::DISP_EVENT::MODE, std::move(data));
         return;
     }
 
@@ -158,43 +195,95 @@ void MXylo::play_button_action_(MiscMappings&& button){
     switch(button){
 
         case(MiscMappings::OCTAVE_UP):
-            if(octave_ == 3) return;
-            octave_++;
-            break;
+            {
+                if(octave_ == 3) return;
+                octave_++;
+                Display::event_data_t data{static_cast<uint8_t>(octave_ + 3), 0};
+                display_.push_event(Display::DISP_EVENT::OCTAVE, std::move(data));
+                break;
+            }
 
         case(MiscMappings::OCTAVE_DOWN):
-            if(octave_ == -3) return;
-            octave_--;
-            break;
+            {
+                if(octave_ == -3) return;
+                octave_--;
+                Display::event_data_t data{static_cast<uint8_t>(octave_ + 3), 0};
+                display_.push_event(Display::DISP_EVENT::OCTAVE, std::move(data));
+                break;
+            }
 
         case(MiscMappings::TRANSPOSE_UP):
-            if(transpose_ == 11) return;
-            transpose_++;
-            break;
+            {
+                if(transpose_ == 11) return;
+                transpose_--;
+                Display::event_data_t data{static_cast<uint8_t>(transpose_ + 11), 1};
+                display_.push_event(Display::DISP_EVENT::TRANSPOSE, std::move(data));
+                break;
+            }
+
 
         case(MiscMappings::TRANSPOSE_DOWN):
-            if(transpose_ == -11) return;
-            transpose_--;
-            break;
+            {
+                if(transpose_ == -11) return;
+                transpose_--;
+                Display::event_data_t data{static_cast<uint8_t>(transpose_ + 11), 0};
+                display_.push_event(Display::DISP_EVENT::TRANSPOSE, std::move(data));
+                break;
+            }
+
+        case(MiscMappings::PROGRAM_CHANGE_UP):
+            {
+                if(patch_ == 126) return;
+                patch_++;
+                Display::event_data_t data{static_cast<uint8_t>(patch_), 1};
+                display_.push_event(Display::DISP_EVENT::PROGRAM_CHANGE, std::move(data));
+                usb_midi_.send(midi::msg::pc(channel_, patch_));
+                break;
+            }
+
+        case(MiscMappings::PROGRAM_CHANGE_DOWN):
+            {
+                if(patch_ == 0) return;
+                patch_--;
+                Display::event_data_t data{static_cast<uint8_t>(patch_), 0};
+                display_.push_event(Display::DISP_EVENT::PROGRAM_CHANGE, std::move(data));
+                usb_midi_.send(midi::msg::pc(channel_, patch_));
+                break;
+            }
 
         case(MiscMappings::SUSTAIN):
-            sustain_on = !sustain_on;
-            break;
-
+            {
+                sustain_on = !sustain_on;
+                Display::event_data_t data{(uint8_t) sustain_on};
+                display_.push_event(Display::DISP_EVENT::SUSTAIN, std::move(data));
+                break;
+            }
         default:
             return;
     }
 }
 
-void MXylo::program_button_action_(MiscMappings&& button){
-    // Change channel
-    if(button == MiscMappings::OCTAVE_UP || button == MiscMappings::TRANSPOSE_UP){
-        channel_++;
-        if(channel_ > 16) channel_ = 1;
+void MXylo::program_change(bool up){
+    if(up){
+        patch_++;
+        return;
     }
 
-    else if(button == MiscMappings::OCTAVE_DOWN || button == MiscMappings::TRANSPOSE_DOWN){
+    patch_--;
+}
+
+void MXylo::program_button_action_(MiscMappings&& button){
+    // Change channel
+    if(button == MiscMappings::OCTAVE_UP || button == MiscMappings::TRANSPOSE_UP || button == MiscMappings::PROGRAM_CHANGE_UP){
+        if(channel_ == 16) return;
+        channel_++;
+        display_.push_event(Display::DISP_EVENT::CHANNEL_CHANGE, Display::event_data_t{static_cast<uint8_t>(channel_ - 1), 1});
+    }
+
+    else if(button == MiscMappings::OCTAVE_DOWN || button == MiscMappings::TRANSPOSE_DOWN || button == MiscMappings::PROGRAM_CHANGE_DOWN){
+        if(channel_ == 1) return;
         channel_--;
-        if(channel_ < 1) channel_ = 16;
+        display_.push_event(Display::DISP_EVENT::CHANNEL_CHANGE, Display::event_data_t{static_cast<uint8_t>(channel_ - 1), 0});
+
     }
 }
