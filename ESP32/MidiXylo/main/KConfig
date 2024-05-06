@@ -20,11 +20,11 @@ menu "XyloMidi Configuration"
 
         config LCD_I2C_SCL_PIN
             int "LCD_I2C_SCL_PIN"
-            default 43
+            default 47
 
         config LCD_I2C_SDA_PIN
             int "LCD_I2C_SDA_PIN"
-            default 44
+            default 48
 
     endmenu # SerLCD I2C pins
 
@@ -32,15 +32,27 @@ menu "XyloMidi Configuration"
 
         config PAD_SET_0_INT_PIN
             int "PAD_SET_0_INT_PIN"
-            default 4
+            default 38
             help
                 Pin number of interrupt for pad set 0 (0-15)
 
+        config PAD_SET_1_INT_PIN
+            int "PAD_SET_1_INT_PIN"
+            default 37
+            help
+                Pin number of interrupt for pad set 1 (16-24)
+
         config SWITCH_INT_PIN
             int "SWITCH_INT_PIN"
-            default 5
+            default 36
             help
-                Pin number of interrupt for buttons and switches
+                Pin number of interrupt for switches
+            
+        config BUTTON_INT_PIN
+            int "BUTTON_INT_PIN"
+            default 35
+            help
+                Pin number of interrupt for buttons
     endmenu # Pad interrupts
 
     menu "ADC and MUX"
@@ -66,16 +78,16 @@ menu "XyloMidi Configuration"
             menu "MUX PADS 1"
                 config MUX_P1_PIN_S0
                     int "MUX_P1_PIN_S0"
-                    default 14
+                    default 15
                 config MUX_P1_PIN_S1
                     int "MUX_P1_PIN_S1"
-                    default 15
+                    default 16
                 config MUX_P1_PIN_S2
                     int "MUX_P1_PIN_S2"
-                    default 16
+                    default 17
                 config MUX_P1_PIN_S3
                     int "MUX_P1_PIN_S3"
-                    default 17
+                    default 18
 
                 endmenu #MUX PADS 1
 
@@ -106,7 +118,8 @@ menu "XyloMidi Configuration"
                     It is NOT the GPIO pin number
             config XMIDI_CHAN_MUX_PADS_1
                 int "XMIDI_CHAN_MUX_P1"
-                default 4
+                # ADC_1_C6 : pin 7
+                default 6
                 help
                     ADC channel used by MUX_P1 (Pads 16-24)
             config XMIDI_CHAN_MUX_MISC
