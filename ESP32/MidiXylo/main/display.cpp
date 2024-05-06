@@ -16,6 +16,10 @@ void task_process_events_(void* params){
                     display_->handle_mode_event(event_data[0]);
                     break;
 
+                case(Display::DISP_EVENT::SUSTAIN):
+                    display_->handle_sustain_event(event_data[0]); 
+                    break;
+
                 case(Display::DISP_EVENT::CHANNEL_CHANGE):
                     display_->handle_events(event_data[0], event_data[1], display_->channel_evt_vals);
                     break;
@@ -78,8 +82,10 @@ void Display::handle_sustain_event(uint8_t val){
     if(val) new_value = "ON ";
     else new_value = "OFF";
     content_[3].replace(sust_pos, 3, new_value);
-    content_[2].replace(evt_pos, 11, "SUSTAIN " + new_value);
-    lcd_.update_line(content_[2].c_str(), 2);
+    content_[1].replace(evt_pos, 11, "SUSTAIN " + new_value);
+    vTaskDelay(2);
+    lcd_.update_line(content_[1].c_str(), 1);
+    vTaskDelay(2);
     lcd_.update_line(content_[3].c_str(), 3);
 }
 
