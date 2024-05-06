@@ -268,7 +268,6 @@ void MXylo::play_button_action_(MiscMappings&& button){
                 break;
             }
 
-
         case(MiscMappings::TRANSPOSE_DOWN):
             {
                 if(transpose_ == -11) return;
@@ -298,13 +297,6 @@ void MXylo::play_button_action_(MiscMappings&& button){
                 break;
             }
 
-        case(MiscMappings::SUSTAIN):
-            {
-                sustain_on = !sustain_on;
-                Display::event_data_t data{(uint8_t) sustain_on};
-                display_.push_event(Display::DISP_EVENT::SUSTAIN, std::move(data));
-                break;
-            }
         default:
             return;
     }
