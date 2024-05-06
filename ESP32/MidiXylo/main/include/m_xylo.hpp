@@ -30,11 +30,11 @@ private:
     // Mappings of MUX_MISC
     enum MiscMappings : uint8_t{
         PROGRAM = 0,   // This will be a switch, but treat as a button in src
-        OCTAVE_UP = 1,
-        OCTAVE_DOWN = 2,
-        TRANSPOSE_UP = 3,
-        TRANSPOSE_DOWN = 4,
-        SUSTAIN = 5,
+        SUSTAIN = 1,
+        OCTAVE_UP = 2,
+        OCTAVE_DOWN = 3,
+        TRANSPOSE_UP = 4,
+        TRANSPOSE_DOWN = 5,
         PROGRAM_CHANGE_UP = 6,
         PROGRAM_CHANGE_DOWN = 7,
 
@@ -53,7 +53,14 @@ private:
 
     Mode mode_ = Mode::PLAY;
 
-    const uint8_t MAX_BUTTONS = 8;
+    // indices of MISC_MUX's button channels
+    // [0] : start
+    // [1] : stop + 1
+    // Default button channels are 2:7
+    const std::array<const uint8_t, 2> MUX_BUTTON_CHANNELS_ = {
+        2,
+        8
+    };
     const uint8_t MAX_KNOBS = 4;
 
     // Use 1 adc, 3 mux's
@@ -71,6 +78,7 @@ private:
 
     uint8_t read_pads_(int mux_id);
     uint8_t read_buttons_();
+    uint8_t read_switches_();
 
     // Choose which action to perform based on button press
     void button_action_(MiscMappings&& button);
@@ -85,7 +93,8 @@ private:
     void program_change(bool up);
     void channel_change(bool up);
 
-
+    void scan_buttons();
+    void scan_switches();
     static void task_scan_pads_(void* params);
     static void task_scan_misc_(void* params);
 
@@ -99,6 +108,7 @@ private:
     int8_t transpose_{0};
     int8_t patch_{0};
     bool sustain_on = false;
+    uint8_t sustain_val = 0;
 
     int8_t last_scanned_misc;
 

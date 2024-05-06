@@ -68,21 +68,17 @@ void MXylo::task_scan_misc_(void* params){
     int interrupt_gpio;
     for(;;){
         if (xQueueReceive(misc_int_queue, &interrupt_gpio, portMAX_DELAY)){
-            int level = gpio_get_level((gpio_num_t) interrupt_gpio);
-            //ESP_LOGI("Pads", "Level: %d", gpio_get_level((gpio_num_t) interrupt_gpio));
-            if(!level) continue;
-            //if(level){
-            int buttons_state = MXylo::instance().read_buttons_();
-               // ESP_LOGI("Buttons", "Measured: %d, time taken: %ld", buttons_state, time_1 - time_0);
-            long time_0 = esp_timer_get_time();
-            for(int i = 0; i < MXylo::instance().MAX_BUTTONS; i++){
-                if(buttons_state & 1){
-                    MXylo::instance().button_action_(static_cast<MiscMappings>(i));
-                }
-                buttons_state = buttons_state >> 1;
+            
+            ESP_LOGI("task_scan_misc_", "Int gpio: %d", interrupt_gpio);
+            if(interrupt_gpio == CONFIG_SWITCH_INT_PIN){
+                MXylo::instance().scan_switches();
+                continue;
             }
-            long time_1 = esp_timer_get_time();
-            ESP_LOGI("Button Scan:", "Time to read buttons: %ld", time_1 - time_0);
+            
+            int level = gpio_get_level((gpio_num_t) interrupt_gpio);
+            if(!level) continue;
+            ESP_LOGI("task_scan_misc_", "Scan buttons");
+            MXylo::instance().scan_buttons();
         }
     }
 }
@@ -92,6 +88,7 @@ void MXylo::task_scan_pads_(void* params){
     int interrupt_gpio;
     for(;;){
         if (xQueueReceive(pad_int_queue, &interrupt_gpio, portMAX_DELAY)){
+            //if(interrupt_gpio == CONFI)
             esp_err_t err = esp_timer_start_once(MXylo::instance().debug_timer, 500);
             //ESP_LOGI("Pads", "Interrupt received from int gpio: %d", interrupt_gpio);
             int level = gpio_get_level((gpio_num_t) interrupt_gpio);
@@ -109,6 +106,38 @@ void MXylo::task_scan_pads_(void* params){
             }
         }
     }
+}
+
+void MXylo::scan_switches(){
+    long time_0 = esp_timer_get_time();
+    int buttons_state = read_switches_();
+    ESP_LOGI("Switch scan", "buttons_state: %d", buttons_state);
+    ESP_LOGI("Switch scan", "Sustain state: %d", sustain_val);
+    if((buttons_state & 1) != static_cast<uint8_t>(mode_)){
+        button_action_(MiscMappings::PROGRAM);
+    }
+
+    buttons_state = buttons_state >> 1;
+
+    if((buttons_state & 1) != static_cast<uint8_t>(sustain_val)){
+        button_action_(MiscMappings::SUSTAIN);
+    }
+    long time_1 = esp_timer_get_time();
+    ESP_LOGI("Switch Scan:", "Time to read switches: %ld", time_1 - time_0);
+}
+
+void MXylo::scan_buttons(){
+    int buttons_state = read_buttons_();
+    // ESP_LOGI("Buttons", "Measured: %d, time taken: %ld", buttons_state, time_1 - time_0);
+    long time_0 = esp_timer_get_time();
+    for(int i = MUX_BUTTON_CHANNELS_[0]; i < MUX_BUTTON_CHANNELS_[1]; i++){
+        if(buttons_state & 1){
+            MXylo::instance().button_action_(static_cast<MiscMappings>(i));
+        }
+        buttons_state = buttons_state >> 1;
+    }
+    long time_1 = esp_timer_get_time();
+    ESP_LOGI("Button Scan:", "Time to read buttons: %ld", time_1 - time_0);
 }
 
 void MXylo::start(){
@@ -159,12 +188,23 @@ uint8_t MXylo::read_pads_(int mux_id){
     return high;
 }
 
+uint8_t MXylo::read_switches_(){
+    uint8_t values = 0;
+    vTaskDelay(1);
+    for(int i = 0; i < 2; i++){
+        mux_ctrls_[mux_type::MUX_MISC]->switch_channel(i);
+        int val = adc_ctrl_->read_adc(AdcController::ADC_CHAN_MISC);
+        if(val > 1000) values |= (1 << i);
+    }
+    return values;
+}
+
 uint8_t MXylo::read_buttons_(){
     uint8_t values = 0;
     vTaskDelay(1);
-    for(int i = 0; i < MAX_BUTTONS; i++){
+    for(int i = MUX_BUTTON_CHANNELS_[0]; i < MUX_BUTTON_CHANNELS_[1]; i++){
         mux_ctrls_[mux_type::MUX_MISC]->switch_channel(i);
-        int val = adc_ctrl_->read_adc(AdcController::ADC_CHAN_MUX);
+        int val = adc_ctrl_->read_adc(AdcController::ADC_CHAN_MISC);
         if(val > 1000) values |= (1 << i);
     }
     return values;
@@ -174,13 +214,20 @@ uint8_t MXylo::read_buttons_(){
 void MXylo::button_action_(MiscMappings&& button){
     ESP_LOGI("Button Action", "Button: %d", (int)button);
 
-    if(button == MiscMappings::NONE) return;
-
     if(button == MiscMappings::PROGRAM){
         mode_ = static_cast<Mode>((static_cast<int>(mode_) + 1) % (static_cast<int>(Mode::NUM_MODES)));
         Display::event_data_t data{static_cast<uint8_t>(mode_)};
         display_.push_event(Display::DISP_EVENT::MODE, std::move(data));
         return;
+    }
+
+    if(button == MiscMappings::SUSTAIN){
+        if(sustain_val) sustain_val = 0;
+        else sustain_val = 1;
+
+        ESP_LOGI("Button action", "Sustain switch new val: %d", sustain_val);
+        Display::event_data_t data{static_cast<uint8_t>(sustain_val)};
+        display_.push_event(Display::DISP_EVENT::SUSTAIN, std::move(data));
     }
 
     if(mode_ == Mode::PLAY){
