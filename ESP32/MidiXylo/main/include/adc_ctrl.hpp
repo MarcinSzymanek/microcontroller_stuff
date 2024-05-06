@@ -9,7 +9,7 @@ public:
     enum ADC_CHAN : uint8_t{
         ADC_CHAN_P0 = 0,
         ADC_CHAN_P1 = 1,
-        ADC_CHAN_MUX = 2
+        ADC_CHAN_MISC = 2
     };
 
     enum ADC_TYPE{
