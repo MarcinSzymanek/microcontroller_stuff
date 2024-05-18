@@ -37,7 +37,7 @@ esp_err_t OpenLCD::init_openLCD(int&& pin_scl_p, int&& pin_sda_p){
     clear_buffer_();
     clear();
 
-    vTaskDelay(50);
+    vTaskDelay(20);
     return err;
 }
 

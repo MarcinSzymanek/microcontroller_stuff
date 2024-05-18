@@ -24,6 +24,10 @@ namespace midi{
             return MidiPacket{ make_status_byte(PC, channel), pc_val};
         }
 
+        MidiPacket pitch(uint8_t channel, uint8_t low_b, uint8_t high_b){
+            return MidiPacket{ make_status_byte(PITCH_BEND, channel), low_b, high_b};
+        }
+
     } // namespace msg
 
 }   // namespace midi

@@ -5,18 +5,66 @@
 #include "FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
+#include "freertos/semphr.h"
 
 #include "adc_ctrl.hpp"
 #include "display.hpp"
 #include "mux.hpp"
+#include "note_controller.hpp"
+#include "peripheral_monitor.hpp"
 #include "usb_midi.h"
 
 #include "esp_timer.h"
 
+class PadStatus{
+public:
+    PadStatus(){
+        mutex_ = xSemaphoreCreateMutex();
+    }
+    void get_status(uint8_t& buffer){
+        while(xSemaphoreTakeFromISR(mutex_, NULL)){
+
+        }
+        buffer = pads_;
+        xSemaphoreGiveFromISR(mutex_, NULL);
+    }
+
+    void set_padset(const uint8_t& padset){
+        while(xSemaphoreTakeFromISR(mutex_, NULL)){
+
+        }
+        pads_ |= padset;
+        xSemaphoreGiveFromISR(mutex_, NULL);
+    }
+
+    void reset_padset(const uint8_t& padset){
+        while(xSemaphoreTakeFromISR(mutex_, NULL)){
+
+        }
+        pads_ &= ~(padset);
+        xSemaphoreGiveFromISR(mutex_, NULL);
+    }
+
+    void reset_status(){
+        while(xSemaphoreTakeFromISR(mutex_, NULL)){
+
+        }
+        pads_ = 0;
+        xSemaphoreGiveFromISR(mutex_, NULL);
+    }
+
+private:
+    uint8_t pads_;
+    SemaphoreHandle_t mutex_;
+};
+
 class MXylo{
 public:
+    static const uint8_t PADSET_0{1};
+    static const uint8_t PADSET_1{2};
+    static const uint8_t PADSET_2{4};
+
     void start();
-    static QueueHandle_t pad_int_queue;
     static QueueHandle_t misc_int_queue;
     static MXylo& instance(){
         static MXylo instance_;
@@ -25,7 +73,28 @@ public:
     }
     MXylo(MXylo const&) = delete;
     void operator=(MXylo const&) = delete;
+    void stop_note();
+    
+    esp_timer_handle_t timer_pad_hit;
+    esp_timer_handle_t timer_rescan;
+    // used for software debouncing
+    esp_timer_handle_t timer_button_timeout;
+    static void timer_cb_pad_hit(void* param);
+    static void timer_cb_rescan(void* param);
+    static void timer_cb_button_reset(void* param);
+    PadStatus pad_status;
+    const int debug = 5;
+
+    // How many times to scan pads again, after a pad has been hit
+    const uint8_t max_pad_scan_iterations = 15;
+    // On interrupt run timer with 300us value (rise time)
+    const int64_t initial_timer_delay_us = 300;
+    // Afterwards run timer with 2ms (500 Hz frequency of scanning)
+    const int64_t subsequent_timer_delay_us = 2000; 
+    int current_scan_iteration = 0;
 private:
+    bool button_timeout = false;
+    QueueHandle_t* periph_mng_int_queue;
     MXylo();
     // Mappings of MUX_MISC
     enum MiscMappings : uint8_t{
@@ -39,6 +108,7 @@ private:
         PROGRAM_CHANGE_DOWN = 7,
 
         // Knobs
+        NOTE_DUR = 11,
         CC0 = 12,
         CC1 = 13,
         CC2 = 14,
@@ -64,52 +134,44 @@ private:
     const uint8_t MAX_KNOBS = 4;
 
     // Use 1 adc, 3 mux's
-    std::shared_ptr<AdcController> adc_ctrl_;
-    std::array<std::unique_ptr<sensors::MuxController>, 3> mux_ctrls_;
+    AdcController adc_ctrl_;
+    MuxController* mux_controller_;
+    NoteController* note_controller_;
+    PeripheralMonitor* periph_monitor_;
 
-    Display display_;
-    usb::UsbMidi usb_midi_;
+    Display display_{};
+    usb::UsbMidi usb_midi_{};
 
-    enum mux_type : uint8_t{
-        MUX_P0 = 0,
-        MUX_P1 = 1,
-        MUX_MISC = 2
-    };
-
-    uint8_t read_pads_(int mux_id);
-    uint8_t read_buttons_();
-    uint8_t read_switches_();
-
+    void switch_mode(uint8_t val);
     // Choose which action to perform based on button press
-    void button_action_(MiscMappings&& button);
-    void play_button_action_(MiscMappings&& button);
-    void program_button_action_(MiscMappings&& button);
+    void button_action_(PeripheralMonitor::MiscMuxChanMap&& button);
+    void play_button_action_(PeripheralMonitor::MiscMuxChanMap&& button);
+    void program_button_action_(PeripheralMonitor::MiscMuxChanMap&& button);
 
-    // Actual actions to perform
-    void toggle_mode();
-    void toggle_sustain();
-    void transpose_change(bool up);
-    void octave_change(bool up);
-    void program_change(bool up);
-    void channel_change(bool up);
+    int transpose_{0};
+    int octave_{0};
 
-    void scan_buttons();
-    void scan_switches();
-    static void task_scan_pads_(void* params);
-    static void task_scan_misc_(void* params);
+    void scan_cc_();
+    static void task_process_buttons_(void* params);
+    static void task_process_cc_(void* params);
+    static void task_process_js_(void* params);
+
+    static IRAM_ATTR void button_int_handler(void* params);
+
+    static QueueHandle_t cc_event_queue_;
+    static QueueHandle_t button_event_queue_;
+    static QueueHandle_t js_event_queue_;
 
     int timer_count = 0;
-    esp_timer_cb_t debug_timer_cb;
-    esp_timer_handle_t debug_timer;
-    std::array<int, 1024> adc_buffer;
-    size_t adc_buffer_pos = 0;
-    uint8_t channel_{1};
-    int8_t octave_{0};
-    int8_t transpose_{0};
+    std::array<int, 4> cc_buffer;
+    std::array<int, 4> cc_channel_{0, 7, 10, 12};
+    std::array<int, 4> cc_vals_{0, 0, 0, 0};
+    int pad_buffer_pos_ = 0;
+    int cc_buffer_pos_ = 0;
+    int cc_change_threshold_ = 100;
+    uint8_t channel_{0};
     int8_t patch_{0};
     bool sustain_on = false;
     uint8_t sustain_val = 0;
-
     int8_t last_scanned_misc;
-
 };

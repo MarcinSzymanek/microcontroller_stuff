@@ -2,14 +2,18 @@
 
 #include "esp_log.h"
 #include "esp_adc/adc_oneshot.h"
+#include "esp_adc/adc_continuous.h"
 #include <vector>
+#include "FreeRTOS.h"
+#include "freertos/semphr.h"
 
 class AdcController{
 public:
     enum ADC_CHAN : uint8_t{
         ADC_CHAN_P0 = 0,
         ADC_CHAN_P1 = 1,
-        ADC_CHAN_MISC = 2
+        ADC_CHAN_MISC = 2,
+        ADC_CHAN_CC = 3
     };
 
     enum ADC_TYPE{
@@ -17,13 +21,18 @@ public:
         ADC_CONTINUOUS
     };
 
-    AdcController(){}
+    AdcController(){
+        mutex_ = xSemaphoreCreateMutex();
+    }
     ~AdcController();
     void init_adc(std::vector<adc_channel_t> &&channels);
     int read_adc();
-    int read_adc(ADC_CHAN channel);
+    void read_adc(const ADC_CHAN& channel, int& buffer);
+
+
 private:
+
+    SemaphoreHandle_t mutex_;
     std::vector<adc_channel_t> channels_;
     adc_oneshot_unit_handle_t handle_;
-    ADC_TYPE adc_type_ = ADC_TYPE::ADC_ONESHOT;
 };

@@ -15,7 +15,10 @@ int adc_to_midi(int val){
 extern "C" void app_main(void){
     int old = 0;
     MXylo::instance().start();
+    // char big_buff[1024];
     for(;;){
-        vTaskDelay(1000);
+        vTaskDelay(10000);
+        // vTaskList(big_buff);
+        // ESP_LOGI("task list", "%s", big_buff);
     }
 }

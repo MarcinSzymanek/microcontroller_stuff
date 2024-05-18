@@ -5,14 +5,14 @@
 #include <memory>
 
 #include "tinyusb.h"
-
 #include "midi_msg.h"
+
+#include "FreeRTOS.h"
+#include "freertos/semphr.h"
 
 namespace usb{
 
 using std::string;
-
-void func(void);
 
 typedef std::array<const uint8_t, 101> midi_cfg_desc_t;
 
@@ -52,5 +52,7 @@ private:
     bool debug_led = false;
 
     std::array<const uint8_t, 101>* s_midi_cfg_desc_handle_;
+
+    SemaphoreHandle_t mutex_;
 };
 };

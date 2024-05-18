@@ -37,18 +37,11 @@ UsbMidi::UsbMidi(){
     // gpio_config(&gpio_config_);
     // gpio_set_level(gpio_num_t(GPIO_LED), 0);
     ESP_ERROR_CHECK(tinyusb_driver_install(&tusb_cfg));
+    mutex_ = xSemaphoreCreateMutex();
 }
 
 void UsbMidi::send(const midi::MidiPacket packet){
     if(tud_midi_mounted()){
-        // if(debug_led){
-        //     gpio_set_level(gpio_num_t(GPIO_LED), 1);
-        //     debug_led = false;
-        // }
-        // else{
-        //     gpio_set_level(gpio_num_t(GPIO_LED), 0);
-        //     debug_led = true;
-        // }
         int written = tud_midi_stream_write(0, packet.payload.data(), packet.payload.capacity());
     }
 }

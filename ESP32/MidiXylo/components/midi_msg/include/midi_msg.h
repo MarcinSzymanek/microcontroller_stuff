@@ -42,6 +42,7 @@ namespace midi{
         MidiPacket noteOff(uint8_t channel, uint8_t note_value);
         MidiPacket cc(uint8_t channel, uint8_t cc_val, uint8_t val);
         MidiPacket pc(uint8_t channel, uint8_t val);
+        MidiPacket pitch(uint8_t channel, uint8_t low_b, uint8_t high_b);
     }
 
 } // namespace midi
