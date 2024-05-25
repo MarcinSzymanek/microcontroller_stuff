@@ -23,7 +23,6 @@ public:
     void init_mux(mux_pin_config* mux_pins);
     void switch_channel(uint8_t channel);
 private:
-    SemaphoreHandle_t mutex_;
     mux_pin_config mux_pins_;
     static int MUX_ID;
     int mux_id_;

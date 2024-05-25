@@ -26,7 +26,6 @@ void Mux::init_mux(mux_pin_config* mux_pins){
     ESP_ERROR_CHECK(conf_gpio(mux_pins_.S3));
     mux_id_ = MUX_ID;
     MUX_ID++;
-    mutex_ = xSemaphoreCreateMutex();
 }
 
 // IT TAKES TOO LONG TO USE SEMAPHORE TAKE HERE!!!
@@ -50,7 +49,6 @@ MuxController::MuxController(
 
 bool MuxController::get_value(MUX_IDX&& mux_id, const uint8_t& channel, int& value){
     // We can't make it work right now. Accept potential errors
-    // if(xSemaphoreGetMutexHolder(mutex_) == NULL) return false;
     controls_[mux_id]->switch_channel(channel);
     adc_->read_adc(std::move(AdcController::ADC_CHAN(mux_id)), value);
     return true;
