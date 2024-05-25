@@ -26,7 +26,7 @@ void PeripheralMonitor::task_monitor_cc(void* params){
     for(;;){
         pmon->scan_cc_();
         if(pmon->mode) delay = 15;
-        else delay = 5;
+        else delay = 3;
         vTaskDelay(delay);
     }
 }
@@ -38,11 +38,12 @@ void PeripheralMonitor::task_monitor_js(void* params){
     PeripheralMonitor* pmon = static_cast<PeripheralMonitor*>(params);
     for(;;){
         pmon->scan_js_();
-        vTaskDelay(3);
+        vTaskDelay(2);
     }
 }
 
 void PeripheralMonitor::scan_js_(){
+    // Mutex used to exclusively use mux_
     if(xSemaphoreTake(mutex_, 1) == pdFALSE) return;
 
     int js_buffer[2];
@@ -59,6 +60,11 @@ void PeripheralMonitor::scan_js_(){
     xSemaphoreGive(mutex_);
     js_event_t event;
     event.type = MiscMuxChanMap::JS_MOD;
+
+    // Here we have to keep track on whether or not joystick is centered
+    // If it's not but the value is within threshold - center it
+    // This is necessary, so that joystick values return to default
+    // When joystick is in default position (centered)
     if(js_buffer[0] > (JS_MOD_DEFAULT + JS_EVENT_THRESH)){
         // send mod event
         event.value = calc_raw_to_js(js_buffer[0]);
@@ -82,9 +88,10 @@ void PeripheralMonitor::scan_js_(){
         xQueueSend(*js_event_queue_, &event, 5);
         js_centered[1] = true;
     }
-
 }
 
+// Play/Program switch is the least important, so it gets a large delay
+// between polling
 void PeripheralMonitor::task_monitor_switches(void* params){
     PeripheralMonitor* pmon = static_cast<PeripheralMonitor*>(params);
     // Read switches every 250ms
@@ -96,6 +103,7 @@ void PeripheralMonitor::task_monitor_switches(void* params){
 
 void PeripheralMonitor::scan_switches_(){
     int button_buffer;
+    // Mutex used to exclusively used mux_ and button_event_queue_
     if(xSemaphoreTake(mutex_, 5) == pdFALSE) return;
     // Just check program
     mux_->get_value(std::move(MuxController::MUX_IDX::MUX_MISC), 0u, button_buffer);
@@ -119,9 +127,9 @@ void PeripheralMonitor::scan_switches_(){
 void PeripheralMonitor::task_read_buttons(void* params){
     PeripheralMonitor* pmon = static_cast<PeripheralMonitor*>(params);
     uint8_t notify_val;
-    
+
     for(;;){
-        if(xQueueReceive(button_interrupt_queue_, &notify_val, 5)){   
+        if(xQueueReceive(button_interrupt_queue_, &notify_val, 5)){
             pmon->read_buttons();
         }
     }
@@ -130,8 +138,8 @@ void PeripheralMonitor::task_read_buttons(void* params){
 
 
 void PeripheralMonitor::read_buttons(){
-    
     int button_buffer;
+    // Mutex used to exclusively used mux_ and button_event_queue_
     if(xSemaphoreTake(mutex_, 5) == pdFALSE) return;
     // Scan the 6 main buttons
     uint8_t start = uint8_t(MiscMuxChanMap::OCTAVE_UP);
@@ -152,18 +160,17 @@ void PeripheralMonitor::read_buttons(){
     xSemaphoreGive(mutex_);
 }
 
-constexpr uint8_t adc_raw_to_note_dur(int raw){
+constexpr uint8_t adc_raw_to_note_dur(int adc_val){
     // This allows setting the note duration between 50 and 2050 ms
-    float conv = 5 + (float(raw)/4095.0*200);
+    float conv = 5 + (float(adc_val)/4095.0*200);
     return uint8_t(conv);
 }
 
 void PeripheralMonitor::scan_cc_(){
-    // Enter critical section here
-    //ESP_LOGI("cc", "buffer:%d, cc_buf %d", note_duration_val_, cc_buffer_[0]);
+    // Mutex used to exclusively use mux_ and button_event_queue_
     if (xSemaphoreTake(mutex_, 5) == pdFALSE) return;
     mux_->get_value(std::move(MuxController::MUX_IDX::MUX_MISC), uint8_t(MiscMuxChanMap::NOTE_DUR), note_duration_buffer_);
-    
+
     if(outside_cc_thresh(current_note_duration_raw_, note_duration_buffer_)){
         current_note_duration_raw_ = note_duration_buffer_;
         button_event_t event{
@@ -174,11 +181,11 @@ void PeripheralMonitor::scan_cc_(){
         xSemaphoreGive(mutex_);
         return;
     }
-    // mux_->get_value(mux_misc_, uint8_t(MiscMuxChanMap::NOTE_DUR), note_duration_val_);
+
     for(uint8_t i = 0; i < 4; i++){
         mux_->get_value(std::move(MuxController::MUX_IDX::MUX_MISC), uint8_t(MiscMuxChanMap::CC0) + i, cc_buffer_[i]);
     }
-
+    xSemaphoreGive(mutex_);
     for(int i = 0; i < 4; i++){
         if(outside_cc_thresh(current_cc_vals_[i], cc_buffer_[i])){
             cc_event_t event;
@@ -200,7 +207,6 @@ void PeripheralMonitor::scan_cc_(){
             xQueueSend(*cc_event_queue_, (void*) &event, 2);
         } // end if
     } // end for loop
-    xSemaphoreGive(mutex_);
 }
 
 PeripheralMonitor::PeripheralMonitor(MuxController* mux, QueueHandle_t* cc_queue, QueueHandle_t* button_queue, QueueHandle_t* js_queue)
@@ -216,10 +222,10 @@ void PeripheralMonitor::start(){
         "monitor cc",
         monitor_cc_stack_size_,
         (void*) this,
-        (UBaseType_t) 2,
+        (UBaseType_t) 6,
         NULL
     );
-    
+
     xTaskCreate(
         &task_read_buttons,
         "read buttons",
@@ -234,7 +240,7 @@ void PeripheralMonitor::start(){
         "monitor switches",
         4096,
         (void*) this,
-        (UBaseType_t) 5,
+        (UBaseType_t) 2,
         NULL
     );
 
@@ -243,7 +249,7 @@ void PeripheralMonitor::start(){
         "monitor joystick",
         2048,
         (void*) this,
-        (UBaseType_t) 3,
+        (UBaseType_t) 8,
         NULL
     );
 }

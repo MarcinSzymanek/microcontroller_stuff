@@ -14,7 +14,7 @@ void AdcController::init_adc(std::vector<adc_channel_t>&& channels){
 
     adc_oneshot_chan_cfg_t config;
     config.bitwidth = ADC_BITWIDTH_DEFAULT;
-    config.atten = ADC_ATTEN_DB_6;
+    config.atten = ADC_ATTEN_DB_12;
     for(adc_channel_t chan : channels){
         ESP_ERROR_CHECK(adc_oneshot_config_channel(handle_, chan, &config));
     }

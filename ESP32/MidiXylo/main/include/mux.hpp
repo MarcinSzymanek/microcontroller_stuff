@@ -39,7 +39,7 @@ public:
     MuxController(
         AdcController* adc,
         mux_pin_config* mux_p0,
-        mux_pin_config* mux_p1, 
+        mux_pin_config* mux_p1,
         mux_pin_config* mux_misc
     );
 
@@ -47,9 +47,6 @@ public:
     bool get_value(MUX_IDX&& mux_id, const uint8_t& channel, int& value);
     // Same as above but... crashes???
     void get_value(const MUX_IDX& mux_id, const uint8_t& channel, int& value);
-
-    // Same as get_value, but does not require the semaphore to be taken
-    void get_pad_value(const MUX_IDX&& mux_id, const uint8_t& channel, int& value);
 
     // We have only one adc - we have to control who gets it when
     // Ideally this class would be a singleton
@@ -70,7 +67,7 @@ public:
 private:
     SemaphoreHandle_t mutex_;
     AdcController* adc_;
-    std::array<Mux*, 3> controls_;    
+    std::array<Mux*, 3> controls_;
 };
 
 

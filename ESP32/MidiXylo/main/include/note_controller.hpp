@@ -30,7 +30,7 @@ public:
     void set_channel(uint8_t channel){
         channel_ = channel;
     }
-private:    
+private:
     uint8_t calc_note_val_(int pad);
     uint8_t calc_velocity_(int adc_val);
     void scan_padset(int padset_id);
@@ -42,13 +42,14 @@ private:
     }active_note_t;
 
     std::array<int, 25> scanned_values_;
+    std::vector<active_note_t> active_notes_;
     std::vector<uint8_t> ignored_pads_;
     void process_active_notes();
     int8_t octave_{0};
     int8_t transpose_{0};
 
     SemaphoreHandle_t active_note_mutex_;
-    SemaphoreHandle_t adc_mutex_;
+    SemaphoreHandle_t mux_mutex_;
     std::array<int, 25> pad_buffer_{0};
     const uint8_t task_delay_ = 2;
     const uint8_t task_priority_ = 5;
@@ -57,6 +58,6 @@ private:
     usb::UsbMidi* usb_midi_;
     bool sustain_ = false;
     uint16_t note_length_;
-    std::vector<active_note_t> active_notes_;
+
     uint8_t channel_;
 };

@@ -19,7 +19,7 @@ void Display::task_process_events_(void* params){
                         break;
 
                     case(Display::DISP_EVENT::SUSTAIN):
-                        display_->handle_sustain_event(event_data[0]); 
+                        display_->handle_sustain_event(event_data[0]);
                         break;
 
                     case(Display::DISP_EVENT::CONTROL_CHANGE):
@@ -46,7 +46,7 @@ void Display::task_process_events_(void* params){
                         break;
                     default:
                         break;
-                } // End switch case 
+                } // End switch case
             vTaskDelay(1);
             xSemaphoreGive(display_->mutex_);
             }
@@ -61,7 +61,7 @@ void Display::start_display(){
         }
         mutex_ = xSemaphoreCreateBinary();
         xSemaphoreGive(mutex_);
-        xTaskCreate(task_process_events_, "display_events", 2048*3, this, 6, NULL);
+        xTaskCreate(task_process_events_, "display_events", 2048*3, this, 1, NULL);
 }
 
 void Display::push_event(DISP_EVENT&& event_type, event_data_t&& data){
@@ -84,7 +84,7 @@ void Display::handle_cc_channel_switch_event(uint8_t cc_idx, uint8_t new_val){
 }
 
 void Display::handle_cc_event(uint8_t cc_chan, uint8_t cc_val){
-    std::string str_chan = std::to_string(cc_chan); 
+    std::string str_chan = std::to_string(cc_chan);
     std::string str_val = std::to_string(cc_val);
     while(str_chan.size() < 3){
         str_chan += ' ';

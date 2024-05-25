@@ -34,20 +34,26 @@ menu "XyloMidi Configuration"
             int "PAD_SET_0_INT_PIN"
             default 3
             help
-                Pin number of interrupt for pad set 0 (0-15)
+                Pin number of interrupt for pad set 0 (1-8)
 
         config PAD_SET_1_INT_PIN
             int "PAD_SET_1_INT_PIN"
             default 8
             help
-                Pin number of interrupt for pad set 1 (16-24)
+                Pin number of interrupt for pad set 1 (8-15)
+
+        config PAD_SET_2_INT_PIN
+            int "PAD_SET_2_INT_PIN"
+            default 6
+            help
+                Pin number of interrupt for pad set 1 (16-25)
 
         config SWITCH_INT_PIN
             int "SWITCH_INT_PIN"
             default 36
             help
                 Pin number of interrupt for switches
-            
+
         config BUTTON_INT_PIN
             int "BUTTON_INT_PIN"
             default 35

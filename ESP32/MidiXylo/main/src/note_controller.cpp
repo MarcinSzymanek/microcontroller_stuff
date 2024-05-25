@@ -17,30 +17,30 @@ void NoteController::task_monitor_notes(void* param){
 }
 
 void NoteController::scan_padset(int padset_id){
-    xSemaphoreTake(adc_mutex_, 1);
+    xSemaphoreTake(mux_mutex_, 1);
     uint8_t mux_id = 0;
     if(padset_id > 2){
         mux_id = 1;
     }
     int start = padset_id*8;
-    for(int i = (0 + start); i < (start + 8); i++){
+    int end = padset_id*8 + 8;
+    if(padset_id > 2) end += 1;
+    for(int i = (0 + start); i < (end); i++){
         mux_ctrl_->get_value(std::move((MuxController::MUX_IDX) mux_id), i, pad_buffer_[i]);
     }
-    xSemaphoreGive(adc_mutex_);
+    xSemaphoreGive(mux_mutex_);
 }
 
 // Read 8 pads
 void NoteController::on_pad_hit(uint8_t padset_id){
-    int pad_id = -1;
     scan_padset(padset_id);
-    // If highest value is above max adc value, the reading is invalid, repeat!
     //ESP_LOGI("NC", "pad hit");
     int start = padset_id*8;
     int end = padset_id*8 + 8;
     if(padset_id > 2) end += 1;
     int highest = 0;
-    uint8_t high_idx = 0;
-    
+
+    // If highest value is above max adc value, the reading is invalid, repeat!
     highest = *std::max_element(pad_buffer_.begin() + start, pad_buffer_.begin() + end);
     if(highest > 5000){
         ESP_LOGE("NC", "adc err");
@@ -57,17 +57,17 @@ void NoteController::on_pad_hit(uint8_t padset_id){
         }
     }
 
-    // Find a better way of figuring out which notes were hit?
-    // All of this will not matter if the neighbour pads give > 3.3V when we hit
     if(xSemaphoreTake(active_note_mutex_, 5) == pdFALSE) return;
+    // ignored_pads_ will be ignored on rescan, but here they are sent
     for(uint8_t& pad_id : ignored_pads_){
         uint8_t note = calc_note_val_(pad_id);
+        uint8_t velocity = calc_velocity_(scanned_values_[pad_id]);
         //ESP_LOGI("NC fp", "Send note %d", note);
-        usb_midi_->send(midi::msg::noteOn(channel_, note, calc_velocity_(scanned_values_[pad_id])));
+        usb_midi_->send(midi::msg::noteOn(channel_, note, velocity));
         auto exists = std::find_if(active_notes_.begin(), active_notes_.end(), [&note](active_note_t& n){
             return n.note == note;
         });
-    
+
         if(exists != active_notes_.end()){
             exists->time_remaining = note_length_;
         }
@@ -77,8 +77,7 @@ void NoteController::on_pad_hit(uint8_t padset_id){
     }
 
     xSemaphoreGive(active_note_mutex_);
-    gpio_set_level((gpio_num_t) 21, 0);
-    // If note already exists, prolong it, otherwise add to active_notes_
+    // gpio_set_level((gpio_num_t) 21, 0);
 }
 
 void NoteController::clear_rescan(){
@@ -108,7 +107,7 @@ void NoteController::on_rescan(uint8_t padset_id){
             continue;
         }
         if(pad_buffer_[i] > 250){
-            ESP_LOGI("nc", "rescan add val");
+            // ESP_LOGI("nc", "rescan add val");
             scanned_values_[i] = pad_buffer_[i];
             new_pad_hits.push_back(i);
         }
@@ -117,13 +116,13 @@ void NoteController::on_rescan(uint8_t padset_id){
     if(xSemaphoreTake(active_note_mutex_, 2) == pdFALSE) return;
     for(uint8_t& pad_id : new_pad_hits){
         uint8_t note = calc_note_val_(pad_id);
-        ESP_LOGI("rescan", "Send note %d", note);
-        
-        usb_midi_->send(midi::msg::noteOn(channel_, note, calc_velocity_(highest)));
+        // ESP_LOGI("rescan", "Send note %d", note);
+
+        usb_midi_->send(midi::msg::noteOn(channel_, note, calc_velocity_(scanned_values_[pad_id])));
         auto exists = std::find_if(active_notes_.begin(), active_notes_.end(), [&note](active_note_t& n){
             return n.note == note;
         });
-    
+
         if(exists != active_notes_.end()){
             exists->time_remaining = note_length_;
         }
@@ -144,7 +143,7 @@ uint8_t NoteController::calc_note_val_(int pad){
 constexpr uint8_t calc_velo(int adc_val){
     // For the future: The coefficient for velocity should be proportional to channel measured
     // Since the signal becomes smaller over time and each measurement takes ~35 us
-    float v =  float(adc_val)/3600*127;
+    float v =  float(adc_val)/4095*127;
     if(v > 127) v = 127;
     return uint8_t(v);
 }
@@ -161,20 +160,18 @@ void IRAM_ATTR NoteController::process_active_notes(){
         std::remove_if(
             active_notes_.begin(),
             active_notes_.end(),
-            [&](active_note_t &n) { 
+            [&](active_note_t &n) {
                 n.time_remaining -= task_delay_;
-                //ESP_LOGI("r", "r%d", n.time_remaining);
                 if(n.time_remaining <= 0) {
-                    //ESP_LOGI("n", "note end");
                     usb_midi_->send(midi::msg::noteOff(channel_, n.note));
                 }
-                return n.time_remaining <= 0; 
+                return n.time_remaining <= 0;
             }
         ),
         active_notes_.end()
     );
     xSemaphoreGive(active_note_mutex_);
-    gpio_set_level(DEBUG_GPIO, 0);
+    // gpio_set_level(DEBUG_GPIO, 0);
 }
 
 NoteController::NoteController(
@@ -182,7 +179,7 @@ NoteController::NoteController(
     usb::UsbMidi* usb_midi,
     uint8_t channel
 ) : mux_ctrl_(mux_ctrl), usb_midi_(usb_midi), channel_(channel){
-    
+
     Helpers::setup_debug_gpio(DEBUG_GPIO);
     gpio_set_level(DEBUG_GPIO, 0);
     // Reserve space for 10 active notes at a time. This should be more than enough for low-sustain notes
@@ -191,6 +188,6 @@ NoteController::NoteController(
         scanned_values_[i] = 0;
     }
     active_note_mutex_ = xSemaphoreCreateMutex();
-    adc_mutex_ = xSemaphoreCreateMutex();
-    xTaskCreate(&task_monitor_notes, "mnotes", stack_size_, (void*) this, (BaseType_t) 5, NULL);
+    mux_mutex_ = xSemaphoreCreateMutex();
+    xTaskCreate(&task_monitor_notes, "mnotes", stack_size_, (void*) this, (BaseType_t) 10, NULL);
 }

@@ -11,33 +11,32 @@ QueueHandle_t MXylo::cc_event_queue_;
 QueueHandle_t MXylo::button_event_queue_;
 QueueHandle_t MXylo::js_event_queue_;
 
+/*
+* TIMER CALLBACKS
+*/
+
 void IRAM_ATTR MXylo::timer_cb_button_reset(void* params){
     MXylo::instance().button_timeout = false;
 }
 
 //
 void MXylo::timer_cb_pad_hit(void*){
-    MXylo::instance().current_scan_iteration -= 1;
-    if(MXylo::instance().current_scan_iteration == 0){
-        MXylo::instance().note_controller_->clear_rescan();
-        MXylo::instance().pad_status.reset_status();
-    };
 
-    uint8_t pad_status; 
+    uint8_t pad_status;
     MXylo::instance().pad_status.get_status(pad_status);
     if(pad_status == 0){
         MXylo::instance().current_scan_iteration = 0;
         MXylo::instance().note_controller_->clear_rescan();
         return;
     }
-    gpio_set_level((gpio_num_t) 21, 1);
+    // gpio_set_level((gpio_num_t) 21, 1);
     for(int i = 0; i < 3; i++){
         if(pad_status & 1){
             MXylo::instance().note_controller_->on_pad_hit(i);
-        } 
+        }
         pad_status = pad_status >> 1;
     }
-    
+
     esp_timer_start_once(MXylo::instance().timer_rescan, MXylo::instance().subsequent_timer_delay_us);
 }
 
@@ -51,7 +50,7 @@ void MXylo::timer_cb_rescan(void* params){
         return;
     }
 
-    uint8_t pad_status; 
+    uint8_t pad_status;
     MXylo::instance().pad_status.get_status(pad_status);
     if(pad_status == 0){
         //ESP_LOGI("main", "Rescan end");
@@ -62,28 +61,37 @@ void MXylo::timer_cb_rescan(void* params){
     for(int i = 0; i < 3; i++){
         if(pad_status & 1){
             MXylo::instance().note_controller_->on_rescan(i);
-        } 
+        }
         pad_status = pad_status >> 1;
     }
     esp_timer_start_once(MXylo::instance().timer_rescan, MXylo::instance().subsequent_timer_delay_us);
 }
 
+/*
+* INTERRUPT HANDLERS
+*/
+
 const uint8_t MXylo::PADSET_0;
 const uint8_t MXylo::PADSET_1;
 const uint8_t MXylo::PADSET_2;
 void IRAM_ATTR pad_0_int_handler(void* arg){
+    if(MXylo::instance().mode_ != MXylo::Mode::PLAY) return;
     int i = int(arg);
-    
-    // Short delay before checking GPIO level, so that it stabilizes
+
+    // Short spin before checking GPIO level, so that it stabilizes
     ets_delay_us(10);
     int level = gpio_get_level(gpio_num_t(i));
+
     uint8_t padset = 0;
     if(i == CONFIG_PAD_SET_0_INT_PIN) padset = MXylo::PADSET_0;
     else if(i == CONFIG_PAD_SET_1_INT_PIN) padset = MXylo::PADSET_1;
+    else if(i == CONFIG_PAD_SET_2_INT_PIN) padset = MXylo::PADSET_2;
+
     if(level < 1){
         MXylo::instance().pad_status.reset_padset(padset);
         return;
     }
+
     MXylo::instance().pad_status.set_padset(padset);
     MXylo::instance().current_scan_iteration = MXylo::instance().max_pad_scan_iterations;
     if(esp_timer_is_active(MXylo::instance().timer_pad_hit)){
@@ -92,7 +100,7 @@ void IRAM_ATTR pad_0_int_handler(void* arg){
         return;
     }
     else{
-        esp_timer_start_once(MXylo::instance().timer_pad_hit, 400);
+        esp_timer_start_once(MXylo::instance().timer_pad_hit, MXylo::instance().initial_timer_delay_us);
     }
 }
 
@@ -105,11 +113,14 @@ void MXylo::button_int_handler(void* arg){
 
     BaseType_t xHigherPrioWoken = pdFALSE;
     static uint8_t val = 1;
-    // vTaskNotify functions constantly crashes so we use a queue...
     xQueueSendFromISR(PeripheralMonitor::button_interrupt_queue_, &val, &xHigherPrioWoken);
     mxylo->button_timeout = true;
     esp_timer_start_once(mxylo->timer_button_timeout, 10000);
 }
+
+/*
+* INITIALIZATION
+*/
 
 MXylo::MXylo(){
     ESP_LOGI("MX", "M-xylo init");
@@ -120,7 +131,7 @@ MXylo::MXylo(){
         adc_channel_t(3)
     };
 
-    
+
     adc_ctrl_.init_adc(std::move(channels));
 
     mux_pin_config mux_p0_pins = {
@@ -152,14 +163,14 @@ MXylo::MXylo(){
     };
 
     ESP_ERROR_CHECK(esp_timer_create(&args, &timer_pad_hit));
-    
+
     args = {
         .callback = &timer_cb_button_reset,
         .arg = this,
         .dispatch_method = ESP_TIMER_TASK,
         .name = "button_timeout"
     };
-    
+
     ESP_ERROR_CHECK(esp_timer_create(&args, &timer_button_timeout));
 
     args = {
@@ -168,7 +179,7 @@ MXylo::MXylo(){
         .dispatch_method = ESP_TIMER_TASK,
         .name = "rescan"
     };
-    
+
     ESP_ERROR_CHECK(esp_timer_create(&args, &timer_rescan));
 
     note_controller_ = new NoteController{mux_controller_, &usb_midi_, channel_};
@@ -214,25 +225,16 @@ void MXylo::start(){
         (void*) this
     );
 
-    xTaskCreate(&task_process_buttons_, "button events", 4096, (void*) this, (UBaseType_t) 2, NULL);
-    xTaskCreate(&task_process_cc_, "cc events", 2048, (void*) this, (UBaseType_t) 3, NULL);
-    xTaskCreate(&task_process_js_, "js events", 4096, (void*) this, (UBaseType_t) 4, NULL);
+    xTaskCreate(&task_process_buttons_, "button events", 4096, (void*) this, (UBaseType_t) 4, NULL);
+    xTaskCreate(&task_process_cc_, "cc events", 2048, (void*) this, (UBaseType_t) 7, NULL);
+    xTaskCreate(&task_process_js_, "js events", 4096, (void*) this, (UBaseType_t) 9, NULL);
     periph_monitor_->start();
 }
 
-void MXylo::switch_mode(uint8_t val){
-    if(val){
-        mode_ = Mode::PROGRAM;
-    }
-    else{
-        mode_ = Mode::PLAY;
-    }
-    periph_monitor_->mode = val;
-    display_.push_event(
-        Display::DISP_EVENT::MODE,
-        std::move(Display::event_data_t{static_cast<uint8_t>(mode_), 0})
-    );
-}
+
+/*
+* TASKS
+*/
 
 void MXylo::task_process_buttons_(void* params){
     MXylo* mxylo = static_cast<MXylo*>(params);
@@ -244,7 +246,7 @@ void MXylo::task_process_buttons_(void* params){
                 mxylo->switch_mode(event_buffer.value);
             }
             // Do button/switch/note duration action
-            if(event_buffer.type == PeripheralMonitor::MiscMuxChanMap::NOTE_DUR){
+            else if(event_buffer.type == PeripheralMonitor::MiscMuxChanMap::NOTE_DUR){
                 mxylo->note_controller_->set_note_length(event_buffer.value);
                 //ESP_LOGI("Button events", "Setting note length to: %d", event_buffer.value);
             }
@@ -296,42 +298,17 @@ void MXylo::task_process_cc_(void* params){
                 mxylo->usb_midi_.send(midi::msg::cc(mxylo->channel_, event_buffer.cc_channel, event_buffer.value));
             // ESP_LOGI("main", "Send cc");
                 mxylo->display_.push_event(
-                Display::DISP_EVENT::CONTROL_CHANGE, 
+                Display::DISP_EVENT::CONTROL_CHANGE,
                 std::move(Display::event_data_t{event_buffer.cc_channel, event_buffer.value})
             );
-        
+
         }
     }
 }
 
-
-// Decide what to do based on the button pressed
-void MXylo::button_action_(PeripheralMonitor::MiscMuxChanMap&& button){
-    ESP_LOGI("Button Action", "Button: %d", (int)button);
-
-    if(button == PeripheralMonitor::MiscMuxChanMap::PROGRAM){
-        mode_ = static_cast<Mode>((static_cast<int>(mode_) + 1) % (static_cast<int>(Mode::NUM_MODES)));
-        Display::event_data_t data{static_cast<uint8_t>(mode_)};
-        display_.push_event(Display::DISP_EVENT::MODE, std::move(data));
-        return;
-    }
-
-    if(button == PeripheralMonitor::MiscMuxChanMap::SUSTAIN){
-        if(sustain_val) sustain_val = 0;
-        else sustain_val = 1;
-
-        ESP_LOGI("Button action", "Sustain switch new val: %d", sustain_val);
-        Display::event_data_t data{static_cast<uint8_t>(sustain_val)};
-        display_.push_event(Display::DISP_EVENT::SUSTAIN, std::move(data));
-    }
-
-    if(mode_ == Mode::PLAY){
-        play_button_action_(std::move(button));
-        return;
-    }
-
-    program_button_action_(std::move(button));
-}
+/*
+* BUTTON EVENT HANDLERS
+*/
 
 void MXylo::play_button_action_(PeripheralMonitor::MiscMuxChanMap&& button){
             switch(button){
@@ -373,7 +350,7 @@ void MXylo::play_button_action_(PeripheralMonitor::MiscMuxChanMap&& button){
 
                 case(PeripheralMonitor::MiscMuxChanMap::PROGRAM_CHANGE_UP):
                     {
-                        if(patch_ == 126) return;
+                        if(patch_ == 127) return;
                         patch_++;
                         Display::event_data_t data{static_cast<uint8_t>(patch_), 1};
                         display_.push_event(Display::DISP_EVENT::PROGRAM_CHANGE, std::move(data));
@@ -394,7 +371,7 @@ void MXylo::play_button_action_(PeripheralMonitor::MiscMuxChanMap&& button){
             default:
                 return;
             }
-    
+
 }
 
 void MXylo::program_button_action_(PeripheralMonitor::MiscMuxChanMap&& button){
@@ -411,4 +388,18 @@ void MXylo::program_button_action_(PeripheralMonitor::MiscMuxChanMap&& button){
         display_.push_event(Display::DISP_EVENT::CHANNEL_CHANGE, Display::event_data_t{static_cast<uint8_t>(channel_ - 1), 0});
 
     }
+}
+
+void MXylo::switch_mode(uint8_t val){
+    if(val){
+        mode_ = Mode::PROGRAM;
+    }
+    else{
+        mode_ = Mode::PLAY;
+    }
+    periph_monitor_->mode = val;
+    display_.push_event(
+        Display::DISP_EVENT::MODE,
+        std::move(Display::event_data_t{static_cast<uint8_t>(mode_), 0})
+    );
 }

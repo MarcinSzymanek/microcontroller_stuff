@@ -19,6 +19,7 @@ public:
     enum MiscMuxChanMap : uint8_t{
         PROGRAM = 0,   // This will be a switch, but treat as a button in src
         SUSTAIN = 1,
+        // Buttons
         OCTAVE_UP = 2,
         OCTAVE_DOWN = 3,
         TRANSPOSE_UP = 4,
@@ -97,10 +98,10 @@ private:
     int current_note_duration_raw_{0};
     int note_duration_buffer_{0};
     constexpr bool outside_cc_thresh(const int& old_val, const int& new_val){
-        return (new_val > (old_val + CC_EVENT_THRESH) || new_val < (old_val - CC_EVENT_THRESH)); 
+        return (new_val > (old_val + CC_EVENT_THRESH) || new_val < (old_val - CC_EVENT_THRESH));
     }
     constexpr bool outside_js_thresh(const int& old_val, const int& new_val){
-        return (new_val > (old_val + JS_EVENT_THRESH) || new_val < (old_val - JS_EVENT_THRESH)); 
+        return (new_val > (old_val + JS_EVENT_THRESH) || new_val < (old_val - JS_EVENT_THRESH));
     }
     uint8_t button_status_;
 };
