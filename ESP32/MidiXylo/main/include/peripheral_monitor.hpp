@@ -17,24 +17,23 @@ public:
     void start();
 
     enum MiscMuxChanMap : uint8_t{
-        PROGRAM = 0,   // This will be a switch, but treat as a button in src
-        SUSTAIN = 1,
-        // Buttons
+        PROGRAM = 14,   // This will be a switch, but treat as a button in src
+        SUSTAIN = 15,
         OCTAVE_UP = 2,
         OCTAVE_DOWN = 3,
         TRANSPOSE_UP = 4,
         TRANSPOSE_DOWN = 5,
-        PROGRAM_CHANGE_UP = 6,
-        PROGRAM_CHANGE_DOWN = 7,
+        PROGRAM_CHANGE_UP = 9,
+        PROGRAM_CHANGE_DOWN = 10,
         // JS
-        JS_MOD = 9,
-        JS_PITCH = 10,
+        JS_MOD = 7,
+        JS_PITCH = 6,
         // Knobs
-        NOTE_DUR = 11,
-        CC0 = 12,
-        CC1 = 13,
-        CC2 = 14,
-        CC3 = 15,
+        NOTE_DUR = 5,
+        CC0 = 4,
+        CC1 = 3,
+        CC2 = 2,
+        CC3 = 1,
     };
 
     typedef struct cc_event_t{
@@ -98,10 +97,10 @@ private:
     int current_note_duration_raw_{0};
     int note_duration_buffer_{0};
     constexpr bool outside_cc_thresh(const int& old_val, const int& new_val){
-        return (new_val > (old_val + CC_EVENT_THRESH) || new_val < (old_val - CC_EVENT_THRESH));
+        return (new_val > (old_val + CC_EVENT_THRESH) || new_val < (old_val - CC_EVENT_THRESH)); 
     }
     constexpr bool outside_js_thresh(const int& old_val, const int& new_val){
-        return (new_val > (old_val + JS_EVENT_THRESH) || new_val < (old_val - JS_EVENT_THRESH));
+        return (new_val > (old_val + JS_EVENT_THRESH) || new_val < (old_val - JS_EVENT_THRESH)); 
     }
     uint8_t button_status_;
 };

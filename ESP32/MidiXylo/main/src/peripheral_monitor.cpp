@@ -38,7 +38,7 @@ void PeripheralMonitor::task_monitor_js(void* params){
     PeripheralMonitor* pmon = static_cast<PeripheralMonitor*>(params);
     for(;;){
         pmon->scan_js_();
-        vTaskDelay(2);
+        vTaskDelay(50);
     }
 }
 
@@ -58,6 +58,7 @@ void PeripheralMonitor::scan_js_(){
             js_buffer[1]
         );
     xSemaphoreGive(mutex_);
+    ESP_LOGI("js", "js monitor event vals x %d, y: %d", js_buffer[0], js_buffer[1]);
     js_event_t event;
     event.type = MiscMuxChanMap::JS_MOD;
 
@@ -203,7 +204,7 @@ void PeripheralMonitor::scan_cc_(){
                 event.cc_channel = i;
                 event.value = cc_channels_[i];
             }
-            //ESP_LOGI("cc", "cc monitor event val %d, raw: %d, idx: %d", event.value, current_cc_vals_[i], i);
+            ESP_LOGI("cc", "cc monitor event val %d, raw: %d, idx: %d", event.value, current_cc_vals_[i], i);
             xQueueSend(*cc_event_queue_, (void*) &event, 2);
         } // end if
     } // end for loop
