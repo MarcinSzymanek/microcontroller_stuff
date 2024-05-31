@@ -17,14 +17,14 @@ public:
     void start();
 
     enum MiscMuxChanMap : uint8_t{
-        PROGRAM = 14,   // This will be a switch, but treat as a button in src
         SUSTAIN = 15,
-        OCTAVE_UP = 2,
-        OCTAVE_DOWN = 3,
-        TRANSPOSE_UP = 4,
-        TRANSPOSE_DOWN = 5,
+        PROGRAM = 14,   // This will be a switch, but treat as a button in src
+        OCTAVE_UP = 13,
+        OCTAVE_DOWN = 12,
+        TRANSPOSE_UP = 11,
+        TRANSPOSE_DOWN = 10,
         PROGRAM_CHANGE_UP = 9,
-        PROGRAM_CHANGE_DOWN = 10,
+        PROGRAM_CHANGE_DOWN = 8,
         // JS
         JS_MOD = 7,
         JS_PITCH = 6,

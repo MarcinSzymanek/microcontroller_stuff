@@ -19,22 +19,22 @@ void NoteController::task_monitor_notes(void* param){
 void NoteController::scan_padset(int padset_id){
     xSemaphoreTake(mux_mutex_, 1);
     uint8_t mux_id = 0;
-    if(padset_id > 2){
+    if(padset_id > 1){
         mux_id = 1;
     }
     int start = padset_id*8;
     int end = padset_id*8 + 8;
-    if(padset_id > 2) end += 1;
+    if(padset_id > 1) end += 1;
     for(int i = (0 + start); i < (end); i++){
-        mux_ctrl_->get_value(std::move((MuxController::MUX_IDX) mux_id), i, pad_buffer_[i]);
+        mux_ctrl_->get_value(std::move((MuxController::MUX_IDX) mux_id), 15 - i, pad_buffer_[i]);
     }
     xSemaphoreGive(mux_mutex_);
 }
 
 // Read 8 pads
 void NoteController::on_pad_hit(uint8_t padset_id){
+    //ESP_LOGI("NC", "pad hit id %d", padset_id);
     scan_padset(padset_id);
-    //ESP_LOGI("NC", "pad hit");
     int start = padset_id*8;
     int end = padset_id*8 + 8;
     if(padset_id > 2) end += 1;
@@ -50,8 +50,8 @@ void NoteController::on_pad_hit(uint8_t padset_id){
 
 
     for(int i = start; i < end; i++){
+        //ESP_LOGI("NC", "Read signal:%d", pad_buffer_[i]);
         if(pad_buffer_[i] > 100){
-            //ESP_LOGI("NC", "Read signal:%d", pad_buffer_[i]);
             scanned_values_[i] = pad_buffer_[i];
             ignored_pads_.push_back(i);
         }
@@ -62,7 +62,7 @@ void NoteController::on_pad_hit(uint8_t padset_id){
     for(uint8_t& pad_id : ignored_pads_){
         uint8_t note = calc_note_val_(pad_id);
         uint8_t velocity = calc_velocity_(scanned_values_[pad_id]);
-        //ESP_LOGI("NC fp", "Send note %d", note);
+        //ESP_LOGI("NC fp", "Send note %d, raw val %d", note, scanned_values_[pad_id]);
         usb_midi_->send(midi::msg::noteOn(channel_, note, velocity));
         auto exists = std::find_if(active_notes_.begin(), active_notes_.end(), [&note](active_note_t& n){
             return n.note == note;
@@ -171,7 +171,7 @@ void IRAM_ATTR NoteController::process_active_notes(){
         active_notes_.end()
     );
     xSemaphoreGive(active_note_mutex_);
-    // gpio_set_level(DEBUG_GPIO, 0);
+    gpio_set_level(DEBUG_GPIO, 0);
 }
 
 NoteController::NoteController(

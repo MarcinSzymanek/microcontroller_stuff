@@ -38,7 +38,7 @@ void PeripheralMonitor::task_monitor_js(void* params){
     PeripheralMonitor* pmon = static_cast<PeripheralMonitor*>(params);
     for(;;){
         pmon->scan_js_();
-        vTaskDelay(50);
+        vTaskDelay(3);
     }
 }
 
@@ -58,7 +58,7 @@ void PeripheralMonitor::scan_js_(){
             js_buffer[1]
         );
     xSemaphoreGive(mutex_);
-    ESP_LOGI("js", "js monitor event vals x %d, y: %d", js_buffer[0], js_buffer[1]);
+    //ESP_LOGI("js", "js monitor event vals x %d, y: %d", js_buffer[0], js_buffer[1]);
     js_event_t event;
     event.type = MiscMuxChanMap::JS_MOD;
 
@@ -107,7 +107,7 @@ void PeripheralMonitor::scan_switches_(){
     // Mutex used to exclusively used mux_ and button_event_queue_
     if(xSemaphoreTake(mutex_, 5) == pdFALSE) return;
     // Just check program
-    mux_->get_value(std::move(MuxController::MUX_IDX::MUX_MISC), 0u, button_buffer);
+    mux_->get_value(std::move(MuxController::MUX_IDX::MUX_MISC), uint8_t(MiscMuxChanMap::PROGRAM), button_buffer);
     if(button_buffer > 3000 && mode == 0){
         button_event_t event{
         .type = MiscMuxChanMap::PROGRAM,
@@ -144,7 +144,7 @@ void PeripheralMonitor::read_buttons(){
     if(xSemaphoreTake(mutex_, 5) == pdFALSE) return;
     // Scan the 6 main buttons
     uint8_t start = uint8_t(MiscMuxChanMap::OCTAVE_UP);
-    for(uint8_t i = start; i < (start + 6); i++){
+    for(uint8_t i = start; i > (start - 6); i--){
         mux_->get_value(
             std::move(MuxController::MUX_IDX::MUX_MISC),
             uint8_t(i),
@@ -183,11 +183,13 @@ void PeripheralMonitor::scan_cc_(){
         return;
     }
 
-    for(uint8_t i = 0; i < 4; i++){
-        mux_->get_value(std::move(MuxController::MUX_IDX::MUX_MISC), uint8_t(MiscMuxChanMap::CC0) + i, cc_buffer_[i]);
+    for(uint8_t i = 0; i < 3; i++){
+        //ESP_LOGI("PM", "Measure from %d", 15 - i);
+        mux_->get_value(std::move(MuxController::MUX_IDX::MUX_MISC), (MiscMuxChanMap::CC1) - i, cc_buffer_[i]);
+        //ESP_LOGI("PM", "Got %d", buff[i]);
     }
     xSemaphoreGive(mutex_);
-    for(int i = 0; i < 4; i++){
+    for(int i = 0; i < 3; i++){
         if(outside_cc_thresh(current_cc_vals_[i], cc_buffer_[i])){
             cc_event_t event;
             // mode == PLAY: Trigger cc event, update current cc vals
@@ -204,7 +206,7 @@ void PeripheralMonitor::scan_cc_(){
                 event.cc_channel = i;
                 event.value = cc_channels_[i];
             }
-            ESP_LOGI("cc", "cc monitor event val %d, raw: %d, idx: %d", event.value, current_cc_vals_[i], i);
+            //ESP_LOGI("cc", "cc monitor event val %d, raw: %d, idx: %d", event.value, current_cc_vals_[i], i);
             xQueueSend(*cc_event_queue_, (void*) &event, 2);
         } // end if
     } // end for loop

@@ -30,6 +30,14 @@ public:
     void set_channel(uint8_t channel){
         channel_ = channel;
     }
+
+    void set_octave(uint8_t octave){
+        octave_ = octave;
+    }
+
+    void set_transpose(uint8_t transpose){
+        transpose_ = transpose;
+    }
 private:
     uint8_t calc_note_val_(int pad);
     uint8_t calc_velocity_(int adc_val);

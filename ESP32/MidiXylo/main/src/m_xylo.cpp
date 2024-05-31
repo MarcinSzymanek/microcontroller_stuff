@@ -107,6 +107,8 @@ void IRAM_ATTR pad_0_int_handler(void* arg){
 
 void MXylo::button_int_handler(void* arg){
     MXylo* mxylo = static_cast<MXylo*>(arg);
+    // Short spin before checking GPIO level, so that it stabilizes
+    ets_delay_us(10);
     // If button is at timeout, ignore (software debouncing)
     // If gpio is low, user has stopped pressing so ignore
     if(mxylo->button_timeout || gpio_get_level(gpio_num_t(CONFIG_BUTTON_INT_PIN)) == 0) return;
@@ -115,7 +117,7 @@ void MXylo::button_int_handler(void* arg){
     static uint8_t val = 1;
     xQueueSendFromISR(PeripheralMonitor::button_interrupt_queue_, &val, &xHigherPrioWoken);
     mxylo->button_timeout = true;
-    esp_timer_start_once(mxylo->timer_button_timeout, 10000);
+    esp_timer_start_once(mxylo->timer_button_timeout, 200000);
 }
 
 /*
@@ -202,7 +204,10 @@ void MXylo::start(){
     };
     // Configure interrupts + create scan pads (0-15) task
     gpio_config_t int_config = {
-        .pin_bit_mask = (1 << CONFIG_PAD_SET_0_INT_PIN) | (1 << CONFIG_BUTTON_INT_PIN),
+        .pin_bit_mask = (
+            1 << CONFIG_PAD_SET_0_INT_PIN) |
+            (1 << CONFIG_PAD_SET_1_INT_PIN) | 
+            (1 << CONFIG_BUTTON_INT_PIN),
         .mode = GPIO_MODE_INPUT,
         .pull_up_en = GPIO_PULLUP_DISABLE,
         .pull_down_en = GPIO_PULLDOWN_DISABLE,
@@ -218,6 +223,13 @@ void MXylo::start(){
         pad_0_int_handler,
         (void*) CONFIG_PAD_SET_0_INT_PIN
     );
+
+    gpio_isr_handler_add(
+        (gpio_num_t) CONFIG_PAD_SET_1_INT_PIN,
+        pad_0_int_handler,
+        (void*) CONFIG_PAD_SET_1_INT_PIN
+    );
+
 
     gpio_isr_handler_add(
         (gpio_num_t) CONFIG_BUTTON_INT_PIN,
@@ -316,6 +328,7 @@ void MXylo::play_button_action_(PeripheralMonitor::MiscMuxChanMap&& button){
                     {
                         if(octave_ == 3) return;
                         octave_++;
+                        note_controller_->set_octave(octave_);
                         Display::event_data_t data{octave_, 1};
                         display_.push_event(Display::DISP_EVENT::OCTAVE, std::move(data));
                         break;
@@ -325,6 +338,7 @@ void MXylo::play_button_action_(PeripheralMonitor::MiscMuxChanMap&& button){
                     {
                         if(octave_ == -3) return;
                         octave_--;
+                        note_controller_->set_octave(octave_);
                         Display::event_data_t data{octave_, 0};
                         display_.push_event(Display::DISP_EVENT::OCTAVE, std::move(data));
                         break;
@@ -334,6 +348,7 @@ void MXylo::play_button_action_(PeripheralMonitor::MiscMuxChanMap&& button){
                     {
                         if(transpose_ >= 11) return;
                         transpose_++;
+                        note_controller_->set_transpose(transpose_);
                         Display::event_data_t data{transpose_, 1};
                         display_.push_event(Display::DISP_EVENT::TRANSPOSE, std::move(data));
                         break;
@@ -343,6 +358,7 @@ void MXylo::play_button_action_(PeripheralMonitor::MiscMuxChanMap&& button){
                     {
                         if(transpose_ <= -11) return;
                         transpose_--;
+                        note_controller_->set_transpose(transpose_);
                         Display::event_data_t data{transpose_, 0};
                         display_.push_event(Display::DISP_EVENT::TRANSPOSE, std::move(data));
                         break;
