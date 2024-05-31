@@ -4,9 +4,7 @@
 #include "driver/gpio.h"
 
 namespace usb{
-void func(void)
-{
-}
+
 #define GPIO_LED 48
 UsbMidi::UsbMidi(){
 
@@ -30,28 +28,21 @@ UsbMidi::UsbMidi(){
         .configuration_descriptor = s_midi_cfg_desc_handle_->data(),
 #endif // TUD_OPT_HIGH_SPEED
     };
-    gpio_config_t gpio_config_ = {
-        .pin_bit_mask = (1ULL << GPIO_LED),
-        .mode = GPIO_MODE_OUTPUT,
-        .pull_up_en = GPIO_PULLUP_DISABLE,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE
-    };
-    gpio_config(&gpio_config_);
-    gpio_set_level(gpio_num_t(GPIO_LED), 0);
+    // gpio_config_t gpio_config_ = {
+    //     .pin_bit_mask = (1ULL << GPIO_LED),
+    //     .mode = GPIO_MODE_OUTPUT,
+    //     .pull_up_en = GPIO_PULLUP_DISABLE,
+    //     .pull_down_en = GPIO_PULLDOWN_DISABLE
+    // };
+    // gpio_config(&gpio_config_);
+    // gpio_set_level(gpio_num_t(GPIO_LED), 0);
     ESP_ERROR_CHECK(tinyusb_driver_install(&tusb_cfg));
+    mutex_ = xSemaphoreCreateMutex();
 }
 
 void UsbMidi::send(const midi::MidiPacket packet){
     if(tud_midi_mounted()){
-        if(debug_led){
-            gpio_set_level(gpio_num_t(GPIO_LED), 1);
-            debug_led = false;
-        }
-        else{
-            gpio_set_level(gpio_num_t(GPIO_LED), 0);
-            debug_led = true;
-        }
-        int written = tud_midi_stream_write(0, packet.payload.data(), 3);
+        int written = tud_midi_stream_write(0, packet.payload.data(), packet.payload.capacity());
     }
 }
 

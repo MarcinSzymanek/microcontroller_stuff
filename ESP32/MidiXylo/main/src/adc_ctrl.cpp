@@ -1,11 +1,12 @@
 #include "adc_ctrl.hpp"
 #include "esp_adc/adc_oneshot.h"
+#include "FreeRTOS.h"
 
 AdcController::~AdcController(){
      ESP_ERROR_CHECK(adc_oneshot_del_unit(handle_));
 }
 
-void AdcController::init_adc(std::vector<adc_channel_t> channels){
+void AdcController::init_adc(std::vector<adc_channel_t>&& channels){
     adc_oneshot_unit_init_cfg_t init_config1 = {
         .unit_id = ADC_UNIT_1
     };
@@ -20,15 +21,14 @@ void AdcController::init_adc(std::vector<adc_channel_t> channels){
     channels_ = channels;
 }
 
+// Don't use this
 int AdcController::read_adc(){
     int buffer;
     adc_oneshot_read(handle_, channels_[0], &buffer);
     return(buffer);
 }
 
-int AdcController::read_adc(int channel){
-    if(channel > channels_.size()) return -1;
-    int buffer;
-    adc_oneshot_read(handle_, channels_[channel], &buffer);
-    return(buffer);
+// Reading from the adc in this way takes approximately 38us. For faster reading, we could use continuous_adc instead
+void IRAM_ATTR AdcController::read_adc(const ADC_CHAN& channel, int& buffer){
+    adc_oneshot_read(handle_, channels_[(uint8_t)channel], &buffer);
 }

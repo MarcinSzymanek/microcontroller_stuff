@@ -22,10 +22,10 @@
 class OpenLCD{
 public:
     OpenLCD();
-    esp_err_t init_openLCD();
+    esp_err_t init_openLCD(int&& pin_scl_p, int&& pin_sda_p);
     esp_err_t write(const char* str, size_t size);
     esp_err_t clear();
-    bool update_line(const char* str, size_t line, size_t length); // Update buffer line with text
+    bool update_line(const char* str, size_t line); // Update buffer line with text
     bool update_display(); // Display buffer contents
 
 private:

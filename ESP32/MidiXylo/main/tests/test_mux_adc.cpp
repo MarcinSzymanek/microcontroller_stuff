@@ -10,13 +10,13 @@ extern "C" void app_main(void){
         adc_channel_t(CONFIG_XMIDI_MUX_CHANNEL_0)
     };
     adc_ctrl.init_adc(channels);
-    sensors::mux_pin_config_t mux_pins = {
+    mux_pin_config_t mux_pins = {
         .S0 = gpio_num_t(CONFIG_MUX0_PIN_S0),
         .S1 = gpio_num_t(CONFIG_MUX0_PIN_S1),
         .S2 = gpio_num_t(CONFIG_MUX0_PIN_S2),
         .S3 = gpio_num_t(CONFIG_MUX0_PIN_S3),
     };
-    sensors::MuxController mux_ctrl(&mux_pins);
+    MuxController mux_ctrl(&mux_pins);
 
     while(1){
         int val = adc_ctrl.read_adc(0);
